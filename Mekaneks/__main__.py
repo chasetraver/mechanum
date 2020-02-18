@@ -7,9 +7,6 @@ pygame.init()
 window_width = 600
 window_height = 600
 
-animation_increment = 10
-clock_tick_rate = 20
-
 # Open a window
 display_size = (window_width, window_height)
 screen = pygame.display.set_mode(display_size)
@@ -19,12 +16,12 @@ pygame.display.set_caption('Mekaneks')
 
 gameExit = False
 
-
-while gameExit == False:
+while not gameExit:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameExit = True
 
+    # Print the grid to the screen
     screen.blit(grid.grid(), [0, 0])
 
     pygame.display.flip()
