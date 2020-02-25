@@ -3,12 +3,13 @@ import pygame
 
 
 class Card:
-    def __init__(self, name, move, attack, damage, armor):
+    def __init__(self, name, move, attack, damage, armor, sprite):
         self.name = name
         self.move = move
         self.attack = attack
         self.damage = damage
         self.armor = armor
+        self.image = pygame.image.load(sprite)
 
     def playeffect(self, player):
         # TODO make move, attack, etc. do stuff with the grid
@@ -63,11 +64,19 @@ class Player:
         self.hand[cardindex].playeffect()
         self.discard(cardindex, discarddeck)
 
-    def damage(self, amount, drawdeck, trashdeck):
+    def damage(self, amount, drawdeck, discarddeck, trashdeck):
         # when player takes damage, reduces armor first if possible before putting top card of drawdeck into trashdeck
         for x in range(0, amount):
             if self.armor != 0:
-                trashdeck.append(drawdeck.drawcard())
+                if len(drawdeck.cards) != 0:
+                    trashdeck.append(drawdeck.drawcard())
+                else:
+                    if len(discarddeck.cards) != 0:
+                        drawdeck.swapdeck(discarddeck)
+                        trashdeck.append(drawdeck.drawcard())
+                    else:
+                        self.gameover()
+
             else:
                 self.armor = self.armor - 1
 
@@ -76,5 +85,8 @@ class Player:
             card.show
         pass
 
+    def gameover(self):
+    # TODO make this end the game
+        pass
 
 
