@@ -35,6 +35,15 @@ def main_menu():
         pygame.draw.rect(screen, (255,0,0), button_options)
         pygame.draw.rect(screen, (255,0,0), button_exit)
         pygame.draw.rect(screen, (255,0,0), button_play)
+        button_play_msg = "Play"
+        button_opt_msg = "Options"
+        button_quit_msg = "Quit"
+        button_play_txt = font.render(button_play_msg, True, (255,255,255))
+        button_opt_txt = font.render(button_opt_msg, True, (255,255,255))
+        button_quit_txt = font.render(button_quit_msg, True, (255,255,255))
+        screen.blit(button_play_txt, (285,220))
+        screen.blit(button_opt_txt, (285,320))
+        screen.blit(button_quit_txt, (285,420))
 
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
