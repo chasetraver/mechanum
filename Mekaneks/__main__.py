@@ -121,11 +121,14 @@ def playerturn(player):
 # player.damage(1)
 # todo else the monster moves 1 space closer to the player
 
+
+
 def game():
     x = 0
     y = 0
 
     mx, my = pygame.mouse.get_pos()
+    click = False
     running = True
     while running:
         screen.fill((0, 0, 0))
@@ -134,8 +137,13 @@ def game():
                 running = False
                 exit()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = grid.get_location(mx, my)
+            if event.type == pygame.MOUSEBUTTONUP:
+                x_temp, y_temp = pygame.mouse.get_pos()
+                x_temp, y_temp = grid.get_location(x_temp, y_temp)
+                if x_temp <= 316:
+                    if y_temp <= 316:
+                        x = x_temp
+                        y = y_temp
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -143,7 +151,7 @@ def game():
         # Print the grid to the screen
 
         screen.blit(grid.grid(), [0, 0])
-        robot(0, 64)
+        robot(x, y)
 
         pygame.display.flip()
         pygame.display.update()
