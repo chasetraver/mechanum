@@ -20,31 +20,51 @@ font = pygame.font.SysFont(None, 20)
 
 click = False
 
+robot_image = pygame.image.load('/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/Robby.png')
+robot_image = pygame.transform.scale(robot_image, (62, 62))
+
+
+def robot(x, y):
+    screen.blit(robot_image, (x, y))
+
+
+left = 0
+top = 0
+width = 0
+height = 0
+
+
+def get_location(x, y):
+    left = x
+    top = y
+    width = x + 62
+    height = y + 62
+
 
 def main_menu():
     while True:
         # button texts
-        text_play = font.render('Mechaneks', True, (255,255,255))
+        text_play = font.render('Mechaneks', True, (255, 255, 255))
         # screen.blit(text_play, (0,0))
         # Fill black
-        screen.fill((0,0,0))
+        screen.fill((0, 0, 0))
         # button creations
         button_play = pygame.Rect(200, 200, 200, 50)
         button_options = pygame.Rect(200, 300, 200, 50)
         button_exit = pygame.Rect(200, 400, 200, 50)
-        pygame.draw.rect(screen, (255,0,0), button_play)
-        pygame.draw.rect(screen, (255,0,0), button_options)
-        pygame.draw.rect(screen, (255,0,0), button_exit)
-        pygame.draw.rect(screen, (255,0,0), button_play)
+        pygame.draw.rect(screen, (255, 0, 0), button_play)
+        pygame.draw.rect(screen, (255, 0, 0), button_options)
+        pygame.draw.rect(screen, (255, 0, 0), button_exit)
+        pygame.draw.rect(screen, (255, 0, 0), button_play)
         button_play_msg = "Play"
         button_opt_msg = "Options"
         button_quit_msg = "Quit"
-        button_play_txt = font.render(button_play_msg, True, (255,255,255))
-        button_opt_txt = font.render(button_opt_msg, True, (255,255,255))
-        button_quit_txt = font.render(button_quit_msg, True, (255,255,255))
-        screen.blit(button_play_txt, (285,220))
-        screen.blit(button_opt_txt, (285,320))
-        screen.blit(button_quit_txt, (285,420))
+        button_play_txt = font.render(button_play_msg, True, (255, 255, 255))
+        button_opt_txt = font.render(button_opt_msg, True, (255, 255, 255))
+        button_quit_txt = font.render(button_quit_msg, True, (255, 255, 255))
+        screen.blit(button_play_txt, (285, 220))
+        screen.blit(button_opt_txt, (285, 320))
+        screen.blit(button_quit_txt, (285, 420))
 
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
@@ -54,13 +74,13 @@ def main_menu():
             # event - left mousebutton clicked (button actions)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 click = True
-                if button_play.collidepoint(mx,my):
+                if button_play.collidepoint(mx, my):
                     if click:
                         game()
-                if button_options.collidepoint(mx,my):
+                if button_options.collidepoint(mx, my):
                     if click:
                         options()
-                if button_exit.collidepoint(mx,my):
+                if button_exit.collidepoint(mx, my):
                     if click:
                         exit()
             # call exit function on Esc key
@@ -79,48 +99,65 @@ def playersetup():
     player = deckcardplayerclasses.Player(playerdrawdeck, playerdiscarddeck, playertrashdeck)
     return player
 
+
 def playerturn(player):
-    turn = 0 # player is able to play 2 cards before monsters act and before they redraw, hence the need for a loop.
+    turn = 0  # player is able to play 2 cards before monsters act and before they redraw, hence the need for a loop.
     while turn < 2:
         # todo have player able to click card in hand, return index of card in player.hand
-        player.playcard(index)
+        # player.playcard(index)
         turn = turn + 1
-    if len(player.hand) < 3:
-        while player.hand < 5:
-            player.draw()
 
-def monsterturn(turncount, player):
-    # todo if there is no monster on the grid, spawn a monster in a random space
-    if turncount % 3 == 0: # could be every 2 monster turns instead of 3. Playtest? Might not matter.
-        #todo spawn a monster
-    #todo for each monster:
-    #todo if adjacent to the player:
-    player.damage(1)
-    #todo else the monster moves 1 space closer to the player
+
+# if len(player.hand) < 3:
+# while player.hand < 5:
+# player.draw()
+
+# def monsterturn(turncount, player):
+# todo if there is no monster on the grid, spawn a monster in a random space
+# if turncount % 3 == 0: # could be every 2 monster turns instead of 3. Playtest? Might not matter.
+# todo spawn a monster
+# todo for each monster:
+# todo if adjacent to the player:
+# player.damage(1)
+# todo else the monster moves 1 space closer to the player
 
 def game():
+    x = 0
+    y = 0
+
+    mx, my = pygame.mouse.get_pos()
     running = True
     while running:
-        screen.fill((0,0,0))
+        screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
                 exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = grid.get_location(mx, my)
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     exit()
         # Print the grid to the screen
+
         screen.blit(grid.grid(), [0, 0])
+        robot(0, 64)
+
         pygame.display.flip()
         pygame.display.update()
-        mainClock.tick(60)
-        player1 = playersetup()
-        turncount = 0
-        while player1.isalive == 1:
-            playerturn(player1)
-            monsterturn(turncount, player1)
+        # mainClock.tick(60)
+        # player1 = playersetup()
+        # turncount = 0
+        # while player1.isalive == 1:
+        # playerturn(player1)
+        # monsterturn(turncount, player1)
+
 
 def options():
+    x = 0
+    y = 0
     running = True
     while running:
         screen.fill((0, 0, 0))
@@ -133,6 +170,7 @@ def options():
                     exit()
         # Print the grid to the screen
         screen.blit(grid.grid(), [0, 0])
+        robot(x, y)
         pygame.display.flip()
         pygame.display.update()
         mainClock.tick(60)
