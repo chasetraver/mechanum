@@ -25,5 +25,5 @@ def get_location(x: object, y: object) -> object:
 
 def grid():
     grid_image: object = pygame.image.load(
-        '/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/gridBackground.png').convert()
+        'gridBackground.png').convert()
     return grid_image

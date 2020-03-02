@@ -17,10 +17,11 @@ pygame.display.set_caption('Mekaneks')
 
 # main font (currently system default)
 font = pygame.font.SysFont(None, 20)
+small_button_font = pygame.font.SysFont(None, 12)
 
 click = False
 
-robot_image = pygame.image.load('/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/Robby.png')
+robot_image = pygame.image.load('Robby.png')
 robot_image = pygame.transform.scale(robot_image, (62, 62))
 
 
@@ -49,6 +50,7 @@ def main_menu():
         # Fill black
         screen.fill((0, 0, 0))
         # button creations
+        #Rect(left pos, top pos, width, height)
         button_play = pygame.Rect(200, 200, 200, 50)
         button_options = pygame.Rect(200, 300, 200, 50)
         button_exit = pygame.Rect(200, 400, 200, 50)
@@ -56,6 +58,7 @@ def main_menu():
         pygame.draw.rect(screen, (255, 0, 0), button_options)
         pygame.draw.rect(screen, (255, 0, 0), button_exit)
         pygame.draw.rect(screen, (255, 0, 0), button_play)
+        #text for buttons
         button_play_msg = "Play"
         button_opt_msg = "Options"
         button_quit_msg = "Quit"
@@ -124,6 +127,7 @@ def playerturn(player):
 
 
 def game():
+    
     x = 0
     y = 0
 
@@ -132,11 +136,58 @@ def game():
     running = True
     while running:
         screen.fill((0, 0, 0))
+        button_conv_wheels = pygame.Rect(50, 550, 75, 25)
+        button_pointed_stick = pygame.Rect(200, 550, 75, 25)
+        button_scrap_armor = pygame.Rect(350, 550, 75, 25)
+        button_stick_lobber = pygame.Rect(500, 550, 75 , 25)
+        pygame.draw.rect(screen, (128, 128, 128), button_conv_wheels)
+        pygame.draw.rect(screen, (128, 128, 128), button_pointed_stick)
+        pygame.draw.rect(screen, (128, 128, 128), button_scrap_armor)
+        pygame.draw.rect(screen, (128, 128, 128), button_stick_lobber)
+        button_conv_wheels_msg = "conveyor wheels"
+        button_pointed_stick_msg = "pointed stick"
+        button_scrap_armor_msg = "scrap armor"
+        button_stick_lobber_msg = "stick lobber"
+        button_conv_wheels_txt = small_button_font.render(button_conv_wheels_msg, True, (255, 255, 255))
+        button_pointed_stick_txt = small_button_font.render(button_pointed_stick_msg, True, (255, 255, 255))
+        button_scrap_armor_txt = small_button_font.render(button_scrap_armor_msg, True, (255, 255, 255))
+        button_stick_lobber_txt = small_button_font.render(button_stick_lobber_msg, True, (255, 255, 255))
+        screen.blit(button_conv_wheels_txt, (55, 557))
+        screen.blit(button_pointed_stick_txt, (212, 557))
+        screen.blit(button_scrap_armor_txt, (365, 557))
+        screen.blit(button_stick_lobber_txt, (517, 557))
+        #img_conv_wheels = pygame.image.load(r'conveyorWheels.png')
+        #img_pointed_stick = pygame.image.load(r'pointedStick.png')
+        #img_scrap_armor = pygame.image.load(r'scrapArmor.png')
+        #img_stick_lobber = pygame.image.load(r'stickLobber.png')
+        #screen.blit(img_conv_wheels, (0,0))
+        #screen.blit(img_pointed_stick, (0,150))
+        #screen.blit(img_scrap_armor, (0,300))
+        #screen.blit(img_stick_lobber, (0,400))
+        #pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
                 exit()
 
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+                if button_conv_wheels.collidepoint(mx, my):
+                    if click:
+                        #replace with move
+                        exit()
+                if button_pointed_stick.collidepoint(mx, my):
+                    if click:
+                        #replace with move
+                        exit()
+                if button_scrap_armor(mx, my):
+                    if click:
+                        #replace with move
+                        exit()
+                if button_scrap_armor(mx, my):
+                    if click:
+                        #replace with move
+                        exit()
             if event.type == pygame.MOUSEBUTTONUP:
                 x_temp, y_temp = pygame.mouse.get_pos()
                 x_temp, y_temp = grid.get_location(x_temp, y_temp)
