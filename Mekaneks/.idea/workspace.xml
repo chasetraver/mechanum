@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7cae45f0-d466-4bab-b0d2-ec77c8287d62" name="Default Changelist" comment="corrected startingcards to have the correct number of starting cards">
-      <change afterPath="$PROJECT_DIR$/monster.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__main__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deckcardplayerclasses.py" beforeDir="false" afterPath="$PROJECT_DIR$/deckcardplayerclasses.py" afterDir="false" />
-    </list>
+    <list default="true" id="7cae45f0-d466-4bab-b0d2-ec77c8287d62" name="Default Changelist" comment="corrected startingcards to have the correct number of starting cards" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
