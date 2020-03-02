@@ -131,11 +131,11 @@ def game():
     
     x = 0
     y = 0
+    card_width = 1771
+    card_length = 2633
+    card_scale_factor = 0.05
 
-    mx, my = pygame.mouse.get_pos()
-    click = False
-    running = True
-    while running:
+    while True:
         screen.fill((0, 0, 0))
         button_conv_wheels = pygame.Rect(50, 550, 75, 25)
         button_pointed_stick = pygame.Rect(200, 550, 75, 25)
@@ -157,18 +157,22 @@ def game():
         screen.blit(button_pointed_stick_txt, (212, 557))
         screen.blit(button_scrap_armor_txt, (365, 557))
         screen.blit(button_stick_lobber_txt, (517, 557))
-        #img_conv_wheels = pygame.image.load(r'conveyorWheels.png')
-        #img_pointed_stick = pygame.image.load(r'pointedStick.png')
-        #img_scrap_armor = pygame.image.load(r'scrapArmor.png')
-        #img_stick_lobber = pygame.image.load(r'stickLobber.png')
-        #screen.blit(img_conv_wheels, (0,0))
-        #screen.blit(img_pointed_stick, (0,150))
-        #screen.blit(img_scrap_armor, (0,300))
-        #screen.blit(img_stick_lobber, (0,400))
-        #pygame.display.update()
+        img_conv_wheels = pygame.image.load('conveyorWheels.png')
+        img_conv_wheels = pygame.transform.scale(img_conv_wheels, (int(card_scale_factor*card_width),int(card_scale_factor*card_length)))
+        img_pointed_stick = pygame.image.load('pointedStick.png')
+        img_pointed_stick = pygame.transform.scale(img_pointed_stick, (int(card_scale_factor*card_width),int(card_scale_factor*card_length)))
+        img_scrap_armor = pygame.image.load('scrapArmor.png')
+        img_scrap_armor = pygame.transform.scale(img_scrap_armor, (int(card_scale_factor*card_width),int(card_scale_factor*card_length)))
+        img_stick_lobber = pygame.image.load('stickLobber.png')
+        img_stick_lobber = pygame.transform.scale(img_stick_lobber, (int(card_scale_factor*card_width),int(card_scale_factor*card_length)))
+        screen.blit(img_conv_wheels, (45,415))
+        screen.blit(img_pointed_stick, (195,415))
+        screen.blit(img_scrap_armor, (345,415))
+        screen.blit(img_stick_lobber, (495,415))
         for event in pygame.event.get():
+            mx, my = pygame.mouse.get_pos()
+            click = False
             if event.type == pygame.QUIT:
-                running = False
                 exit()
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -181,11 +185,11 @@ def game():
                     if click:
                         #replace with move
                         exit()
-                if button_scrap_armor(mx, my):
+                if button_scrap_armor.collidepoint(mx, my):
                     if click:
                         #replace with move
                         exit()
-                if button_scrap_armor(mx, my):
+                if button_stick_lobber.collidepoint(mx, my):
                     if click:
                         #replace with move
                         exit()
