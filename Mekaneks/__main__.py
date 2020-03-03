@@ -22,9 +22,9 @@ small_button_font = pygame.font.SysFont(None, 12)
 
 click = False
 
-robot_image = pygame.image.load('/home/chase/PycharmProjects/mechanum/Mekaneks/Robby.png')
+robot_image = pygame.image.load('Robby.png')
 robot_image = pygame.transform.scale(robot_image, (62, 62))
-goblin_image = pygame.image.load('/home/chase/PycharmProjects/mechanum/Mekaneks/goblinmonster.png')
+goblin_image = pygame.image.load('goblinmonster.png')
 goblin_image = pygame.transform.scale(goblin_image, (62, 62))
 
 
@@ -297,7 +297,7 @@ def game():
         index = 6
 
         if handsize >= 1:
-            button_card_0 = pygame.Rect(50, 550, 75, 25)
+            button_card_0 = pygame.Rect(45, 550, 90, 25)
             pygame.draw.rect(screen, (128, 128, 128), button_card_0)
             button_0_msg = "Play %s" % player1.hand[0].name
             button_0_txt = small_button_font.render(button_0_msg, True, (255, 255, 255))
@@ -305,51 +305,51 @@ def game():
             img_0 = pygame.transform.scale(img_0, (
             int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
             screen.blit(img_0, (45, 415))
-            screen.blit(button_0_txt, (55, 557))
+            screen.blit(button_0_txt, (50, 557))
 
         if handsize >= 2:
-            button_card_1 = pygame.Rect(200, 550, 75, 25)
+            button_card_1 = pygame.Rect(195, 550, 90, 25)
             pygame.draw.rect(screen, (128, 128, 128), button_card_1)
             button_1_msg = "Play %s" % player1.hand[1].name
             button_1_txt = small_button_font.render(button_1_msg, True, (255, 255, 255))
-            screen.blit(button_1_txt, (212, 557))
+            screen.blit(button_1_txt, (200, 557))
             img_1 = pygame.image.load(player1.hand[1].image)
             img_1 = pygame.transform.scale(img_1, (
                 int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
             screen.blit(img_1, (195, 415))
 
         if handsize >= 3:
-            button_card_2 = pygame.Rect(350, 550, 75, 25)
+            button_card_2 = pygame.Rect(345, 550, 90, 25)
             pygame.draw.rect(screen, (128, 128, 128), button_card_2)
             button_2_msg = "Play %s" % player1.hand[2].name
             button_2_txt = small_button_font.render(button_2_msg, True, (255, 255, 255))
-            screen.blit(button_2_txt, (365, 557))
+            screen.blit(button_2_txt, (350, 557))
             img_2 = pygame.image.load(player1.hand[2].image)
             img_2 = pygame.transform.scale(img_2, (
                 int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
             screen.blit(img_2, (345, 415))
 
         if handsize >= 4:
-            button_card_3 = pygame.Rect(500, 550, 75, 25)
+            button_card_3 = pygame.Rect(495, 550, 90, 25)
             pygame.draw.rect(screen, (128, 128, 128), button_card_3)
             button_3_msg = "Play %s" % player1.hand[3].name
             button_3_txt = small_button_font.render(button_3_msg, True, (255, 255, 255))
-            screen.blit(button_3_txt, (517, 557))
+            screen.blit(button_3_txt, (500, 557))
             img_3 = pygame.image.load(player1.hand[3].image)
             img_3 = pygame.transform.scale(img_3, (
                 int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
             screen.blit(img_3, (495, 415))
 
         if handsize >= 5:
-            button_card_4 = pygame.Rect(650, 550, 75, 25)
+            button_card_4 = pygame.Rect(420, 340, 90, 25)
             pygame.draw.rect(screen, (128, 128, 128), button_card_4)
             button_4_msg = "Play %s" % player1.hand[4].name
             button_4_txt = small_button_font.render(button_4_msg, True, (255, 255, 255))
-            screen.blit(button_4_txt, (670, 557))
+            screen.blit(button_4_txt, (425,345))
             img_4 = pygame.image.load(player1.hand[4].image)
             img_4 = pygame.transform.scale(img_4, (
                 int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-            screen.blit(img_4, (645, 415))
+            screen.blit(img_4, (420, 200))
 
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
