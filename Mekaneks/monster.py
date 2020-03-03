@@ -3,12 +3,10 @@ import random
 import pygame
 
 class Monster:
-    def __init__(self, hp, xcoord, ycoord):
+    def __init__(self, hp):
         self.hp = hp
         self.isalive = 1
-        self.xcoord = xcoord
-        self.ycoord = ycoord
-        self.sprite = pygame.image.load('/home/chase/PycharmProjects/mechanum/Mekaneks/goblinmonster.png')
+        self.sprite = pygame.image.load()
 
     def damage(self, amount):
         self.hp = self.hp - amount
