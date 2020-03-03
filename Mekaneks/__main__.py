@@ -139,6 +139,9 @@ def message_display(text):
     textRect.center = (100, 350)
     screen.blit(text, textRect)
 
+
+
+
 def game():
     xr = 0
     yr = 0
