@@ -51,6 +51,7 @@ class Player:
         self.ycoord = ycoord
         self.hand = []
         self.armor = 0
+        self.score = 0
         self.isalive = True
 
     def draw(self):
@@ -63,14 +64,11 @@ class Player:
             else:
                 self.gameover()
 
+    def addcard(self, card):
+        self.discarddeck.addcard(card)
+
     def discard(self, cardindex):
         self.discarddeck.addcard(self.hand.pop(cardindex))
-
-    def playcard(self, cardindex):
-        playedcard = self.hand[cardindex]
-        self.armor += playedcard.armor
-        # TODO make played card's other attributes do stuff with the grid.
-        self.discard(cardindex, self.discarddeck)
 
     def damage(self, amount):
         # when player takes damage, reduces armor first if possible before putting top card of drawdeck into trashdeck

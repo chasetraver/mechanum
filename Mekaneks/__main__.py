@@ -4,6 +4,7 @@ import sys
 import deckcardplayerclasses
 import cardlib
 import monster
+import random
 
 # initialize game engine and open a window
 mainClock = pygame.time.Clock()
@@ -29,6 +30,7 @@ goblin_image = pygame.transform.scale(goblin_image, (62, 62))
 
 def robot(x, y):
     screen.blit(robot_image, (x, y))
+
 
 def goblin(x, y):
     screen.blit(goblin_image, (x, y))
@@ -107,12 +109,46 @@ def playersetup(xplayer, yplayer):
     return player
 
 
-def playerturn(player):
+def playerturn(player, _monster):
     turn = 0  # player is able to play 2 cards before monsters act and before they redraw, hence the need for a loop.
     while turn < 2:
         # todo have player able to click card in hand, return index of card in player.hand
-        # player.playcard(index)
-        # todo if the player kills a monster, call cardlib.randcard and give the player the option to add card to deck
+        playedcard = player.hand[index]
+        if playedcard.move != 0:
+            message_display("Select the space to move to")
+            #todo have player click space and return xclick, yclick
+            while (grid.valid_move(xclick, yclick, player.xcoord, player.ycoord, _monster.xcoord, _monster.ycoord,
+                                   playedcard.move, True) == False):
+                message_display("That is not a valid move, please select a space within %r spaces of Robby" %
+                                playedcard.move)
+            xclick = grid.coordtogrid(xclick)
+            yclick = grid.coordtogrid(yclick)
+            player.xcoord = xclick
+            player.ycoord = yclick
+
+        if playedcard.attrange != 0:
+            message_display("Select a space to attack")
+            #todo, have player click space and return xclick, yclick
+            while (grid.valid_attack(xclick, yclick, player.xcoord, player.ycoord, _monster.xcoord, _monster.ycoord,
+                                     playedcard.attrange, True) == False):
+                message_display("That is not a valid space to attack, please select a space within %r spaces of Robby" %
+                                playedcard.attrange)
+            _monster.damage(playedcard.damage)
+            if (_monster.isalive == False):
+                player.score = player.score + 100
+                randnum = random.randint(1, 3)
+                if randnum == 3:
+                    lootcard = cardlib.randomcard()
+                    message_display("The monster has dropped a part! Would you like to add %r to your deck?" %
+                                    lootcard.name)
+                    #todo add buttons for player to choose yes or no. Buttons return True or False.
+                    if playerchoice == True:
+                        player.addcard(lootcard)
+        if playedcard.armor != 0:
+            message_display("You gain %d armor" % playedcard.armor)
+            player.armor = player.armor + playedcard.armor
+
+        player.discard(index)
         turn = turn + 1
 
     if len(player.hand) < 3:
@@ -121,8 +157,9 @@ def playerturn(player):
 
 
 def isadjacent(object1, object2):
+   #loops through all orthagonally adjacent squares of an object2 to determine if object 1 is adjacent
     xmod = 1
-    while xmod > -2:  # todo change this to a for loop like a sane person (upon research this might be the best way)
+    while xmod > -2:
         ymod = 1
         while ymod > -2:
             if (object1.xcoord == (object2.xcoord + xmod)) & (object2.ycoord == object2.ycoord):
@@ -151,7 +188,6 @@ def monsterturn(_monster, player):
             else:
                 assert True, "monster/player coord move error. Monsterx: %a, Monstery: %b, Playerx: %c, Playery: %d" % \
                              (_monster.xcoord, _monster.ycoord, player.xcoord, player.ycoord)
-        goblin(_monster.xcoord, _monster.ycoord)
 
 
 def message_display(text):
@@ -167,7 +203,6 @@ def message_display(text):
 def game():
     xgoblin = 0
     ygoblin = 0
-    playerscore = 0
     card_width = 1771
     card_length = 2633
     card_scale_factor = 0.05
@@ -175,12 +210,23 @@ def game():
 
     xrobby = grid.rand_location()
     yrobby = grid.rand_location()
-    xrobby = grid.set_coor(xrobby)
-    yrobby = grid.set_coor(yrobby)
+    xrobby = grid.coordtogrid(xrobby)
+    yrobby = grid.coordtogrid(yrobby)
 
     player1 = playersetup(xrobby, yrobby)
+    goblinmonster = monster.Monster(1, xgoblin, ygoblin)
 
-    while True:
+    xgoblin = grid.rand_location()
+    ygoblin = grid.rand_location()
+    if xrobby == xgoblin and yrobby == ygoblin:
+        while xrobby == xgoblin and yrobby == ygoblin:
+            xgoblin = grid.rand_location()
+            ygoblin = grid.rand_location()
+
+    xgoblin = grid.coordtogrid(xgoblin)
+    ygoblin = grid.coordtogrid(ygoblin)
+
+    while player1.isalive:
 
         screen.fill((0, 0, 0))
         button_conv_wheels = pygame.Rect(50, 550, 75, 25)
@@ -282,26 +328,9 @@ def game():
                                         xgoblin = grid.rand_location()
                                         ygoblin = grid.rand_location()
 
-                                xgoblin = grid.set_coor(xgoblin)
-                                ygoblin = grid.set_coor(ygoblin)
+                                xgoblin = grid.coordtogrid(xgoblin)
+                                ygoblin = grid.coordtogrid(ygoblin)
 
-                                goblin(xgoblin, ygoblin)
-                                newgoblin = monster.Monster(1, xgoblin, ygoblin)
-
-
-            elif beginning == True:
-
-                xgoblin = grid.rand_location()
-                ygoblin = grid.rand_location()
-                if xrobby == xgoblin and yrobby == ygoblin:
-                    while xrobby == xgoblin and yrobby == ygoblin:
-                        xgoblin = grid.rand_location()
-                        ygoblin = grid.rand_location()
-
-                xgoblin = grid.set_coor(xgoblin)
-                ygoblin = grid.set_coor(ygoblin)
-
-                beginning = False
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # ESC makes the game quit
@@ -311,15 +340,14 @@ def game():
         screen.blit(grid.grid(), [0, 0])
         robot(xrobby, yrobby)
         goblin(xgoblin, ygoblin)
-        goblinmonster = monster.Monster(1, xgoblin, ygoblin)
+
 
         pygame.display.flip()
         pygame.display.update()
         mainClock.tick(60)
 
-        while player1.isalive:
-            playerturn(player1)
-            monsterturn(goblinmonster, player1)
+        playerturn(player1, goblinmonster)
+        monsterturn(goblinmonster, player1)
 
 
 def options():
