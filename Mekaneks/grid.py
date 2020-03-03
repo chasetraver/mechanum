@@ -5,8 +5,7 @@ from random import randint
 seed(randint(0, 10))
 
 
-def xy_location(i):
-    x = 0
+def coordtogrid(i):
 
     if 0 < i < 63:
         x = 0
@@ -22,14 +21,14 @@ def xy_location(i):
 
 
 def get_location(x: object, y: object) -> object:
-    x_coor = xy_location(x)
-    y_coor = xy_location(y)
+    x_coor = coordtogrid(x)
+    y_coor = coordtogrid(y)
     return x_coor, y_coor
 
 
 def grid():
     grid_image: object = pygame.image.load(
-        '/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/gridBackground.png').convert()
+        '/home/chase/PycharmProjects/mechanum/Mekaneks/gridBackground.png').convert()
     return grid_image
 
 
@@ -38,7 +37,7 @@ def rand_location():
     return value
 
 
-def set_coor(i):
+def gridtocoord(i):
     if i == 0:
         return 0
     elif i == 1:

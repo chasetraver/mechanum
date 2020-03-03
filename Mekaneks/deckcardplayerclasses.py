@@ -16,10 +16,10 @@ class Deck:
     def __init__(self, cards):
         self.cards = cards
 
-    def show(self):
+   # def show(self):
         # Not functional, arguably not necessary
-        for card in self.cards:
-            card.show()
+        #for card in self.cards:
+            #card.show()
 
     def shuffle(self):
         for i in range(len(self.cards) - 1, 0, -1):
@@ -43,13 +43,15 @@ class Deck:
 
 
 class Player:
-    def __init__(self, drawdeck, discarddeck, trashdeck):
+    def __init__(self, drawdeck, discarddeck, trashdeck, xcoord, ycoord):
         self.drawdeck = drawdeck
         self.discarddeck = discarddeck
         self.trashdeck = trashdeck
+        self.xcoord = xcoord
+        self.ycoord = ycoord
         self.hand = []
         self.armor = 0
-        self.isalive = 1
+        self.isalive = True
 
     def draw(self):
         if len(self.drawdeck.cards) != 0:
@@ -92,7 +94,7 @@ class Player:
         pass
 
     def gameover(self):
-        self.isalive = 0
+        self.isalive = False
         pass
 
 

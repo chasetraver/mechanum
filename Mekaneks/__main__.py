@@ -13,7 +13,7 @@ window_height = 600
 # window settings
 display_size = (window_width, window_height)
 screen = pygame.display.set_mode(display_size)
-pygame.display.set_caption('Mekaneks')
+pygame.display.set_caption('Mechanum')
 
 # main font (currently system default)
 font = pygame.font.SysFont(None, 20)
@@ -21,9 +21,9 @@ small_button_font = pygame.font.SysFont(None, 12)
 
 click = False
 
-robot_image = pygame.image.load('/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/Robby.png')
+robot_image = pygame.image.load('/home/chase/PycharmProjects/mechanum/Mekaneks/Robby.png')
 robot_image = pygame.transform.scale(robot_image, (62, 62))
-goblin_image = pygame.image.load('/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/goblinmonster.png')
+goblin_image = pygame.image.load('/home/chase/PycharmProjects/mechanum/Mekaneks/goblinmonster.png')
 goblin_image = pygame.transform.scale(goblin_image, (62, 62))
 
 
@@ -31,8 +31,9 @@ def robot(x, y):
     screen.blit(robot_image, (x, y))
 
 def goblin(x, y):
+    goblinmonster = monster.Monster(1, x, y)
     screen.blit(goblin_image, (x, y))
-
+    return goblinmonster
 
 left = 0
 top = 0
@@ -50,7 +51,7 @@ def get_location(x, y):
 def main_menu():
     while True:
         # button texts
-        text_play = font.render('Mechaneks', True, (255, 255, 255))
+        text_play = font.render('Mechanum', True, (255, 255, 255))
         # screen.blit(text_play, (0,0))
         # Fill black
         screen.fill((0, 0, 0))
@@ -99,12 +100,12 @@ def main_menu():
         mainClock.tick(60)
 
 
-def playersetup():
+def playersetup(xplayer, yplayer):
     playerdrawdeck = deckcardplayerclasses.Deck(cardlib.startingcards())
     playerdrawdeck.shuffle()
     playerdiscarddeck = deckcardplayerclasses.Deck([])
     playertrashdeck = deckcardplayerclasses.Deck([])
-    player = deckcardplayerclasses.Player(playerdrawdeck, playerdiscarddeck, playertrashdeck)
+    player = deckcardplayerclasses.Player(playerdrawdeck, playerdiscarddeck, playertrashdeck, xplayer, yplayer)
     return player
 
 
@@ -116,17 +117,25 @@ def playerturn(player):
         # todo if the player kills a monster, call cardlib.randcard and give the player the option to add card to deck
         turn = turn + 1
 
+    if len(player.hand) < 3:
+        while player.hand < 5:
+            player.draw()
 
-# if len(player.hand) < 3:
-# while player.hand < 5:
-# player.draw()
 
-# def monsterturn(turncount, player):
-# todo if there is no monster on the grid, spawn a monster in a random space
-# if turncount % 3 == 0: # could be every 2 monster turns instead of 3. Playtest? Might not matter.
-# todo spawn a monster
-# todo for each monster:
-# todo if adjacent to the player:
+def monsterturn(_monster, player):
+    #checks each space adjacent to monster. If player is there, player is damaged.
+    xmod = 1
+    while xmod > -2: #todo change this to a for loop like a sane person (upon research this might be the best way)
+        ymod = 1
+        while ymod > -2:
+            if (player.xcoord == (_monster.xcoord + xmod)) & (_monster.ycoord == player.ycoord):
+                player.damage(1)
+            elif (player.xcoord == monster.xcoord) & (player.ycoord == (monster.ycoord + ymod)):
+                player.damage(1)
+            ymod = ymod - 2
+        xmod = xmod - 2
+
+
 # player.damage(1)
 # todo else the monster moves 1 space closer to the player
 
@@ -143,16 +152,24 @@ def message_display(text):
 
 
 def game():
-    xr = 0
-    yr = 0
-    xg = 0
-    yg = 0
+    xgoblin = 0
+    ygoblin = 0
+    playerscore = 0
     card_width = 1771
     card_length = 2633
     card_scale_factor = 0.05
     beginning = True            # If it's at the beginning of the game, Robby and Goblin will get randomly assigned spaces
 
+
+    xrobby = grid.rand_location()
+    yrobby = grid.rand_location()
+    xrobby = grid.set_coor(xrobby)
+    yrobby = grid.set_coor(yrobby)
+
+    player1 = playersetup(xrobby, yrobby)
+
     while True:
+
         screen.fill((0, 0, 0))
         button_conv_wheels = pygame.Rect(50, 550, 75, 25)
         button_pointed_stick = pygame.Rect(200, 550, 75, 25)
@@ -175,19 +192,19 @@ def game():
         screen.blit(button_scrap_armor_txt, (365, 557))
         screen.blit(button_stick_lobber_txt, (517, 557))
         img_conv_wheels = pygame.image.load(
-            '/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/conveyorWheels.png')
+            '/home/chase/PycharmProjects/mechanum/Mekaneks/conveyorWheels.png')
         img_conv_wheels = pygame.transform.scale(img_conv_wheels, (
             int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
         img_pointed_stick = pygame.image.load(
-            '/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/pointedStick.png')
+            '/home/chase/PycharmProjects/mechanum/Mekaneks/pointedStick.png')
         img_pointed_stick = pygame.transform.scale(img_pointed_stick, (
             int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
         img_scrap_armor = pygame.image.load(
-            '/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/scrapArmor.png')
+            '/home/chase/PycharmProjects/mechanum/Mekaneks/scrapArmor.png')
         img_scrap_armor = pygame.transform.scale(img_scrap_armor, (
             int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
         img_stick_lobber = pygame.image.load(
-            '/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/sticklobber.png')
+            '/home/chase/PycharmProjects/mechanum/Mekaneks/sticklobber.png')
         img_stick_lobber = pygame.transform.scale(img_stick_lobber, (
             int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
         screen.blit(img_conv_wheels, (45, 415))
@@ -213,64 +230,83 @@ def game():
                                         x_temp, y_temp = pygame.mouse.get_pos()
                                         if 0 <= x_temp <= 316 and 0 <= y_temp <= 316:
                                             x_temp, y_temp = grid.get_location(x_temp, y_temp)
-                                            xr = x_temp
-                                            yr = y_temp
+                                            xrobby = x_temp
+                                            yrobby = y_temp
 
 
 
                         #exit()
                     if button_pointed_stick.collidepoint(mx, my):
                         if click:
-                        # replace with move
-                            exit()
+                            #todo have it wait for another click to get space coordinates...?
+                            message_display("Click the space you want to attack")
+                            if grid.valid_attack(xcoord,ycoord,player1.xcoord,player1.ycoord,goblinmonster.xcoord,
+                                                 goblinmonster.ycoord,1, playerturn):
+                                playerscore = playerscore + 100
+                                xgoblin = grid.rand_location()
+                                ygoblin = grid.rand_location()
+                                if player1.xcoord == xgoblin and player1.ycoord == ygoblin:
+                                    while xrobby == xgoblin and yrobby == ygoblin:
+                                        xgoblin = grid.rand_location()
+                                        ygoblin = grid.rand_location()
+
+                                xgoblin = grid.set_coor(xgoblin)
+                                ygoblin = grid.set_coor(ygoblin)
+
+                                goblin(xgoblin, ygoblin)
+
+                                #todo double check this spawns the goblin properly
                     if button_scrap_armor.collidepoint(mx, my):
                         if click:
-                        # replace with move
-                            exit()
+                            player1.armor = player1.armor + 1
                     if button_stick_lobber.collidepoint(mx, my):
                         if click:
-                        # replace with move
-                            exit()
+                            if grid.valid_attack(xcoord, ycoord, player1.xcoord, player1.ycoord, goblinmonster.xcoord,
+                                                 goblinmonster.ycoord, 2, playerturn):
+                                playerscore = playerscore + 100
+                                xgoblin = grid.rand_location()
+                                ygoblin = grid.rand_location()
+                                if player1.xcoord == xgoblin and player1.ycoord == ygoblin:
+                                    while xrobby == xgoblin and yrobby == ygoblin:
+                                        xgoblin = grid.rand_location()
+                                        ygoblin = grid.rand_location()
+
+                                xgoblin = grid.set_coor(xgoblin)
+                                ygoblin = grid.set_coor(ygoblin)
+
+                                goblin(xgoblin, ygoblin)
+
 
             elif beginning == True:
-                xr = grid.rand_location()
-                yr = grid.rand_location()
-                xg = grid.rand_location()
-                yg = grid.rand_location()
-                if xr == xg and yr == yg:
-                    while xr == xg and yr == yg:
-                        xg = grid.rand_location()
-                        yg = grid.rand_location()
 
-                xg = grid.set_coor(xg)
-                yg = grid.set_coor(yg)
-                xr = grid.set_coor(xr)
-                yr = grid.set_coor(yr)
+                xgoblin = grid.rand_location()
+                ygoblin = grid.rand_location()
+                if xrobby == xgoblin and yrobby == ygoblin:
+                    while xrobby == xgoblin and yrobby == ygoblin:
+                        xgoblin = grid.rand_location()
+                        ygoblin = grid.rand_location()
+
+                xgoblin = grid.set_coor(xgoblin)
+                ygoblin = grid.set_coor(ygoblin)
+
                 beginning = False
 
-
-
-
-
-
-
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_ESCAPE:  # ESC makes the game quit
                     exit()
         # Print the grid to the screen
 
         screen.blit(grid.grid(), [0, 0])
-        robot(xr, yr)
-        goblin(xg, yg)
+        robot(xrobby, yrobby)
+        goblinmonster = goblin(xgoblin, ygoblin)
 
         pygame.display.flip()
         pygame.display.update()
-        # mainClock.tick(60)
-        # player1 = playersetup()
-        # turncount = 0
-        # while player1.isalive == 1:
-        # playerturn(player1)
-        # monsterturn(turncount, player1)
+        mainClock.tick(60)
+
+        while player1.isalive:
+            playerturn(player1)
+            monsterturn(goblinmonster, player1)
 
 
 def options():
