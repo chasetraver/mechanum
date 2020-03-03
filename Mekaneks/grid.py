@@ -1,4 +1,7 @@
 import pygame
+from random import seed
+from random import randint
+seed(randint(0, 10))
 
 
 def xy_location(i):
@@ -25,5 +28,25 @@ def get_location(x: object, y: object) -> object:
 
 def grid():
     grid_image: object = pygame.image.load(
-        'gridBackground.png').convert()
+        '/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/gridBackground.png').convert()
     return grid_image
+
+
+def rand_location():
+    value = randint(0, 4)
+    return value
+
+
+def set_coor(i):
+    if i == 0:
+        return 0
+    elif i == 1:
+        return 64
+    elif i == 2:
+        return 128
+    elif i == 3:
+        return 191
+    else:
+        return 255
+
+

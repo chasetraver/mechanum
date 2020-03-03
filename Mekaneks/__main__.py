@@ -21,12 +21,17 @@ small_button_font = pygame.font.SysFont(None, 12)
 
 click = False
 
-robot_image = pygame.image.load('Robby.png')
+robot_image = pygame.image.load('/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/Robby.png')
 robot_image = pygame.transform.scale(robot_image, (62, 62))
+goblin_image = pygame.image.load('/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/goblinmonster.png')
+goblin_image = pygame.transform.scale(goblin_image, (62, 62))
 
 
 def robot(x, y):
     screen.blit(robot_image, (x, y))
+
+def goblin(x, y):
+    screen.blit(goblin_image, (x, y))
 
 
 left = 0
@@ -50,7 +55,7 @@ def main_menu():
         # Fill black
         screen.fill((0, 0, 0))
         # button creations
-        #Rect(left pos, top pos, width, height)
+        # Rect(left pos, top pos, width, height)
         button_play = pygame.Rect(200, 200, 200, 50)
         button_options = pygame.Rect(200, 300, 200, 50)
         button_exit = pygame.Rect(200, 400, 200, 50)
@@ -58,7 +63,7 @@ def main_menu():
         pygame.draw.rect(screen, (255, 0, 0), button_options)
         pygame.draw.rect(screen, (255, 0, 0), button_exit)
         pygame.draw.rect(screen, (255, 0, 0), button_play)
-        #text for buttons
+        # text for buttons
         button_play_msg = "Play"
         button_opt_msg = "Options"
         button_quit_msg = "Quit"
@@ -127,20 +132,23 @@ def playerturn(player):
 
 
 
+
 def game():
-    
-    x = 0
-    y = 0
+    xr = 0
+    yr = 0
+    xg = 0
+    yg = 0
     card_width = 1771
     card_length = 2633
     card_scale_factor = 0.05
+    beginning = True            # If it's at the beginning of the game, Robby and Goblin will get randomly assigned spaces
 
     while True:
         screen.fill((0, 0, 0))
         button_conv_wheels = pygame.Rect(50, 550, 75, 25)
         button_pointed_stick = pygame.Rect(200, 550, 75, 25)
         button_scrap_armor = pygame.Rect(350, 550, 75, 25)
-        button_stick_lobber = pygame.Rect(500, 550, 75 , 25)
+        button_stick_lobber = pygame.Rect(500, 550, 75, 25)
         pygame.draw.rect(screen, (128, 128, 128), button_conv_wheels)
         pygame.draw.rect(screen, (128, 128, 128), button_pointed_stick)
         pygame.draw.rect(screen, (128, 128, 128), button_scrap_armor)
@@ -157,18 +165,28 @@ def game():
         screen.blit(button_pointed_stick_txt, (212, 557))
         screen.blit(button_scrap_armor_txt, (365, 557))
         screen.blit(button_stick_lobber_txt, (517, 557))
-        img_conv_wheels = pygame.image.load('conveyorWheels.png')
-        img_conv_wheels = pygame.transform.scale(img_conv_wheels, (int(card_scale_factor*card_width),int(card_scale_factor*card_length)))
-        img_pointed_stick = pygame.image.load('pointedStick.png')
-        img_pointed_stick = pygame.transform.scale(img_pointed_stick, (int(card_scale_factor*card_width),int(card_scale_factor*card_length)))
-        img_scrap_armor = pygame.image.load('scrapArmor.png')
-        img_scrap_armor = pygame.transform.scale(img_scrap_armor, (int(card_scale_factor*card_width),int(card_scale_factor*card_length)))
-        img_stick_lobber = pygame.image.load('stickLobber.png')
-        img_stick_lobber = pygame.transform.scale(img_stick_lobber, (int(card_scale_factor*card_width),int(card_scale_factor*card_length)))
-        screen.blit(img_conv_wheels, (45,415))
-        screen.blit(img_pointed_stick, (195,415))
-        screen.blit(img_scrap_armor, (345,415))
-        screen.blit(img_stick_lobber, (495,415))
+        img_conv_wheels = pygame.image.load(
+            '/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/conveyorWheels.png')
+        img_conv_wheels = pygame.transform.scale(img_conv_wheels, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        img_pointed_stick = pygame.image.load(
+            '/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/pointedStick.png')
+        img_pointed_stick = pygame.transform.scale(img_pointed_stick, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        img_scrap_armor = pygame.image.load(
+            '/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/scrapArmor.png')
+        img_scrap_armor = pygame.transform.scale(img_scrap_armor, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        img_stick_lobber = pygame.image.load(
+            '/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/sticklobber.png')
+        img_stick_lobber = pygame.transform.scale(img_stick_lobber, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_conv_wheels, (45, 415))
+        screen.blit(img_pointed_stick, (195, 415))
+        screen.blit(img_scrap_armor, (345, 415))
+        screen.blit(img_stick_lobber, (495, 415))
+
+
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
             click = False
@@ -179,27 +197,50 @@ def game():
                 click = True
                 if button_conv_wheels.collidepoint(mx, my):
                     if click:
-                        #replace with move
+                        # replace with move
                         exit()
                 if button_pointed_stick.collidepoint(mx, my):
                     if click:
-                        #replace with move
+                        # replace with move
                         exit()
                 if button_scrap_armor.collidepoint(mx, my):
                     if click:
-                        #replace with move
+                        # replace with move
                         exit()
                 if button_stick_lobber.collidepoint(mx, my):
                     if click:
-                        #replace with move
+                        # replace with move
                         exit()
-            if event.type == pygame.MOUSEBUTTONUP:
-                x_temp, y_temp = pygame.mouse.get_pos()
-                x_temp, y_temp = grid.get_location(x_temp, y_temp)
-                if x_temp <= 316:
-                    if y_temp <= 316:
-                        x = x_temp
-                        y = y_temp
+
+            if beginning == False:
+                if event.type == pygame.MOUSEBUTTONUP:
+                    x_temp, y_temp = pygame.mouse.get_pos()
+                    if 0 <= x_temp <= 316 and 0 <= y_temp <= 316:
+                        x_temp, y_temp = grid.get_location(x_temp, y_temp)
+                        xr = x_temp
+                        yr = y_temp
+
+            elif beginning == True:
+                xr = grid.rand_location()
+                yr = grid.rand_location()
+                xg = grid.rand_location()
+                yg = grid.rand_location()
+                if xr == xg and yr == yg:
+                    while xr == xg and yr == yg:
+                        xg = grid.rand_location()
+                        yg = grid.rand_location()
+
+                xg = grid.set_coor(xg)
+                yg = grid.set_coor(yg)
+                xr = grid.set_coor(xr)
+                yr = grid.set_coor(yr)
+                beginning = False
+
+
+
+
+
+
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -207,7 +248,8 @@ def game():
         # Print the grid to the screen
 
         screen.blit(grid.grid(), [0, 0])
-        robot(x, y)
+        robot(xr, yr)
+        goblin(xg, yg)
 
         pygame.display.flip()
         pygame.display.update()
