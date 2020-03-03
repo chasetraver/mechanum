@@ -41,6 +41,12 @@ width = 0
 height = 0
 
 
+def waitforclick():
+    while not pygame.MOUSEBUTTONDOWN:
+        pass
+    return pygame.mouse.get_pos()
+
+
 def get_location(x, y):
     left = x
     top = y
@@ -116,9 +122,9 @@ def playerturn(player, _monster):
         playedcard = player.hand[index]
         if playedcard.move != 0:
             message_display("Select the space to move to")
-            #todo have player click space and return xclick, yclick
-            while (grid.valid_move(xclick, yclick, player.xcoord, player.ycoord, _monster.xcoord, _monster.ycoord,
-                                   playedcard.move, True) == False):
+            xclick, yclick = waitforclick()
+            while not grid.valid_move(xclick, yclick, player.xcoord, player.ycoord, _monster.xcoord, _monster.ycoord,
+                                playedcard.move, True):
                 message_display("That is not a valid move, please select a space within %r spaces of Robby" %
                                 playedcard.move)
             xclick = grid.coordtogrid(xclick)
@@ -128,22 +134,45 @@ def playerturn(player, _monster):
 
         if playedcard.attrange != 0:
             message_display("Select a space to attack")
-            #todo, have player click space and return xclick, yclick
-            while (grid.valid_attack(xclick, yclick, player.xcoord, player.ycoord, _monster.xcoord, _monster.ycoord,
-                                     playedcard.attrange, True) == False):
+            xclick, yclick = waitforclick()
+            while not grid.valid_attack(xclick, yclick, player.xcoord, player.ycoord, _monster.xcoord, _monster.ycoord,
+                                     playedcard.attrange, True):
                 message_display("That is not a valid space to attack, please select a space within %r spaces of Robby" %
                                 playedcard.attrange)
             _monster.damage(playedcard.damage)
-            if (_monster.isalive == False):
+            if not _monster.isalive:
+                message_display("You attack and kill the monster! You earn 100 points!")
                 player.score = player.score + 100
                 randnum = random.randint(1, 3)
                 if randnum == 3:
                     lootcard = cardlib.randomcard()
                     message_display("The monster has dropped a part! Would you like to add %r to your deck?" %
                                     lootcard.name)
-                    #todo add buttons for player to choose yes or no. Buttons return True or False.
-                    if playerchoice == True:
+                    validresponse = False
+                    while not validresponse:
+                        while not pygame.MOUSEBUTTONDOWN:
+                            button_yes = pygame.Rect(200, 200, 200, 50)
+                            pygame.draw.rect(screen, (255, 0, 0), button_yes)
+                            button_yes_msg = "YES"
+                            button_yes_txt = font.render(button_yes_msg, True, (255, 255, 255))
+                            screen.blit(button_yes_txt, (285, 220))
+                            button_no = pygame.Rect(200, 300, 200, 50)
+                            pygame.draw.rect(screen, (255, 0, 0), button_no)
+                            button_no_msg = "NO"
+                            button_no_txt = font.render(button_no_msg, True, (255, 255, 255))
+                            screen.blit(button_no_txt, (285, 320))
+                        xmouse, ymouse = pygame.mouse.get_pos()
+                        if button_yes.collidepoint(xmouse, ymouse):
+                            playerchoice = True
+                            validresponse = True
+                        if button_no.collidepoint(xmouse, ymouse):
+                            playerchoice = False
+                            validresponse = True
+                    if playerchoice:
                         player.addcard(lootcard)
+
+            else:
+                message_display("You attack the monster. It is weakened, but yet lives.")
         if playedcard.armor != 0:
             message_display("You gain %d armor" % playedcard.armor)
             player.armor = player.armor + playedcard.armor
@@ -172,9 +201,16 @@ def isadjacent(object1, object2):
 
 
 def monsterturn(_monster, player):
-    #checks each space adjacent to monster. If player is there, player is damaged.
+    #checks each space adjacent to monster. If player is there, player is damaged, otherwise the monster moves closer.
     if isadjacent(_monster, player):
-        player.damage(1)
+        if player.armor > 0:
+            message_display("The monster attacked you, but your armor protected you!")
+            player.damage(1)
+        else:
+            lostcard = player.damage(1)
+            if player.isalive:
+                message_display("The monster attacked you and broke your %r!" % lostcard.name)
+
     else:
         if _monster.ycoord < player.ycoord:
             _monster.ycoord = _monster.ycoord + 1
@@ -206,7 +242,6 @@ def game():
     card_width = 1771
     card_length = 2633
     card_scale_factor = 0.05
-    beginning = True            # If it's at the beginning of the game, Robby and Goblin will get randomly assigned spaces
 
     xrobby = grid.rand_location()
     yrobby = grid.rand_location()
@@ -275,7 +310,7 @@ def game():
             click = False
             if event.type == pygame.QUIT:
                 exit()
-            if beginning == False:
+            if True:
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     click = True
                     if button_conv_wheels.collidepoint(mx, my):
@@ -297,8 +332,8 @@ def game():
                         if click:
                             #todo have it wait for another click to get space coordinates...?
                             message_display("Click the space you want to attack")
-                            if grid.valid_attack(xcoord,ycoord,player1.xcoord,player1.ycoord,goblinmonster.xcoord,
-                                                 goblinmonster.ycoord,1, playerturn):
+                            if grid.valid_attack(xcoord, ycoord, player1.xcoord, player1.ycoord, goblinmonster.xcoord,
+                                                 goblinmonster.ycoord, 1, playerturn):
                                 playerscore = playerscore + 100
                                 xgoblin = grid.rand_location()
                                 ygoblin = grid.rand_location()
@@ -330,7 +365,6 @@ def game():
 
                                 xgoblin = grid.coordtogrid(xgoblin)
                                 ygoblin = grid.coordtogrid(ygoblin)
-
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # ESC makes the game quit

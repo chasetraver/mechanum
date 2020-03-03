@@ -79,12 +79,14 @@ class Player:
                 else:
                     if len(self.discarddeck.cards) != 0:
                         self.drawdeck.swapdeck(self.discarddeck)
-                        self.trashdeck.append(self.drawdeck.drawcard())
+                        trashedcard = self.drawdeck.drawcard()
+                        self.trashdeck.append(trashedcard)
+                        return trashedcard
                     else:
                         self.gameover()
 
             else:
-                self.armor = self.armor - 1
+                self.armor = self.armor - amount
 
     def showhand(self):
         for card in self.hand:
