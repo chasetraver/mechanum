@@ -113,6 +113,7 @@ def in_range(xr, yr, xg, yg, i):
     else:
         return True
 
+
 def valid_attack(x, y, xr, yr, xg, yg, i, j):
     # x and y are coordinates of the click
     # xr and yr are the coordinates of the robot

@@ -31,9 +31,7 @@ def robot(x, y):
     screen.blit(robot_image, (x, y))
 
 def goblin(x, y):
-    goblinmonster = monster.Monster(1, x, y)
     screen.blit(goblin_image, (x, y))
-    return goblinmonster
 
 left = 0
 top = 0
@@ -122,22 +120,39 @@ def playerturn(player):
             player.draw()
 
 
-def monsterturn(_monster, player):
-    #checks each space adjacent to monster. If player is there, player is damaged.
+def isadjacent(object1, object2):
     xmod = 1
-    while xmod > -2: #todo change this to a for loop like a sane person (upon research this might be the best way)
+    while xmod > -2:  # todo change this to a for loop like a sane person (upon research this might be the best way)
         ymod = 1
         while ymod > -2:
-            if (player.xcoord == (_monster.xcoord + xmod)) & (_monster.ycoord == player.ycoord):
-                player.damage(1)
-            elif (player.xcoord == monster.xcoord) & (player.ycoord == (monster.ycoord + ymod)):
-                player.damage(1)
+            if (object1.xcoord == (object2.xcoord + xmod)) & (object2.ycoord == object2.ycoord):
+                return True
+            elif (object1.xcoord == object2.xcoord) & (object1.ycoord == (object2.ycoord + ymod)):
+                return True
             ymod = ymod - 2
         xmod = xmod - 2
+    return False
 
 
-# player.damage(1)
-# todo else the monster moves 1 space closer to the player
+def monsterturn(_monster, player):
+    #checks each space adjacent to monster. If player is there, player is damaged.
+    if isadjacent(_monster, player):
+        player.damage(1)
+    else:
+        if _monster.ycoord < player.ycoord:
+            _monster.ycoord = _monster.ycoord + 1
+        elif monster.ycoord > player.ycoord:
+            _monster.ycoord = _monster.ycoord - 1
+        elif _monster.ycoord == player.ycoord:
+            if _monster.xcoord < player.xcoord:
+                _monster.xcoord = _monster.xcoord + 1
+            elif _monster.xcoord > player.xcoord:
+                _monster.xcoord = _monster.xcoord - 1
+            else:
+                assert True, "monster/player coord move error. Monsterx: %a, Monstery: %b, Playerx: %c, Playery: %d" % \
+                             (_monster.xcoord, _monster.ycoord, player.xcoord, player.ycoord)
+        goblin(_monster.xcoord, _monster.ycoord)
+
 
 def message_display(text):
     white = (255, 255, 255)
@@ -149,8 +164,6 @@ def message_display(text):
     screen.blit(text, textRect)
 
 
-
-
 def game():
     xgoblin = 0
     ygoblin = 0
@@ -159,7 +172,6 @@ def game():
     card_length = 2633
     card_scale_factor = 0.05
     beginning = True            # If it's at the beginning of the game, Robby and Goblin will get randomly assigned spaces
-
 
     xrobby = grid.rand_location()
     yrobby = grid.rand_location()
@@ -212,7 +224,6 @@ def game():
         screen.blit(img_scrap_armor, (345, 415))
         screen.blit(img_stick_lobber, (495, 415))
 
-
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
             click = False
@@ -250,8 +261,8 @@ def game():
                                         xgoblin = grid.rand_location()
                                         ygoblin = grid.rand_location()
 
-                                xgoblin = grid.set_coor(xgoblin)
-                                ygoblin = grid.set_coor(ygoblin)
+                                xgoblin = grid.gridtocoord(xgoblin)
+                                ygoblin = grid.gridtocoord(ygoblin)
 
                                 goblin(xgoblin, ygoblin)
 
@@ -275,6 +286,7 @@ def game():
                                 ygoblin = grid.set_coor(ygoblin)
 
                                 goblin(xgoblin, ygoblin)
+                                newgoblin = monster.Monster(1, xgoblin, ygoblin)
 
 
             elif beginning == True:
@@ -298,7 +310,8 @@ def game():
 
         screen.blit(grid.grid(), [0, 0])
         robot(xrobby, yrobby)
-        goblinmonster = goblin(xgoblin, ygoblin)
+        goblin(xgoblin, ygoblin)
+        goblinmonster = monster.Monster(1, xgoblin, ygoblin)
 
         pygame.display.flip()
         pygame.display.update()
