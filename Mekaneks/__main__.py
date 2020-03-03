@@ -29,22 +29,20 @@ goblin_image = pygame.transform.scale(goblin_image, (62, 62))
 
 
 def robot(x, y):
+    x = grid.gridtocoord(x)
+    y = grid.gridtocoord(y)
     screen.blit(robot_image, (x, y))
 
 
 def goblin(x, y):
+    x = grid.gridtocoord(x)
+    y = grid.gridtocoord(y)
     screen.blit(goblin_image, (x, y))
 
 left = 0
 top = 0
 width = 0
 height = 0
-
-
-def waitforclick():
-    while not pygame.MOUSEBUTTONDOWN:
-        pass
-    return pygame.mouse.get_pos()
 
 
 def get_location(x, y):
@@ -115,29 +113,50 @@ def playersetup(xplayer, yplayer):
     return player
 
 
-def playerturn(player, _monster):
+def possibleattack(player, _monster, attrange):
+    for x in range(-attrange, attrange):
+        if player.xcoord + x == _monster.xcoord:
+            return True
+        if player.ycoord + x == monster.ycoord:
+            return True
+    return False
+
+
+def waitforclick():
+    while not pygame.MOUSEBUTTONDOWN:
+        pass
+    return pygame.mouse.get_pos()
+
+
+def playerturn(player, _monster, index):
     turn = 0  # player is able to play 2 cards before monsters act and before they redraw, hence the need for a loop.
     while turn < 2:
         # todo have player able to click card in hand, return index of card in player.hand
+
+        assert index == 6, "index error"
         playedcard = player.hand[index]
-        if playedcard.move != 0:
+        if playedcard.move != 0:   
             message_display("Select the space to move to")
             xclick, yclick = waitforclick()
             while not grid.valid_move(xclick, yclick, player.xcoord, player.ycoord, _monster.xcoord, _monster.ycoord,
                                 playedcard.move, True):
-                message_display("That is not a valid move, please select a space within %r spaces of Robby" %
+                message_display("That is not a valid move, please select a space within %d spaces of Robby" %
                                 playedcard.move)
             xclick = grid.coordtogrid(xclick)
             yclick = grid.coordtogrid(yclick)
             player.xcoord = xclick
             player.ycoord = yclick
-
         if playedcard.attrange != 0:
+            if not possibleattack(player, _monster, playedcard.attrange):
+                message_display("There is no possible attack target for that card")
+                player.discard(index)
+                return
             message_display("Select a space to attack")
             xclick, yclick = waitforclick()
+
             while not grid.valid_attack(xclick, yclick, player.xcoord, player.ycoord, _monster.xcoord, _monster.ycoord,
                                      playedcard.attrange, True):
-                message_display("That is not a valid space to attack, please select a space within %r spaces of Robby" %
+                message_display("That is not a valid space to attack, please select a space within %d spaces of Robby" %
                                 playedcard.attrange)
             _monster.damage(playedcard.damage)
             if not _monster.isalive:
@@ -146,7 +165,7 @@ def playerturn(player, _monster):
                 randnum = random.randint(1, 3)
                 if randnum == 3:
                     lootcard = cardlib.randomcard()
-                    message_display("The monster has dropped a part! Would you like to add %r to your deck?" %
+                    message_display("The monster has dropped a part! Would you like to add %s to your deck?" %
                                     lootcard.name)
                     validresponse = False
                     while not validresponse:
@@ -169,6 +188,7 @@ def playerturn(player, _monster):
                             button_no_msg = "NO"
                             button_no_txt = font.render(button_no_msg, True, (255, 255, 255))
                             screen.blit(button_no_txt, (285, 320))
+                            pygame.display.update()
                         xmouse, ymouse = pygame.mouse.get_pos()
                         if button_yes.collidepoint(xmouse, ymouse):
                             playerchoice = True
@@ -217,7 +237,7 @@ def monsterturn(_monster, player):
         else:
             lostcard = player.damage(1)
             if player.isalive:
-                message_display("The monster attacked you and broke your %r!" % lostcard.name)
+                message_display("The monster attacked you and broke your %s!" % lostcard.name)
 
     else:
         if _monster.ycoord < player.ycoord:
@@ -230,9 +250,9 @@ def monsterturn(_monster, player):
             elif _monster.xcoord > player.xcoord:
                 _monster.xcoord = _monster.xcoord - 1
             else:
-                assert True, "monster/player coord move error. Monsterx: %a, Monstery: %b, Playerx: %c, Playery: %d" % \
-                             (_monster.xcoord, _monster.ycoord, player.xcoord, player.ycoord)
-
+                # assert True, "monster/player coord move error. Monsterx: %a, Monstery: %b, Playerx: %c, Playery: %d" % \
+                             # (_monster.xcoord, _monster.ycoord, player.xcoord, player.ycoord)
+                pass
 
 def message_display(text):
     white = (255, 255, 255)
@@ -247,71 +267,87 @@ def message_display(text):
 def game():
     xgoblin = 0
     ygoblin = 0
-    card_width = 1771
-    card_length = 2633
-    card_scale_factor = 0.05
 
     xrobby = grid.rand_location()
     yrobby = grid.rand_location()
-    xrobby = grid.coordtogrid(xrobby)
-    yrobby = grid.coordtogrid(yrobby)
-
-    player1 = playersetup(xrobby, yrobby)
-    goblinmonster = monster.Monster(1, xgoblin, ygoblin)
 
     xgoblin = grid.rand_location()
     ygoblin = grid.rand_location()
+    player1 = playersetup(xrobby, yrobby)
+
     if xrobby == xgoblin and yrobby == ygoblin:
         while xrobby == xgoblin and yrobby == ygoblin:
             xgoblin = grid.rand_location()
             ygoblin = grid.rand_location()
 
-    xgoblin = grid.coordtogrid(xgoblin)
-    ygoblin = grid.coordtogrid(ygoblin)
+    goblinmonster = monster.Monster(1, xgoblin, ygoblin)
 
     while player1.isalive:
 
         screen.fill((0, 0, 0))
-        button_conv_wheels = pygame.Rect(50, 550, 75, 25)
-        button_pointed_stick = pygame.Rect(200, 550, 75, 25)
-        button_scrap_armor = pygame.Rect(350, 550, 75, 25)
-        button_stick_lobber = pygame.Rect(500, 550, 75, 25)
-        pygame.draw.rect(screen, (128, 128, 128), button_conv_wheels)
-        pygame.draw.rect(screen, (128, 128, 128), button_pointed_stick)
-        pygame.draw.rect(screen, (128, 128, 128), button_scrap_armor)
-        pygame.draw.rect(screen, (128, 128, 128), button_stick_lobber)
-        button_conv_wheels_msg = "conveyor wheels"
-        button_pointed_stick_msg = "pointed stick"
-        button_scrap_armor_msg = "scrap armor"
-        button_stick_lobber_msg = "stick lobber"
-        button_conv_wheels_txt = small_button_font.render(button_conv_wheels_msg, True, (255, 255, 255))
-        button_pointed_stick_txt = small_button_font.render(button_pointed_stick_msg, True, (255, 255, 255))
-        button_scrap_armor_txt = small_button_font.render(button_scrap_armor_msg, True, (255, 255, 255))
-        button_stick_lobber_txt = small_button_font.render(button_stick_lobber_msg, True, (255, 255, 255))
-        screen.blit(button_conv_wheels_txt, (55, 557))
-        screen.blit(button_pointed_stick_txt, (212, 557))
-        screen.blit(button_scrap_armor_txt, (365, 557))
-        screen.blit(button_stick_lobber_txt, (517, 557))
-        img_conv_wheels = pygame.image.load(
-            '/home/chase/PycharmProjects/mechanum/Mekaneks/conveyorWheels.png')
-        img_conv_wheels = pygame.transform.scale(img_conv_wheels, (
-            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        img_pointed_stick = pygame.image.load(
-            '/home/chase/PycharmProjects/mechanum/Mekaneks/pointedStick.png')
-        img_pointed_stick = pygame.transform.scale(img_pointed_stick, (
-            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        img_scrap_armor = pygame.image.load(
-            '/home/chase/PycharmProjects/mechanum/Mekaneks/scrapArmor.png')
-        img_scrap_armor = pygame.transform.scale(img_scrap_armor, (
-            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        img_stick_lobber = pygame.image.load(
-            '/home/chase/PycharmProjects/mechanum/Mekaneks/sticklobber.png')
-        img_stick_lobber = pygame.transform.scale(img_stick_lobber, (
-            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_conv_wheels, (45, 415))
-        screen.blit(img_pointed_stick, (195, 415))
-        screen.blit(img_scrap_armor, (345, 415))
-        screen.blit(img_stick_lobber, (495, 415))
+
+        card_width = 1771
+        card_length = 2633
+        card_scale_factor = 0.05
+
+        handsize = len(player1.hand)
+        assert handsize <= 5
+        index = 6
+
+        if handsize >= 1:
+            button_card_0 = pygame.Rect(50, 550, 75, 25)
+            pygame.draw.rect(screen, (128, 128, 128), button_card_0)
+            button_0_msg = "Play %s" % player1.hand[0].name
+            button_0_txt = small_button_font.render(button_0_msg, True, (255, 255, 255))
+            screen.blit(button_0_txt, (55, 557))
+            img_0 = pygame.image.load(player1.hand[0].image)
+            img_0 = pygame.transform.scale(img_0, (
+                int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+            screen.blit(img_0, (45, 415))
+
+        if handsize >= 2:
+            button_card_1 = pygame.Rect(200, 550, 75, 25)
+            pygame.draw.rect(screen, (128, 128, 128), button_card_1)
+            button_1_msg = "Play %s" % player1.hand[1].name
+            button_1_txt = small_button_font.render(button_1_msg, True, (255, 255, 255))
+            screen.blit(button_1_txt, (212, 557))
+            img_1 = pygame.image.load(player1.hand[1].image)
+            img_1 = pygame.transform.scale(img_1, (
+                int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+            screen.blit(img_1, (195, 415))
+
+        if handsize >= 3:
+            button_card_2 = pygame.Rect(350, 550, 75, 25)
+            pygame.draw.rect(screen, (128, 128, 128), button_card_2)
+            button_2_msg = "Play %s" % player1.hand[2].name
+            button_2_txt = small_button_font.render(button_2_msg, True, (255, 255, 255))
+            screen.blit(button_2_txt, (365, 557))
+            img_2 = pygame.image.load(player1.hand[2].image)
+            img_2 = pygame.transform.scale(img_2, (
+                int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+            screen.blit(img_2, (345, 415))
+
+        if handsize >= 4:
+            button_card_3 = pygame.Rect(500, 550, 75, 25)
+            pygame.draw.rect(screen, (128, 128, 128), button_card_3)
+            button_3_msg = "Play %s" % player1.hand[3].name
+            button_3_txt = small_button_font.render(button_3_msg, True, (255, 255, 255))
+            screen.blit(button_3_txt, (517, 557))
+            img_3 = pygame.image.load(player1.hand[3].image)
+            img_3 = pygame.transform.scale(img_3, (
+                int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+            screen.blit(img_3, (495, 415))
+
+        if handsize >= 5:
+            button_card_4 = pygame.Rect(650, 550, 75, 25)
+            pygame.draw.rect(screen, (128, 128, 128), button_card_4)
+            button_4_msg = "Play %s" % player1.hand[4].name
+            button_4_txt = small_button_font.render(button_4_msg, True, (255, 255, 255))
+            screen.blit(button_4_txt, (670, 557))
+            img_4 = pygame.image.load(player1.hand[4].image)
+            img_4 = pygame.transform.scale(img_4, (
+                int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+            screen.blit(img_4, (645, 415))
 
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
@@ -321,22 +357,22 @@ def game():
             if True:
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     click = True
-                    if button_conv_wheels.collidepoint(mx, my):
-                            if click:
-                                pass
-                    if button_pointed_stick.collidepoint(mx, my):
+                    if button_card_0.collidepoint(mx, my):
                         if click:
-                            pass
-                    if button_scrap_armor.collidepoint(mx, my):
+                            index = 0
+                    if button_card_1.collidepoint(mx, my):
                         if click:
-                            player1.armor = player1.armor + 1
-                    if button_stick_lobber.collidepoint(mx, my):
+                            index = 1
+                    if button_card_2.collidepoint(mx, my):
                         if click:
-                            pass
+                            index = 2
+                    if button_card_3.collidepoint(mx, my):
+                        if click:
+                            index = 3
+                    if button_card_4.collidepoint(mx, my):
+                        if click:
+                            index = 4
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:  # ESC makes the game quit
-                    exit()
         # Print the grid to the screen
 
         screen.blit(grid.grid(), [0, 0])
@@ -348,9 +384,13 @@ def game():
         pygame.display.update()
         mainClock.tick(60)
 
-        playerturn(player1, goblinmonster)
-        monsterturn(goblinmonster, player1)
-
+        playerwent = False
+        if not index == 6:
+            playerturn(player1, goblinmonster, index)
+            playerwent = True
+        if playerwent == True:
+            monsterturn(goblinmonster, player1)
+#todo add game over screen and display player1.score
 
 def options():
     x = 0

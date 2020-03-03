@@ -9,7 +9,7 @@ class Card:
         self.attrange = attrange
         self.damage = damage
         self.armor = armor
-        self.image = pygame.image.load(sprite)
+        self.image = sprite
 
 
 class Deck:

@@ -26,6 +26,9 @@ def get_location(x: object, y: object) -> object:
     return x_coor, y_coor
 
 
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_ESCAPE:  # ESC makes the game quit
+                    exit()
 def grid():
     grid_image: object = pygame.image.load(
         '/home/chase/PycharmProjects/mechanum/Mekaneks/gridBackground.png').convert()
