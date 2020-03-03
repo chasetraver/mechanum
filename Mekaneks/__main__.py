@@ -130,8 +130,14 @@ def playerturn(player):
 # player.damage(1)
 # todo else the monster moves 1 space closer to the player
 
-
-
+def message_display(text):
+    white = (255, 255, 255)
+    black = (0, 0, 0)
+    font = pygame.font.Font('freesansbold.ttf', 32)
+    text = font.render(text, True, white, black)
+    textRect = text.get_rect()
+    textRect.center = (100, 350)
+    screen.blit(text, textRect)
 
 def game():
     xr = 0
@@ -192,33 +198,36 @@ def game():
             click = False
             if event.type == pygame.QUIT:
                 exit()
-
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                click = True
-                if button_conv_wheels.collidepoint(mx, my):
-                    if click:
-                        # replace with move
-                        exit()
-                if button_pointed_stick.collidepoint(mx, my):
-                    if click:
-                        # replace with move
-                        exit()
-                if button_scrap_armor.collidepoint(mx, my):
-                    if click:
-                        # replace with move
-                        exit()
-                if button_stick_lobber.collidepoint(mx, my):
-                    if click:
-                        # replace with move
-                        exit()
-
             if beginning == False:
-                if event.type == pygame.MOUSEBUTTONUP:
-                    x_temp, y_temp = pygame.mouse.get_pos()
-                    if 0 <= x_temp <= 316 and 0 <= y_temp <= 316:
-                        x_temp, y_temp = grid.get_location(x_temp, y_temp)
-                        xr = x_temp
-                        yr = y_temp
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    click = True
+                    if button_conv_wheels.collidepoint(mx, my):
+                            if click:
+
+                                for event in pygame.event.get():
+                                    message_display('Move 1')
+                                    if event.type == pygame.MOUSEBUTTONUP:
+                                        x_temp, y_temp = pygame.mouse.get_pos()
+                                        if 0 <= x_temp <= 316 and 0 <= y_temp <= 316:
+                                            x_temp, y_temp = grid.get_location(x_temp, y_temp)
+                                            xr = x_temp
+                                            yr = y_temp
+
+
+
+                        #exit()
+                    if button_pointed_stick.collidepoint(mx, my):
+                        if click:
+                        # replace with move
+                            exit()
+                    if button_scrap_armor.collidepoint(mx, my):
+                        if click:
+                        # replace with move
+                            exit()
+                    if button_stick_lobber.collidepoint(mx, my):
+                        if click:
+                        # replace with move
+                            exit()
 
             elif beginning == True:
                 xr = grid.rand_location()
