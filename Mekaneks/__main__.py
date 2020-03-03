@@ -151,6 +151,14 @@ def playerturn(player, _monster):
                     validresponse = False
                     while not validresponse:
                         while not pygame.MOUSEBUTTONDOWN:
+                            card_width = 1771
+                            card_length = 2633
+                            card_scale_factor = 0.05
+
+                            img_lootcard = pygame.transform.scale(lootcard.image, (
+                                int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+                            screen.blit(img_lootcard, 325, 200)
+
                             button_yes = pygame.Rect(200, 200, 200, 50)
                             pygame.draw.rect(screen, (255, 0, 0), button_yes)
                             button_yes_msg = "YES"
@@ -315,56 +323,16 @@ def game():
                     click = True
                     if button_conv_wheels.collidepoint(mx, my):
                             if click:
-
-                                for event in pygame.event.get():
-                                    message_display('Move 1')
-                                    if event.type == pygame.MOUSEBUTTONUP:
-                                        x_temp, y_temp = pygame.mouse.get_pos()
-                                        if 0 <= x_temp <= 316 and 0 <= y_temp <= 316:
-                                            x_temp, y_temp = grid.get_location(x_temp, y_temp)
-                                            xrobby = x_temp
-                                            yrobby = y_temp
-
-
-
-                        #exit()
+                                pass
                     if button_pointed_stick.collidepoint(mx, my):
                         if click:
-                            #todo have it wait for another click to get space coordinates...?
-                            message_display("Click the space you want to attack")
-                            if grid.valid_attack(xcoord, ycoord, player1.xcoord, player1.ycoord, goblinmonster.xcoord,
-                                                 goblinmonster.ycoord, 1, playerturn):
-                                playerscore = playerscore + 100
-                                xgoblin = grid.rand_location()
-                                ygoblin = grid.rand_location()
-                                if player1.xcoord == xgoblin and player1.ycoord == ygoblin:
-                                    while xrobby == xgoblin and yrobby == ygoblin:
-                                        xgoblin = grid.rand_location()
-                                        ygoblin = grid.rand_location()
-
-                                xgoblin = grid.gridtocoord(xgoblin)
-                                ygoblin = grid.gridtocoord(ygoblin)
-
-                                goblin(xgoblin, ygoblin)
-
-                                #todo double check this spawns the goblin properly
+                            pass
                     if button_scrap_armor.collidepoint(mx, my):
                         if click:
                             player1.armor = player1.armor + 1
                     if button_stick_lobber.collidepoint(mx, my):
                         if click:
-                            if grid.valid_attack(xcoord, ycoord, player1.xcoord, player1.ycoord, goblinmonster.xcoord,
-                                                 goblinmonster.ycoord, 2, playerturn):
-                                playerscore = playerscore + 100
-                                xgoblin = grid.rand_location()
-                                ygoblin = grid.rand_location()
-                                if player1.xcoord == xgoblin and player1.ycoord == ygoblin:
-                                    while xrobby == xgoblin and yrobby == ygoblin:
-                                        xgoblin = grid.rand_location()
-                                        ygoblin = grid.rand_location()
-
-                                xgoblin = grid.coordtogrid(xgoblin)
-                                ygoblin = grid.coordtogrid(ygoblin)
+                            pass
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # ESC makes the game quit
