@@ -12,8 +12,4 @@ class Monster:
         self.hp = self.hp - amount
         if self.hp <= 0:
             self.isalive = 0
-            r = random.randint(1, 3)
-            if r == 3:
-                return cardlib.randomcard()
-            # todo have player be able to select if they want to add returned card to deck or not.
 

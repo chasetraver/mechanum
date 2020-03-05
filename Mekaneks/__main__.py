@@ -108,6 +108,7 @@ def playerturn(player):
     while turn < 2:
         # todo have player able to click card in hand, return index of card in player.hand
         # player.playcard(index)
+        # todo if the player kills a monster, call cardlib.randcard and give the player the option to add card to deck
         turn = turn + 1
 
 
