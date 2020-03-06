@@ -72,7 +72,7 @@ def main_menu():
         pygame.draw.rect(screen, (255, 0, 0), button_play)
         # text for buttons
         button_play_msg = "Play"
-        button_opt_msg = "Options"
+        button_opt_msg = "High Scores"
         button_quit_msg = "Quit"
         button_play_txt = font.render(button_play_msg, True, (255, 255, 255))
         button_opt_txt = font.render(button_opt_msg, True, (255, 255, 255))
@@ -121,7 +121,7 @@ def possibleattack(player, _monster, attrange):
     for x in range(-attrange, attrange):
         if player.xcoord + x == _monster.xcoord:
             return True
-        if player.ycoord + x == monster.ycoord:
+        if player.ycoord + x == _monster.ycoord:
             return True
     return False
 
@@ -313,21 +313,21 @@ def game():
                     if True:
                         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                             click = True
-                if click:
-                    if not grid.valid_move(xclick, yclick, player1.xcoord, player1.ycoord, goblinmonster.xcoord,
+                    if click:
+                        if not grid.valid_move(xclick, yclick, player1.xcoord, player1.ycoord, goblinmonster.xcoord,
                                           goblinmonster.ycoord,
                                           playedcard.move, True):
-                        currentmessage = ("That is not a valid move, please select a space within %d spaces of Robby" %
-                                    playedcard.move)
-                    else:
-                        xclick = grid.coordtogrid(xclick)
-                        yclick = grid.coordtogrid(yclick)
-                        player1.xcoord = xclick
-                        player1.ycoord = yclick
-                        player1.discard(index)
-                        index = 6 #todo fix this to be more adaptable later
-                        playedcard = emptycard
-                        playerwent = playerwent + 1
+                            currentmessage = ("That is not a valid move, please select a space within %d spaces of Robby" %
+                                        playedcard.move)
+                        else:
+                            xclick = grid.coordtogrid(xclick)
+                            yclick = grid.coordtogrid(yclick)
+                            player1.xcoord = xclick
+                            player1.ycoord = yclick
+                            player1.discard(index)
+                            index = 6 #todo fix this to be more adaptable later
+                            playedcard = emptycard
+                            playerwent = playerwent + 1
 
             if playedcard.attrange != 0:
                 if not possibleattack(player1, goblinmonster, playedcard.attrange):
@@ -421,9 +421,9 @@ def game():
             monsterturn(goblinmonster, player1)
             playerwent = 0
 
-    pygame.display.flip()
-    pygame.display.update()
-    mainClock.tick(60)
+        pygame.display.flip()
+        pygame.display.update()
+        mainClock.tick(2)
 
 
 #todo add game over screen and display player1.score
@@ -454,7 +454,7 @@ def options():
     black = (0, 0, 0)
     white = (255, 255, 255)
     red = (255, 0, 0)
-    arr = read_scores('/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/highscores.txt')
+    arr = read_scores('/home/chase/PycharmProjects/mechanum/Mekaneks/highscores.txt')
     running = True
     while running:
         screen.fill((0, 0, 0))
