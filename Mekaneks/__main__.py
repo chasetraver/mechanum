@@ -110,6 +110,8 @@ def playersetup(xplayer, yplayer):
     playerdiscarddeck = deckcardplayerclasses.Deck([])
     playertrashdeck = deckcardplayerclasses.Deck([])
     player = deckcardplayerclasses.Player(playerdrawdeck, playerdiscarddeck, playertrashdeck, xplayer, yplayer)
+    while len(player.hand) < 5:
+        player.draw()
     return player
 
 
@@ -133,9 +135,9 @@ def playerturn(player, _monster, index):
     while turn < 2:
         # todo have player able to click card in hand, return index of card in player.hand
 
-        assert index == 6, "index error"
+        assert not index == 6, "index error"
         playedcard = player.hand[index]
-        if playedcard.move != 0:   
+        if playedcard.move != 0:
             message_display("Select the space to move to")
             xclick, yclick = waitforclick()
             while not grid.valid_move(xclick, yclick, player.xcoord, player.ycoord, _monster.xcoord, _monster.ycoord,
@@ -281,7 +283,7 @@ def game():
             ygoblin = grid.rand_location()
 
     goblinmonster = monster.Monster(1, xgoblin, ygoblin)
-
+    currentmessage = ""
     while player1.isalive:
 
         screen.fill((0, 0, 0))
@@ -299,11 +301,11 @@ def game():
             pygame.draw.rect(screen, (128, 128, 128), button_card_0)
             button_0_msg = "Play %s" % player1.hand[0].name
             button_0_txt = small_button_font.render(button_0_msg, True, (255, 255, 255))
-            screen.blit(button_0_txt, (55, 557))
             img_0 = pygame.image.load(player1.hand[0].image)
             img_0 = pygame.transform.scale(img_0, (
-                int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
             screen.blit(img_0, (45, 415))
+            screen.blit(button_0_txt, (55, 557))
 
         if handsize >= 2:
             button_card_1 = pygame.Rect(200, 550, 75, 25)
@@ -374,7 +376,7 @@ def game():
                             index = 4
 
         # Print the grid to the screen
-
+        message_display(currentmessage)
         screen.blit(grid.grid(), [0, 0])
         robot(xrobby, yrobby)
         goblin(xgoblin, ygoblin)
