@@ -8,7 +8,7 @@ class Monster:
         self.isalive = 1
         self.xcoord = xcoord
         self.ycoord = ycoord
-        self.sprite = pygame.image.load('goblinmonster.png')
+        self.sprite = ('/home/chase/PycharmProjects/mechanum/Mekaneks/goblinmonster.png')
 
     def damage(self, amount):
         self.hp = self.hp - amount

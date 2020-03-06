@@ -24,9 +24,9 @@ small_button_font = pygame.font.SysFont(None, 12)
 
 click = False
 
-robot_image = pygame.image.load('Robby.png')
+robot_image = pygame.image.load('/home/chase/PycharmProjects/mechanum/Mekaneks/Robby.png')
 robot_image = pygame.transform.scale(robot_image, (62, 62))
-goblin_image = pygame.image.load('goblinmonster.png')
+goblin_image = pygame.image.load('/home/chase/PycharmProjects/mechanum/Mekaneks/goblinmonster.png')
 goblin_image = pygame.transform.scale(goblin_image, (62, 62))
 
 
@@ -428,51 +428,52 @@ def game():
 
 #todo add game over screen and display player1.score
 
+white = (255,255,255)
+def text_objects(text, font):
+    textSurface = font.render(text, True, white)
+    return textSurface, textSurface.get_rect()
+
+def message_display1(text, i):
+    height = window_height/10
+    largeText = pygame.font.Font('freesansbold.ttf',30)
+    TextSurf, TextRect = text_objects(text, largeText)
+    TextRect.center = ((window_width/2),(height+(i*50)))
+    screen.blit(TextSurf, TextRect)
+
+    time.sleep(2)
+    pygame.display.update()
+
+
+
+def read_scores(filename):
+    with open(filename) as f:
+        return [int(x) for x in f]
+
+
 def options():
+    black = (0, 0, 0)
     white = (255, 255, 255)
-
-    def text_objects(text, font):
-        textSurface = font.render(text, True, white)
-        return textSurface, textSurface.get_rect()
-
-    def message_display1(text, i):
-        height = window_height / 10
-        largeText = pygame.font.Font('freesansbold.ttf', 30)
-        TextSurf, TextRect = text_objects(text, largeText)
-        TextRect.center = ((window_width / 2), (height + (i * 50)))
-        screen.blit(TextSurf, TextRect)
-
-        time.sleep(2)
-        pygame.display.update()
-
-    def read_scores(filename):
-        with open(filename) as f:
-            return [int(x) for x in f]
-
-    def options():
-        black = (0, 0, 0)
-        white = (255, 255, 255)
-        red = (255, 0, 0)
-        arr = read_scores('/home/chase/PycharmProjects/mechanum/Mekaneks/highscores.txt')
-        running = True
-        while running:
-            screen.fill((0, 0, 0))
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
+    red = (255, 0, 0)
+    arr = read_scores('/Users/Benny/Desktop/School/Software Engineering/mechanum/Mekaneks/highscores.txt')
+    running = True
+    while running:
+        screen.fill((0, 0, 0))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
                     exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        exit()
 
-            for i in range(10):
-                temp_string = str(arr[i])
-                message_display1(temp_string, i)
 
-            pygame.display.flip()
-            pygame.display.update()
-            mainClock.tick(60)
+        for i in range(10):
+            temp_string = str(arr[i])
+            message_display1(temp_string, i)
 
+        pygame.display.flip()
+        pygame.display.update()
+        mainClock.tick(60)
 def exit():
     pygame.quit()
     sys.exit()
