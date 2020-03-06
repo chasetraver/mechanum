@@ -5,6 +5,8 @@ import deckcardplayerclasses
 import cardlib
 import monster
 import random
+import time
+import high_scores
 
 # initialize game engine and open a window
 mainClock = pygame.time.Clock()
@@ -124,97 +126,6 @@ def possibleattack(player, _monster, attrange):
     return False
 
 
-def waitforclick():
-    while not pygame.MOUSEBUTTONDOWN:
-        pass
-    return pygame.mouse.get_pos()
-
-
-def playerturn(player, _monster, index):
-    turn = 0  # player is able to play 2 cards before monsters act and before they redraw, hence the need for a loop.
-    while turn < 2:
-        # todo have player able to click card in hand, return index of card in player.hand
-
-        assert not index == 6, "index error"
-        playedcard = player.hand[index]
-        if playedcard.move != 0:
-            message_display("Select the space to move to")
-            xclick, yclick = waitforclick()
-            while not grid.valid_move(xclick, yclick, player.xcoord, player.ycoord, _monster.xcoord, _monster.ycoord,
-                                playedcard.move, True):
-                message_display("That is not a valid move, please select a space within %d spaces of Robby" %
-                                playedcard.move)
-            xclick = grid.coordtogrid(xclick)
-            yclick = grid.coordtogrid(yclick)
-            player.xcoord = xclick
-            player.ycoord = yclick
-        if playedcard.attrange != 0:
-            if not possibleattack(player, _monster, playedcard.attrange):
-                message_display("There is no possible attack target for that card")
-                player.discard(index)
-                return
-            message_display("Select a space to attack")
-            xclick, yclick = waitforclick()
-
-            while not grid.valid_attack(xclick, yclick, player.xcoord, player.ycoord, _monster.xcoord, _monster.ycoord,
-                                     playedcard.attrange, True):
-                message_display("That is not a valid space to attack, please select a space within %d spaces of Robby" %
-                                playedcard.attrange)
-            _monster.damage(playedcard.damage)
-            if not _monster.isalive:
-                message_display("You attack and kill the monster! You earn 100 points!")
-                player.score = player.score + 100
-                randnum = random.randint(1, 3)
-                if randnum == 3:
-                    lootcard = cardlib.randomcard()
-                    message_display("The monster has dropped a part! Would you like to add %s to your deck?" %
-                                    lootcard.name)
-                    validresponse = False
-                    while not validresponse:
-                        while not pygame.MOUSEBUTTONDOWN:
-                            card_width = 1771
-                            card_length = 2633
-                            card_scale_factor = 0.05
-
-                            img_lootcard = pygame.transform.scale(lootcard.image, (
-                                int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-                            screen.blit(img_lootcard, 325, 200)
-
-                            button_yes = pygame.Rect(200, 200, 200, 50)
-                            pygame.draw.rect(screen, (255, 0, 0), button_yes)
-                            button_yes_msg = "YES"
-                            button_yes_txt = font.render(button_yes_msg, True, (255, 255, 255))
-                            screen.blit(button_yes_txt, (285, 220))
-                            button_no = pygame.Rect(200, 300, 200, 50)
-                            pygame.draw.rect(screen, (255, 0, 0), button_no)
-                            button_no_msg = "NO"
-                            button_no_txt = font.render(button_no_msg, True, (255, 255, 255))
-                            screen.blit(button_no_txt, (285, 320))
-                            pygame.display.update()
-                        xmouse, ymouse = pygame.mouse.get_pos()
-                        if button_yes.collidepoint(xmouse, ymouse):
-                            playerchoice = True
-                            validresponse = True
-                        if button_no.collidepoint(xmouse, ymouse):
-                            playerchoice = False
-                            validresponse = True
-                    if playerchoice:
-                        player.addcard(lootcard)
-
-            else:
-                message_display("You attack the monster. It is weakened, but yet lives.")
-        if playedcard.armor != 0:
-            message_display("You gain %d armor" % playedcard.armor)
-            player.armor = player.armor + playedcard.armor
-
-        player.discard(index)
-        turn = turn + 1
-
-    if len(player.hand) < 3:
-        while player.hand < 5:
-            player.draw()
-
-
 def isadjacent(object1, object2):
    #loops through all orthagonally adjacent squares of an object2 to determine if object 1 is adjacent
     xmod = 1
@@ -259,7 +170,7 @@ def monsterturn(_monster, player):
 def message_display(text):
     white = (255, 255, 255)
     black = (0, 0, 0)
-    font = pygame.font.Font('freesansbold.ttf', 32)
+    font = pygame.font.Font('freesansbold.ttf', 18)
     text = font.render(text, True, white, black)
     textRect = text.get_rect()
     textRect.center = (100, 350)
@@ -277,6 +188,7 @@ def game():
     ygoblin = grid.rand_location()
     player1 = playersetup(xrobby, yrobby)
 
+
     if xrobby == xgoblin and yrobby == ygoblin:
         while xrobby == xgoblin and yrobby == ygoblin:
             xgoblin = grid.rand_location()
@@ -284,6 +196,13 @@ def game():
 
     goblinmonster = monster.Monster(1, xgoblin, ygoblin)
     currentmessage = ""
+
+    emptycard = deckcardplayerclasses.Card("", 0, 0, 0, 0, "")
+    playedcard = emptycard
+    loot = False
+    playerwent = 0
+    lootcard = emptycard
+
     while player1.isalive:
 
         screen.fill((0, 0, 0))
@@ -378,42 +297,181 @@ def game():
         # Print the grid to the screen
         message_display(currentmessage)
         screen.blit(grid.grid(), [0, 0])
+
         robot(xrobby, yrobby)
         goblin(xgoblin, ygoblin)
 
-
-        pygame.display.flip()
-        pygame.display.update()
-        mainClock.tick(60)
-
-        playerwent = False
         if not index == 6:
-            playerturn(player1, goblinmonster, index)
-            playerwent = True
-        if playerwent == True:
+            playedcard = player1.hand[index]
+            if playedcard.move != 0:
+                currentmessage = "Select the space to move to"
+                for event in pygame.event.get():
+                    xclick, yclick = pygame.mouse.get_pos()
+                    click = False
+                    if event.type == pygame.QUIT:
+                        exit()
+                    if True:
+                        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                            click = True
+                if click:
+                    if not grid.valid_move(xclick, yclick, player1.xcoord, player1.ycoord, goblinmonster.xcoord,
+                                          goblinmonster.ycoord,
+                                          playedcard.move, True):
+                        currentmessage = ("That is not a valid move, please select a space within %d spaces of Robby" %
+                                    playedcard.move)
+                    else:
+                        xclick = grid.coordtogrid(xclick)
+                        yclick = grid.coordtogrid(yclick)
+                        player1.xcoord = xclick
+                        player1.ycoord = yclick
+                        player1.discard(index)
+                        index = 6 #todo fix this to be more adaptable later
+                        playedcard = emptycard
+                        playerwent = playerwent + 1
+
+            if playedcard.attrange != 0:
+                if not possibleattack(player1, goblinmonster, playedcard.attrange):
+                    currentmessage = "There is no possible attack target for that card"
+                    player1.discard(index)
+                    playedcard = emptycard
+                    index == 6
+                    playerwent = playerwent + 1
+
+                currentmessage = "Select a space to attack"
+                for event in pygame.event.get():
+                    xclick, yclick = pygame.mouse.get_pos()
+                    click = False
+                    if event.type == pygame.QUIT:
+                        exit()
+                    if True:
+                        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                            click = True
+                if click:
+                    if not grid.valid_attack(xclick, yclick, player1.xcoord, player1.ycoord, goblinmonster.xcoord,
+                                            goblinmonster.ycoord,
+                                            playedcard.attrange, True):
+                        currentmessage = "That is not a valid space to attack, please select a space within %d spaces of Robby" % playedcard.attrange
+
+                    else: goblinmonster.damage(playedcard.damage)
+                    if not goblinmonster.isalive:
+                        currentmessage = "You attack and kill the monster! You earn 100 points!"
+                        player1.score = player1.score + 100
+                        randnum = random.randint(1, 3)
+                        if randnum == 3:
+                            loot = True
+                            lootcard = cardlib.randomcard()
+                            player1.discard(index)
+                            playedcard = emptycard
+                            index = 6
+
+
+                    else:
+                        currentmessage = "You attack the monster. It is weakened, but yet lives."
+                        player1.discard(index)
+                        playedcard = emptycard
+                        index = 6
+                        playerwent = playerwent + 1
+            if playedcard.armor != 0:
+                currentmessage = "You gain %d armor" % playedcard.armor
+                player1.armor = player1.armor + playedcard.armor
+                player1.discard(index)
+                playedcard = emptycard
+                index = 6
+                playerwent = playerwent + 1
+
+
+            if len(player1.hand) < 3:
+                while player1.hand < 5:
+                    player1.draw()
+        if loot:
+            message_display("The monster has dropped a part! Would you like to add %s to your deck?" %
+                            lootcard.name)
+            card_width = 1771
+            card_length = 2633
+            card_scale_factor = 0.05
+
+            img_lootcard = pygame.transform.scale(lootcard.image, (
+                int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+            screen.blit(img_lootcard, 325, 200)
+
+            button_yes = pygame.Rect(200, 200, 200, 50)
+            pygame.draw.rect(screen, (255, 0, 0), button_yes)
+            button_yes_msg = "YES"
+            button_yes_txt = font.render(button_yes_msg, True, (255, 255, 255))
+            screen.blit(button_yes_txt, (285, 220))
+            button_no = pygame.Rect(200, 300, 200, 50)
+            pygame.draw.rect(screen, (255, 0, 0), button_no)
+            button_no_msg = "NO"
+            button_no_txt = font.render(button_no_msg, True, (255, 255, 255))
+            screen.blit(button_no_txt, (285, 320))
+            pygame.display.update()
+            xmouse, ymouse = pygame.mouse.get_pos()
+            if button_yes.collidepoint(xmouse, ymouse):
+                playerchoice = True
+                loot = False
+                playerwent = playerwent + 1
+            if button_no.collidepoint(xmouse, ymouse):
+                playerchoice = False
+                loot = False
+                playerwent = playerwent + 1
+            if playerchoice:
+                player1.addcard(lootcard)
+
+        if playerwent == 2:
             monsterturn(goblinmonster, player1)
+            playerwent = 0
+
+    pygame.display.flip()
+    pygame.display.update()
+    mainClock.tick(60)
+
+
 #todo add game over screen and display player1.score
 
 def options():
-    x = 0
-    y = 0
-    running = True
-    while running:
-        screen.fill((0, 0, 0))
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    exit()
-        # Print the grid to the screen
-        screen.blit(grid.grid(), [0, 0])
-        robot(x, y)
-        pygame.display.flip()
-        pygame.display.update()
-        mainClock.tick(60)
+    white = (255, 255, 255)
 
+    def text_objects(text, font):
+        textSurface = font.render(text, True, white)
+        return textSurface, textSurface.get_rect()
+
+    def message_display1(text, i):
+        height = window_height / 10
+        largeText = pygame.font.Font('freesansbold.ttf', 30)
+        TextSurf, TextRect = text_objects(text, largeText)
+        TextRect.center = ((window_width / 2), (height + (i * 50)))
+        screen.blit(TextSurf, TextRect)
+
+        time.sleep(2)
+        pygame.display.update()
+
+    def read_scores(filename):
+        with open(filename) as f:
+            return [int(x) for x in f]
+
+    def options():
+        black = (0, 0, 0)
+        white = (255, 255, 255)
+        red = (255, 0, 0)
+        arr = read_scores('/home/chase/PycharmProjects/mechanum/Mekaneks/highscores.txt')
+        running = True
+        while running:
+            screen.fill((0, 0, 0))
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        exit()
+
+            for i in range(10):
+                temp_string = str(arr[i])
+                message_display1(temp_string, i)
+
+            pygame.display.flip()
+            pygame.display.update()
+            mainClock.tick(60)
 
 def exit():
     pygame.quit()
