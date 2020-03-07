@@ -10,7 +10,7 @@ allcards = [pointedstick, conveyorwheels, scraparmor, sticklobber]
 
 
 def startingcards():
-    startcards = [pointedstick, conveyorwheels, scraparmor, sticklobber]
+    startcards = [pointedstick, pointedstick, pointedstick, conveyorwheels, conveyorwheels, conveyorwheels, conveyorwheels, sticklobber, sticklobber, scraparmor]
     return startcards
 
 
