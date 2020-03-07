@@ -3,19 +3,13 @@ import pygame
 
 
 class Card:
-    def __init__(self, name, move, attack, damage, armor, sprite):
+    def __init__(self, name, move, attrange, damage, armor, sprite):
         self.name = name
         self.move = move
-        self.attack = attack
+        self.attrange = attrange
         self.damage = damage
         self.armor = armor
         self.image = pygame.image.load(sprite)
-
-    def playeffect(self, player):
-        # TODO make move, attack, etc. do stuff with the grid
-        # armor should work as intended
-        player.armor += self.armor
-        pass
 
 
 class Deck:
@@ -49,31 +43,42 @@ class Deck:
 
 
 class Player:
-    def __init__(self):
+    def __init__(self, drawdeck, discarddeck, trashdeck):
+        self.drawdeck = drawdeck
+        self.discarddeck = discarddeck
+        self.trashdeck = trashdeck
         self.hand = []
         self.armor = 0
 
-    def draw(self, deck):
-        self.hand.append(deck.drawcard())
-        return self
+    def draw(self):
+        if len(self.drawdeck.cards) != 0:
+            self.hand.append(self.drawdeck.drawcard())
+        else:
+            if len(self.discarddeck.cards) != 0:
+                self.drawdeck.swapdeck(self.discarddeck)
+                self.hand.append(self.drawdeck.drawcard())
+            else:
+                self.gameover()
 
-    def discard(self, cardindex, discarddeck):
-        discarddeck.addcard(self.hand.pop(cardindex))
+    def discard(self, cardindex):
+        self.discarddeck.addcard(self.hand.pop(cardindex))
 
-    def playcard(self, cardindex, discarddeck):
-        self.hand[cardindex].playeffect()
-        self.discard(cardindex, discarddeck)
+    def playcard(self, cardindex):
+        playedcard = self.hand[cardindex]
+        self.armor += playedcard.armor
+        # TODO make played card's other attributes do stuff with the grid.
+        self.discard(cardindex, self.discarddeck)
 
-    def damage(self, amount, drawdeck, discarddeck, trashdeck):
+    def damage(self, amount):
         # when player takes damage, reduces armor first if possible before putting top card of drawdeck into trashdeck
         for x in range(0, amount):
             if self.armor != 0:
-                if len(drawdeck.cards) != 0:
-                    trashdeck.append(drawdeck.drawcard())
+                if len(self.drawdeck.cards) != 0:
+                    self.trashdeck.append(self.drawdeck.drawcard())
                 else:
-                    if len(discarddeck.cards) != 0:
-                        drawdeck.swapdeck(discarddeck)
-                        trashdeck.append(drawdeck.drawcard())
+                    if len(self.discarddeck.cards) != 0:
+                        self.drawdeck.swapdeck(self.discarddeck)
+                        self.trashdeck.append(self.drawdeck.drawcard())
                     else:
                         self.gameover()
 
@@ -82,7 +87,7 @@ class Player:
 
     def showhand(self):
         for card in self.hand:
-            card.show
+            card.show()
         pass
 
     def gameover(self):
