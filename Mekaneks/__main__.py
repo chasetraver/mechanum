@@ -1,6 +1,8 @@
 import pygame
 import grid
 import sys
+import deckcardplayerclasses
+import cardlib
 
 # initialize game engine and open a window
 mainClock = pygame.time.Clock()
@@ -12,19 +14,20 @@ display_size = (window_width, window_height)
 screen = pygame.display.set_mode(display_size)
 pygame.display.set_caption('Mekaneks')
 
-#main font (currently system default)
+# main font (currently system default)
 font = pygame.font.SysFont(None, 20)
 
 click = False
 
+
 def main_menu():
     while True:
-        #button texts
+        # button texts
         text_play = font.render('Mechaneks', True, (255,255,255))
-        #screen.blit(text_play, (0,0))
-        #Fill black
+        # screen.blit(text_play, (0,0))
+        # Fill black
         screen.fill((0,0,0))
-        #button creations
+        # button creations
         button_play = pygame.Rect(200, 200, 200, 50)
         button_options = pygame.Rect(200, 300, 200, 50)
         button_exit = pygame.Rect(200, 400, 200, 50)
@@ -38,7 +41,7 @@ def main_menu():
             click = False
             if event.type == pygame.QUIT:
                 exit()
-            #event - left mousebutton clicked (button actions)
+            # event - left mousebutton clicked (button actions)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 click = True
                 if button_play.collidepoint(mx,my):
@@ -50,12 +53,22 @@ def main_menu():
                 if button_exit.collidepoint(mx,my):
                     if click:
                         exit()
-            #call exit function on Esc key
+            # call exit function on Esc key
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     exit()
         pygame.display.update()
         mainClock.tick(60)
+
+
+def playersetup():
+    playerdrawdeck = deckcardplayerclasses.Deck(cardlib.startingcards())
+    playerdrawdeck.shuffle()
+    playerdiscarddeck = deckcardplayerclasses.Deck([])
+    playertrashdeck = deckcardplayerclasses.Deck([])
+    player = deckcardplayerclasses.Player(playerdrawdeck, playerdiscarddeck, playertrashdeck)
+    return player
+
 
 def game():
     running = True
@@ -68,16 +81,18 @@ def game():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     exit()
-        #Print the grid to the screen
+        # Print the grid to the screen
         screen.blit(grid.grid(), [0, 0])
         pygame.display.flip()
         pygame.display.update()
         mainClock.tick(60)
+        player1 = playersetup()
+
 
 def options():
     running = True
     while running:
-        screen.fill((0,0,0))
+        screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -85,14 +100,16 @@ def options():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     exit()
-        #Print the grid to the screen
+        # Print the grid to the screen
         screen.blit(grid.grid(), [0, 0])
         pygame.display.flip()
         pygame.display.update()
         mainClock.tick(60)
 
+
 def exit():
     pygame.quit()
     sys.exit()
+
 
 main_menu()
