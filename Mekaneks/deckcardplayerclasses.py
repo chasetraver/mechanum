@@ -49,6 +49,7 @@ class Player:
         self.trashdeck = trashdeck
         self.hand = []
         self.armor = 0
+        self.isalive = 1
 
     def draw(self):
         if len(self.drawdeck.cards) != 0:
@@ -91,7 +92,7 @@ class Player:
         pass
 
     def gameover(self):
-    # TODO make this end the game
+        self.isalive = 0
         pass
 
 

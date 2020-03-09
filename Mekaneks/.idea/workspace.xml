@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7cae45f0-d466-4bab-b0d2-ec77c8287d62" name="Default Changelist" comment="corrected startingcards to have the correct number of starting cards">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Mekaneks.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Mekaneks.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/monster.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__main__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deckcardplayerclasses.py" beforeDir="false" afterPath="$PROJECT_DIR$/deckcardplayerclasses.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,47 +147,70 @@
       <option name="project" value="LOCAL" />
       <updated>1583606312686</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="corrected startingcards to have the correct number of starting cards">
+      <created>1583613450253</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1583613450253</updated>
+    </task>
+    <task id="LOCAL-00005" summary="set up player and monster turn functions. Added player death game-end condition.">
+      <created>1583424021878</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1583424021878</updated>
+    </task>
+    <task id="LOCAL-00006" summary="player now has attribute 'isalive' to end game when false (0).">
+      <created>1583424127043</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1583424127043</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="cleaned up player class methods," />
     <MESSAGE value="added file to store current and future cards, as well as a function to return a random card from all cards." />
     <MESSAGE value="corrected startingcards to have the correct number of starting cards" />
-    <option name="LAST_COMMIT_MESSAGE" value="corrected startingcards to have the correct number of starting cards" />
+    <MESSAGE value="set up player and monster turn functions. Added player death game-end condition." />
+    <MESSAGE value="player now has attribute 'isalive' to end game when false (0)." />
+    <option name="LAST_COMMIT_MESSAGE" value="player now has attribute 'isalive' to end game when false (0)." />
   </component>
   <component name="WindowStateProjectService">
     <state x="27" y="79" width="1071" height="696" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582068542835">
       <screen x="0" y="23" width="1440" height="809" />
     </state>
     <state x="27" y="79" width="1071" height="696" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.809@0.23.1440.809" timestamp="1582068542835" />
-    <state x="321" y="0" width="714" height="723" key="CommitChangelistDialog2" timestamp="1583613448887">
+    <state x="321" y="0" width="714" height="723" key="CommitChangelistDialog2" timestamp="1583424126405">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="321" y="0" width="714" height="723" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1583613448887" />
-    <state x="110" y="120" width="1146" height="488" key="DiffContextDialog" timestamp="1583605802298">
+    <state x="321" y="0" width="714" height="723" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1583424126405" />
+    <state x="110" y="120" width="1146" height="488" key="DiffContextDialog" timestamp="1583614050546">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="110" y="120" width="1146" height="488" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1583605802298" />
-    <state width="1325" height="160" key="GridCell.Tab.0.bottom" timestamp="1583315023312">
+    <state x="110" y="120" width="1146" height="488" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1583614050546" />
+    <state width="1325" height="160" key="GridCell.Tab.0.bottom" timestamp="1583615996502">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1325" height="160" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583315023312" />
+    <state width="1325" height="160" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583615996502" />
     <state width="1083" height="201" key="GridCell.Tab.0.bottom/0.23.1440.809@0.23.1440.809" timestamp="1582068702274" />
-    <state width="1325" height="160" key="GridCell.Tab.0.center" timestamp="1583315023311">
+    <state width="1325" height="160" key="GridCell.Tab.0.center" timestamp="1583615996501">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1325" height="160" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583315023311" />
+    <state width="1325" height="160" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583615996501" />
     <state width="1083" height="201" key="GridCell.Tab.0.center/0.23.1440.809@0.23.1440.809" timestamp="1582068702274" />
-    <state width="1325" height="160" key="GridCell.Tab.0.left" timestamp="1583315023310">
+    <state width="1325" height="160" key="GridCell.Tab.0.left" timestamp="1583615996500">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1325" height="160" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583315023310" />
+    <state width="1325" height="160" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583615996500" />
     <state width="1083" height="201" key="GridCell.Tab.0.left/0.23.1440.809@0.23.1440.809" timestamp="1582068702273" />
-    <state width="1325" height="160" key="GridCell.Tab.0.right" timestamp="1583315023311">
+    <state width="1325" height="160" key="GridCell.Tab.0.right" timestamp="1583615996501">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1325" height="160" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583315023311" />
+    <state width="1325" height="160" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583615996501" />
     <state width="1083" height="201" key="GridCell.Tab.0.right/0.23.1440.809@0.23.1440.809" timestamp="1582068702274" />
     <state width="1325" height="200" key="GridCell.Tab.1.bottom" timestamp="1583314322957">
       <screen x="0" y="0" width="1366" height="728" />
@@ -205,15 +228,15 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1325" height="200" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1583314322956" />
-    <state x="61" y="0" key="SettingsEditor" timestamp="1583314208802">
+    <state x="61" y="0" key="SettingsEditor" timestamp="1583763440596">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="61" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1583314208802" />
+    <state x="61" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1583763440596" />
     <state x="64" y="56" key="SettingsEditor/0.23.1440.809@0.23.1440.809" timestamp="1582068530213" />
-    <state x="366" y="191" key="com.intellij.ide.util.TipDialog" timestamp="1583314185771">
+    <state x="366" y="191" key="com.intellij.ide.util.TipDialog" timestamp="1583419567200">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="366" y="191" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1583314185771" />
+    <state x="366" y="191" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1583419567200" />
     <state x="227" y="156" key="search.everywhere.popup" timestamp="1582065123761">
       <screen x="0" y="23" width="1440" height="809" />
     </state>

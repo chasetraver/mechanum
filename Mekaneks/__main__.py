@@ -3,6 +3,7 @@ import grid
 import sys
 import deckcardplayerclasses
 import cardlib
+import monster
 
 # initialize game engine and open a window
 mainClock = pygame.time.Clock()
@@ -78,6 +79,24 @@ def playersetup():
     player = deckcardplayerclasses.Player(playerdrawdeck, playerdiscarddeck, playertrashdeck)
     return player
 
+def playerturn(player):
+    turn = 0 # player is able to play 2 cards before monsters act and before they redraw, hence the need for a loop.
+    while turn < 2:
+        # todo have player able to click card in hand, return index of card in player.hand
+        player.playcard(index)
+        turn = turn + 1
+    if len(player.hand) < 3:
+        while player.hand < 5:
+            player.draw()
+
+def monsterturn(turncount, player):
+    # todo if there is no monster on the grid, spawn a monster in a random space
+    if turncount % 3 == 0: # could be every 2 monster turns instead of 3. Playtest? Might not matter.
+        #todo spawn a monster
+    #todo for each monster:
+    #todo if adjacent to the player:
+    player.damage(1)
+    #todo else the monster moves 1 space closer to the player
 
 def game():
     running = True
@@ -96,7 +115,10 @@ def game():
         pygame.display.update()
         mainClock.tick(60)
         player1 = playersetup()
-
+        turncount = 0
+        while player1.isalive == 1:
+            playerturn(player1)
+            monsterturn(turncount, player1)
 
 def options():
     running = True
