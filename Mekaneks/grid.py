@@ -31,7 +31,7 @@ def get_location(x: object, y: object) -> object:
                     exit()
 def grid():
     grid_image: object = pygame.image.load(
-        '/home/chase/PycharmProjects/mechanum/Mekaneks/gridBackground.png').convert()
+        'Images/gridBackground.png').convert()
     return grid_image
 
 

@@ -1,10 +1,10 @@
 import deckcardplayerclasses
 import random
 
-pointedstick = deckcardplayerclasses.Card("Pointed Stick", 0, 1, 1, 0, '/home/chase/PycharmProjects/mechanum/Mekaneks/pointedStick.png')
-conveyorwheels = deckcardplayerclasses.Card("Conveyor Wheels", 1, 0, 0, 0, '/home/chase/PycharmProjects/mechanum/Mekaneks/conveyorWheels.png')
-scraparmor = deckcardplayerclasses.Card("Scrap Armor", 0, 0, 0, 1, '/home/chase/PycharmProjects/mechanum/Mekaneks/scrapArmor.png')
-sticklobber = deckcardplayerclasses.Card("Stick Lobber", 0, 2, 1, 0, '/home/chase/PycharmProjects/mechanum/Mekaneks/sticklobber.png')
+pointedstick = deckcardplayerclasses.Card("Pointed Stick", 0, 1, 1, 0, 'Images/pointedStick.png')
+conveyorwheels = deckcardplayerclasses.Card("Conveyor Wheels", 1, 0, 0, 0, 'Images/conveyorWheels.png')
+scraparmor = deckcardplayerclasses.Card("Scrap Armor", 0, 0, 0, 1, 'Images/scrapArmor.png')
+sticklobber = deckcardplayerclasses.Card("Stick Lobber", 0, 2, 1, 0, 'Images/stickLobber.png')
 
 allcards = [pointedstick, conveyorwheels, scraparmor, sticklobber]
 

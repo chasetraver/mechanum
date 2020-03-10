@@ -22,9 +22,9 @@ small_button_font = pygame.font.SysFont(None, 12)
 
 click = False
 
-robot_image = pygame.image.load('/home/chase/PycharmProjects/mechanum/Mekaneks/Robby.png')
+robot_image = pygame.image.load('Images/Robby.png')
 robot_image = pygame.transform.scale(robot_image, (62, 62))
-goblin_image = pygame.image.load('/home/chase/PycharmProjects/mechanum/Mekaneks/goblinmonster.png')
+goblin_image = pygame.image.load('Images/goblinmonster.png')
 goblin_image = pygame.transform.scale(goblin_image, (62, 62))
 
 
