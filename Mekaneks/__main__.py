@@ -30,16 +30,20 @@ goblin_image = pygame.image.load('Images/goblinmonster.png')
 goblin_image = pygame.transform.scale(goblin_image, (62, 62))
 
 
-def robot(x, y):
-    x = grid.gridtocoord(x)
-    y = grid.gridtocoord(y)
-    screen.blit(robot_image, (x, y))
+def displayplayer(player):
+    x = grid.gridtocoord(player.xcoord)
+    y = grid.gridtocoord(player.ycoord)
+    playersprite = pygame.image.load(player.sprite)
+    playersprite = pygame.transform.scale(playersprite, (62, 62))
+    screen.blit(playersprite, (x, y))
 
 
-def goblin(x, y):
-    x = grid.gridtocoord(x)
-    y = grid.gridtocoord(y)
-    screen.blit(goblin_image, (x, y))
+def displaygoblin(goblinmonster):
+    x = grid.gridtocoord(goblinmonster.xcoord)
+    y = grid.gridtocoord(goblinmonster.ycoord)
+    goblinsprite = pygame.image.load(goblinmonster.sprite)
+    goblinsprite = pygame.transform.scale(goblinsprite, (62, 62))
+    screen.blit(goblinsprite, (x, y))
 
 left = 0
 top = 0
@@ -64,10 +68,10 @@ def main_menu():
         # button creations
         # Rect(left pos, top pos, width, height)
         button_play = pygame.Rect(200, 200, 200, 50)
-        button_options = pygame.Rect(200, 300, 200, 50)
+        button_highscores = pygame.Rect(200, 300, 200, 50)
         button_exit = pygame.Rect(200, 400, 200, 50)
         pygame.draw.rect(screen, (255, 0, 0), button_play)
-        pygame.draw.rect(screen, (255, 0, 0), button_options)
+        pygame.draw.rect(screen, (255, 0, 0), button_highscores)
         pygame.draw.rect(screen, (255, 0, 0), button_exit)
         pygame.draw.rect(screen, (255, 0, 0), button_play)
         # text for buttons
@@ -92,9 +96,9 @@ def main_menu():
                 if button_play.collidepoint(mx, my):
                     if click:
                         game()
-                if button_options.collidepoint(mx, my):
+                if button_highscores.collidepoint(mx, my):
                     if click:
-                        options()
+                        highscores()
                 if button_exit.collidepoint(mx, my):
                     if click:
                         exit()
@@ -107,11 +111,14 @@ def main_menu():
 
 
 def playersetup(xplayer, yplayer):
-    playerdrawdeck = deckcardplayerclasses.Deck(cardlib.startingcards())
+    #todo take player character choice as an argument as either 1 or 2
+    playercharacterchoice = 1
+    playerdrawdeck = deckcardplayerclasses.Deck(cardlib.startingcards(playercharacterchoice))
     playerdrawdeck.shuffle()
     playerdiscarddeck = deckcardplayerclasses.Deck([])
     playertrashdeck = deckcardplayerclasses.Deck([])
-    player = deckcardplayerclasses.Player(playerdrawdeck, playerdiscarddeck, playertrashdeck, xplayer, yplayer)
+    player = deckcardplayerclasses.Player(playerdrawdeck, playerdiscarddeck, playertrashdeck, xplayer, yplayer,
+                                          playercharacterchoice)
     while len(player.hand) < 5:
         player.draw()
     return player
@@ -151,11 +158,10 @@ def monsterturn(_monster, player):
             lostcard = player.damage(1)
             if player.isalive:
                 message_display("The monster attacked you and broke your %s!" % lostcard.name)
-
     else:
         if _monster.ycoord < player.ycoord:
             _monster.ycoord = _monster.ycoord + 1
-        elif monster.ycoord > player.ycoord:
+        elif _monster.ycoord > player.ycoord:
             _monster.ycoord = _monster.ycoord - 1
         elif _monster.ycoord == player.ycoord:
             if _monster.xcoord < player.xcoord:
@@ -167,41 +173,48 @@ def monsterturn(_monster, player):
                              # (_monster.xcoord, _monster.ycoord, player.xcoord, player.ycoord)
                 pass
 
+
+def spawngoblin(goblinmonster, player):
+    xgoblin = grid.rand_location()
+    ygoblin = grid.rand_location()
+
+    while xgoblin == player.xcoord and ygoblin == player.ycoord:
+        xgoblin = grid.rand_location()
+        ygoblin = grid.rand_location()
+
+    goblinmonster.xcoord = xgoblin
+    goblinmonster.ycoord = ygoblin
+    goblinmonster.isalive = True
+    goblinmonster.hp = goblinmonster.hp + 1
+
 def message_display(text):
     white = (255, 255, 255)
     black = (0, 0, 0)
-    font = pygame.font.Font('freesansbold.ttf', 18)
+    font = pygame.font.Font('freesansbold.ttf', 15)
     text = font.render(text, True, white, black)
     textRect = text.get_rect()
-    textRect.center = (100, 350)
+    textRect.center = (300, 350)
     screen.blit(text, textRect)
 
 
 def game():
-    xgoblin = 0
-    ygoblin = 0
 
-    xrobby = grid.rand_location()
-    yrobby = grid.rand_location()
-
-    xgoblin = grid.rand_location()
-    ygoblin = grid.rand_location()
-    player1 = playersetup(xrobby, yrobby)
+    xplayer = grid.rand_location()
+    yplayer = grid.rand_location()
 
 
-    if xrobby == xgoblin and yrobby == ygoblin:
-        while xrobby == xgoblin and yrobby == ygoblin:
-            xgoblin = grid.rand_location()
-            ygoblin = grid.rand_location()
+    player1 = playersetup(xplayer, yplayer)
 
-    goblinmonster = monster.Monster(1, xgoblin, ygoblin)
-    currentmessage = ""
+    goblinmonster = monster.Monster(0, 0, 0)
+    spawngoblin(goblinmonster, player1)
+    currentmessage = "Defeat the Goblins! Choose a card to get started!"
 
     emptycard = deckcardplayerclasses.Card("", 0, 0, 0, 0, "")
     playedcard = emptycard
     loot = False
     playerwent = 0
     lootcard = emptycard
+    playercleanup = False
 
     while player1.isalive:
 
@@ -212,8 +225,7 @@ def game():
         card_scale_factor = 0.05
 
         handsize = len(player1.hand)
-        assert handsize <= 5
-        index = 6
+        index = None
 
         if handsize >= 1:
             button_card_0 = pygame.Rect(45, 550, 90, 25)
@@ -278,32 +290,40 @@ def game():
             if True:
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     click = True
-                    if button_card_0.collidepoint(mx, my):
-                        if click:
-                            index = 0
-                    if button_card_1.collidepoint(mx, my):
-                        if click:
-                            index = 1
-                    if button_card_2.collidepoint(mx, my):
-                        if click:
-                            index = 2
-                    if button_card_3.collidepoint(mx, my):
-                        if click:
-                            index = 3
-                    if button_card_4.collidepoint(mx, my):
-                        if click:
-                            index = 4
+
+                    if handsize >= 1:
+                        if button_card_0.collidepoint(mx, my):
+                            if click:
+                                index = 0
+                    if handsize >= 2:
+                        if button_card_1.collidepoint(mx, my):
+                            if click:
+                                index = 1
+                    if handsize >= 3:
+                        if button_card_2.collidepoint(mx, my):
+                            if click:
+                                index = 2
+                    if handsize >= 4:
+                        if button_card_3.collidepoint(mx, my):
+                            if click:
+                                index = 3
+                    if handsize >= 5:
+                        if button_card_4.collidepoint(mx, my):
+                            if click:
+                                index = 4
 
         # Print the grid to the screen
         message_display(currentmessage)
         screen.blit(grid.grid(), [0, 0])
 
-        robot(xrobby, yrobby)
-        goblin(xgoblin, ygoblin)
+        displayplayer(player1)
+        displaygoblin(goblinmonster)
 
-        if not index == 6:
+        if not index == None:
             playedcard = player1.hand[index]
-            if playedcard.move != 0:
+            if playedcard.move == 99:
+                playercleanup = True
+            elif playedcard.move != 0:
                 currentmessage = "Select the space to move to"
                 for event in pygame.event.get():
                     xclick, yclick = pygame.mouse.get_pos()
@@ -324,18 +344,12 @@ def game():
                             yclick = grid.coordtogrid(yclick)
                             player1.xcoord = xclick
                             player1.ycoord = yclick
-                            player1.discard(index)
-                            index = 6 #todo fix this to be more adaptable later
-                            playedcard = emptycard
-                            playerwent = playerwent + 1
+                            playercleanup = True
 
             if playedcard.attrange != 0:
                 if not possibleattack(player1, goblinmonster, playedcard.attrange):
                     currentmessage = "There is no possible attack target for that card"
-                    player1.discard(index)
-                    playedcard = emptycard
-                    index == 6
-                    playerwent = playerwent + 1
+                    playercleanup = True
 
                 currentmessage = "Select a space to attack"
                 for event in pygame.event.get():
@@ -356,32 +370,27 @@ def game():
                     if not goblinmonster.isalive:
                         currentmessage = "You attack and kill the monster! You earn 100 points!"
                         player1.score = player1.score + 100
+                        spawngoblin(goblinmonster, player1)
                         randnum = random.randint(1, 3)
                         if randnum == 3:
                             loot = True
                             lootcard = cardlib.randomcard()
                             player1.discard(index)
                             playedcard = emptycard
-                            index = 6
+                            index = None
 
 
                     else:
                         currentmessage = "You attack the monster. It is weakened, but yet lives."
-                        player1.discard(index)
-                        playedcard = emptycard
-                        index = 6
-                        playerwent = playerwent + 1
+                        playercleanup = True
             if playedcard.armor != 0:
                 currentmessage = "You gain %d armor" % playedcard.armor
                 player1.armor = player1.armor + playedcard.armor
-                player1.discard(index)
-                playedcard = emptycard
-                index = 6
-                playerwent = playerwent + 1
+                playercleanup = True
 
 
-            if len(player1.hand) < 3:
-                while player1.hand < 5:
+            if (len(player1.hand)) < 3:
+                while (len(player1.hand)) < 6:
                     player1.draw()
         if loot:
             message_display("The monster has dropped a part! Would you like to add %s to your deck?" %
@@ -417,6 +426,13 @@ def game():
             if playerchoice:
                 player1.addcard(lootcard)
 
+        if playercleanup:
+            playercleanup = False
+            player1.discard(index)
+            playedcard = emptycard
+            index = None
+            playerwent = playerwent + 1
+
         if playerwent == 2:
             monsterturn(goblinmonster, player1)
             playerwent = 0
@@ -450,7 +466,7 @@ def read_scores(filename):
         return [int(x) for x in f]
 
 
-def options():
+def highscores():
     black = (0, 0, 0)
     white = (255, 255, 255)
     red = (255, 0, 0)

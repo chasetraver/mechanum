@@ -43,7 +43,7 @@ class Deck:
 
 
 class Player:
-    def __init__(self, drawdeck, discarddeck, trashdeck, xcoord, ycoord):
+    def __init__(self, drawdeck, discarddeck, trashdeck, xcoord, ycoord, playerselect):
         self.drawdeck = drawdeck
         self.discarddeck = discarddeck
         self.trashdeck = trashdeck
@@ -52,6 +52,10 @@ class Player:
         self.hand = []
         self.armor = 0
         self.score = 0
+        if playerselect == 1:
+            self.sprite = 'Images/Robby.png'
+        elif playerselect == 2:
+            self.sprite = 'Images/doomcopter.png'
         self.isalive = True
 
     def draw(self):
@@ -73,14 +77,14 @@ class Player:
     def damage(self, amount):
         # when player takes damage, reduces armor first if possible before putting top card of drawdeck into trashdeck
         for x in range(0, amount):
-            if self.armor != 0:
+            if self.armor < 0:
                 if len(self.drawdeck.cards) != 0:
-                    self.trashdeck.append(self.drawdeck.drawcard())
+                    self.trashdeck.addcard(self.drawdeck.drawcard())
                 else:
                     if len(self.discarddeck.cards) != 0:
                         self.drawdeck.swapdeck(self.discarddeck)
                         trashedcard = self.drawdeck.drawcard()
-                        self.trashdeck.append(trashedcard)
+                        self.trashdeck.addcard(trashedcard)
                         return trashedcard
                     else:
                         self.gameover()
