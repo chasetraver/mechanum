@@ -52,6 +52,9 @@ class Player:
         elif playerselect == 2:
             self.sprite = 'Images/doomcopter.png'
         self.isalive = True
+        self.turn = 0
+        self.loot = None
+        self.cleanup = False
 
     def draw(self):
         if len(self.drawdeck.cards) != 0:

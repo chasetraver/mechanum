@@ -13,7 +13,7 @@ rocketboost = deckcardplayerclasses.Card("Rocket Boost", 1, 1, 1, 0, 'Images/roc
 
 allcards = [pointedstick, conveyorwheels, scraparmor, sticklobber, arccannon, durdle, broadside, mobilerepairs,
             rocketboost]
-
+emptycard = deckcardplayerclasses.Card("", 0, 0, 0, 0, "")
 
 def startingcards(characterselection):
     if characterselection == 1:

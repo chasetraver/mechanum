@@ -53,7 +53,7 @@ def gridtocoord(i):
         return 255
 
 
-def valid_move(x, y, xr, yr, xg, yg, i, j):
+def valid_move(clickx, clicky, playerx, playery, goblinx, gobliny, move):
     # i is the number of moves the user is allowed to make
     # x_r, y_r are the coordinates of the robot
     # x_g, y_g are the coordinates of the goblin
@@ -62,37 +62,29 @@ def valid_move(x, y, xr, yr, xg, yg, i, j):
     x_temp = 0  # The x distance the user is trying to click away from current position
     y_temp = 0  # The y distance the user is trying to click away from current position
 
-    x, y = get_location(x, y)
-    if x == xr and y == yr:  # If trying to move where the robot is
+    clickx, clicky = get_location(clickx, clicky)
+    if clickx == playerx and clicky == playery:  # If trying to move where the robot is
         return False
-    elif x == xg and y == yg:  # If trying to move where goblin is
+    elif clickx == goblinx and clicky == gobliny:  # If trying to move where goblin is
         return False
-    if j:
-        if x > xr:
-            x_temp = x - xr
+    if True:
+        if clickx > playerx:
+            x_temp = clickx - playerx
         else:
-            x_temp = xr - x
-        if y > yr:
-            y_temp = y - yr
+            x_temp = playerx - clickx
+        if clicky > playery:
+            y_temp = clicky - playery
         else:
-            y_temp = yr - y
-    else:
-        if x > xr:
-            x_temp = x - xg
-        else:
-            x_temp = xg - x
-        if y > yg:
-            y_temp = y - yg
-        else:
-            y_temp = yg - y
+            y_temp = playery - clicky
 
-    if x_temp > 0 and y_temp > 0:
+    #this logic doesnt make sense to me.
+    #if x_temp > 0 and y_temp > 0:
+        #return False
+    if x_temp > move:
         return False
-    elif x_temp > i:
+    elif y_temp > move:
         return False
-    elif y_temp > i:
-        return False
-    elif (x_temp + y_temp) > i:
+    elif (x_temp + y_temp) > move:
         return False
     else:
         return True
