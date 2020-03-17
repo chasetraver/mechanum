@@ -47,6 +47,7 @@ class Player:
         self.hand = []
         self.armor = 0
         self.score = 0
+        self.gold = 0
         if playerselect == 1:
             self.sprite = 'Images/Robby.png'
         elif playerselect == 2:
