@@ -1,3 +1,5 @@
+from os import path
+
 import pygame
 import grid
 import sys
@@ -21,6 +23,13 @@ pygame.display.set_caption('Mechanum')
 # main font (currently system default)
 font = pygame.font.SysFont(None, 20)
 small_button_font = pygame.font.SysFont(None, 12)
+
+#sounds
+pygame.mixer.pre_init(44100, 16, 2, 4096)  # frequency, size, channels, buffersize
+pygame.mixer.init()
+sound_dir = path.join(path.dirname(__file__), 'sounds')
+MenuMusic = pygame.mixer.music.load(path.join(sound_dir, 'main_menu.wav'))
+MenuMusic = pygame.music.mixer.set_volume(0.45)
 
 click = False
 
