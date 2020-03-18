@@ -483,15 +483,14 @@ def text_objects(text, font):
     textSurface = font.render(text, True, white)
     return textSurface, textSurface.get_rect()
 
-def message_display1(text, i):
+def highscore_display(text, i):
     height = window_height/10
     largeText = pygame.font.Font('freesansbold.ttf',30)
     TextSurf, TextRect = text_objects(text, largeText)
     TextRect.center = ((window_width/2),(height+(i*50)))
     screen.blit(TextSurf, TextRect)
 
-    time.sleep(2)
-    pygame.display.update()
+    #pygame.display.update()
 
 
 
@@ -504,10 +503,11 @@ def highscores():
     black = (0, 0, 0)
     white = (255, 255, 255)
     red = (255, 0, 0)
-    arr = read_scores('/home/chase/PycharmProjects/mechanum/Mekaneks/highscores.txt')
+    arr = read_scores('highscores.txt')
     running = True
+    scoresdisplayed = False
     while running:
-        screen.fill((0, 0, 0))
+        screen.fill(black)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -516,13 +516,17 @@ def highscores():
                 if event.key == pygame.K_ESCAPE:
                     exit()
 
-
+        highscore_display("Top 10 High Scores:", 0)
         for i in range(10):
             temp_string = str(arr[i])
-            message_display1(temp_string, i)
+            temp_string = str(i + 1) + ". " + temp_string
+            highscore_display(temp_string, i + 1)
 
-        pygame.display.flip()
-        pygame.display.update()
+        if scoresdisplayed == False:
+            pygame.display.flip()
+            pygame.display.update()
+            displayed = True
+
         mainClock.tick(60)
 def exit():
     pygame.quit()

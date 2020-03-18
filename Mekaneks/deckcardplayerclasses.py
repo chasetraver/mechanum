@@ -16,11 +16,6 @@ class Deck:
     def __init__(self, cards):
         self.cards = cards
 
-   # def show(self):
-        # Not functional, arguably not necessary
-        #for card in self.cards:
-            #card.show()
-
     def shuffle(self):
         for i in range(len(self.cards) - 1, 0, -1):
             r = random.randint(0, i)
