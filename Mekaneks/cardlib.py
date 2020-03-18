@@ -7,7 +7,7 @@ scraparmor = deckcardplayerclasses.Card("Scrap Armor", 0, 0, 0, 1, 'Images/scrap
 sticklobber = deckcardplayerclasses.Card("Stick Lobber", 0, 2, 1, 0, 'Images/stickLobber.png')
 arccannon = deckcardplayerclasses.Card("Arc-Cannon", 0, 2, 2, 0, 'Images/arc-cannon.png')
 durdle = deckcardplayerclasses.Card("Durdle", 99, 0, 0, 0, 'Images/durdle.png')
-broadside = deckcardplayerclasses.Card("The Broadside", 0, 1, 4, 0, 'images/theboradside.png')
+broadside = deckcardplayerclasses.Card("The Broadside", 0, 1, 4, 0, 'Images/theboradside.png')
 mobilerepairs = deckcardplayerclasses.Card("Mobile Repairs", 1, 0, 0, 1, 'Images/mobilerepairs.png')
 rocketboost = deckcardplayerclasses.Card("Rocket Boost", 1, 1, 1, 0, 'Images/rocket boost.png')
 

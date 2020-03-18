@@ -61,11 +61,12 @@ def get_location(x, y):
 def main_menu():
     while True:
         # button texts
-        text_play = font.render('Mechanum', True, (255, 255, 255))
-        # screen.blit(text_play, (0,0))
         # Fill black
         screen.fill((0, 0, 0))
         # button creations
+        #text_play = font.render('Mechanum', True, (255, 255, 255))
+        #screen.blit(text_play, (200, 100))
+    #todo yell at chase to photoshop a background for the menu and the main game. Should feature a stylised 'mechanum' title
         # Rect(left pos, top pos, width, height)
         button_play = pygame.Rect(200, 200, 200, 50)
         button_highscores = pygame.Rect(200, 300, 200, 50)
@@ -82,7 +83,7 @@ def main_menu():
         button_opt_txt = font.render(button_opt_msg, True, (255, 255, 255))
         button_quit_txt = font.render(button_quit_msg, True, (255, 255, 255))
         screen.blit(button_play_txt, (285, 220))
-        screen.blit(button_opt_txt, (285, 320))
+        screen.blit(button_opt_txt, (265, 320))
         screen.blit(button_quit_txt, (285, 420))
 
         for event in pygame.event.get():
@@ -110,9 +111,42 @@ def main_menu():
         mainClock.tick(60)
 
 
-def playersetup(xplayer, yplayer):
-    #todo take player character choice as an argument as either 1 or 2
-    playercharacterchoice = 1
+def characterscreen():
+    while True:
+        screen.fill((0, 0, 0))
+        button_char1 = pygame.Rect(200, 200, 200, 50)
+        button_char2 = pygame.Rect(200, 300, 200, 50)
+        pygame.draw.rect(screen, (255, 0, 0), button_char1)
+        pygame.draw.rect(screen, (255, 0, 0), button_char2)
+        # text for buttons
+        button_char1_msg = "Select 'Robby the Robot'"
+        button_char2_msg = "Select 'The Doomcopter'"
+        button_char1_txt = font.render(button_char1_msg, True, (255, 255, 255))
+        button_char2_txt = font.render(button_char2_msg, True, (255, 255, 255))
+        screen.blit(button_char1_txt, (285, 220))
+        screen.blit(button_char2_txt, (265, 320))
+
+        for event in pygame.event.get():
+            mx, my = pygame.mouse.get_pos()
+            click = False
+            # event - left mousebutton clicked (button actions)
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+                if button_char1.collidepoint(mx, my):
+                    if click:
+                        return 1
+                if button_char2.collidepoint(mx, my):
+                    if click:
+                        return 2
+            # call exit function on Esc key
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    exit()
+        pygame.display.update()
+        mainClock.tick(60)
+
+
+def playersetup(xplayer, yplayer, playercharacterchoice):
     playerdrawdeck = deckcardplayerclasses.Deck(cardlib.startingcards(playercharacterchoice))
     playerdrawdeck.shuffle()
     playerdiscarddeck = deckcardplayerclasses.Deck([])
@@ -198,12 +232,12 @@ def message_display(text):
 
 
 def game():
-
+    characterselect = characterscreen()
     xplayer = grid.rand_location()
     yplayer = grid.rand_location()
 
 
-    player1 = playersetup(xplayer, yplayer)
+    player1 = playersetup(xplayer, yplayer, characterselect)
 
     goblinmonster = monster.Monster(0, 0, 0)
     spawngoblin(goblinmonster, player1)
