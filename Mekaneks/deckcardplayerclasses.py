@@ -58,10 +58,10 @@ class Player:
         self.cleanup = False
 
     def draw(self):
-        if len(self.drawdeck.cards) != 0:
+        if len(self.drawdeck.cards) > 0:
             self.hand.append(self.drawdeck.drawcard())
         else:
-            if len(self.discarddeck.cards) != 0:
+            if len(self.discarddeck.cards) > 0:
                 self.drawdeck.swapdeck(self.discarddeck)
                 self.hand.append(self.drawdeck.drawcard())
             else:
@@ -75,12 +75,18 @@ class Player:
 
     def damage(self, amount):
         # when player takes damage, reduces armor first if possible before putting top card of drawdeck into trashdeck
-        for x in range(0, amount):
-            if self.armor < 0:
-                if len(self.drawdeck.cards) != 0:
-                    self.trashdeck.addcard(self.drawdeck.drawcard())
+        count = 0
+        while True:
+            if count == amount:
+                break
+            count = count + 1
+            if self.armor < 1:
+                if len(self.drawdeck.cards) < 1:
+                    trashedcard = self.drawdeck.drawcard()
+                    self.trashdeck.addcard(trashedcard)
+                    return trashedcard
                 else:
-                    if len(self.discarddeck.cards) != 0:
+                    if len(self.discarddeck.cards) < 1:
                         self.drawdeck.swapdeck(self.discarddeck)
                         trashedcard = self.drawdeck.drawcard()
                         self.trashdeck.addcard(trashedcard)
@@ -89,7 +95,7 @@ class Player:
                         self.gameover()
 
             else:
-                self.armor = self.armor - amount
+                self.armor = self.armor - 1
 
     def showhand(self):
         for card in self.hand:

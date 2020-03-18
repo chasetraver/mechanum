@@ -316,8 +316,10 @@ def playersetup(xplayer, yplayer, playercharacterchoice):
 
 
 def possibleattack(player, _monster, attrange):
-    for x in range(-attrange, attrange):
-        if player.xcoord + x == _monster.xcoord or player.ycoord + x == _monster.ycoord:
+    for possibletarget in range(-attrange, attrange):
+        if player.xcoord + possibletarget == _monster.xcoord and player.ycoord == _monster.ycoord:
+            return True
+        elif player.ycoord + possibletarget == _monster.ycoord and player.xcoord == _monster.xcoord:
             return True
     return False
 
@@ -338,21 +340,21 @@ def isadjacent(object1, object2):
 
 def playermove(player, goblin, amount, direction):
 
-    if direction == "up":
+    if direction == "down":
         destination = player.ycoord + amount
-        if destination > 5:
-            destination = 5
-        for spacemoved in (player.ycoord, destination):
+        if destination > 4:
+            destination = 4
+        for spacemoved in range(player.ycoord, destination):
             if goblin.ycoord == spacemoved + 1:
                 destination = spacemoved
                 break
         player.ycoord = destination
 
-    elif direction == "down":
+    elif direction == "up":
         destination = player.ycoord - amount
-        if destination < 1:
-            destination = 1
-        for spacemoved in (player.ycoord, destination, -1):
+        if destination < 0:
+            destination = 0
+        for spacemoved in range(player.ycoord, destination, -1):
             if goblin.ycoord == spacemoved - 1:
                 destination = spacemoved
                 break
@@ -360,9 +362,9 @@ def playermove(player, goblin, amount, direction):
 
     elif direction == "right":
         destination = player.xcoord + amount
-        if destination > 5:
-            destination = 5
-        for spacemoved in (player.xcoord, destination):
+        if destination > 4:
+            destination = 4
+        for spacemoved in range(player.xcoord, destination):
             if goblin.xcoord == spacemoved + 1:
                 destination = spacemoved
                 break
@@ -371,9 +373,9 @@ def playermove(player, goblin, amount, direction):
 
     elif direction == "left":
         destination = player.xcoord - amount
-        if destination < 1:
-            destination = 1
-        for spacemoved in (player.xcoord, destination, -1):
+        if destination < 0:
+            destination = 0
+        for spacemoved in range(player.xcoord, destination, -1):
             if goblin.xcoord == spacemoved - 1:
                 destination = spacemoved
                 break
@@ -382,8 +384,8 @@ def playermove(player, goblin, amount, direction):
 def playerturn(goblinmonster, player):
 
     currentmessage = "Choose a card to play this turn."
-    index = choosecards(player, goblinmonster)
     message_display(currentmessage)
+    index = choosecards(player, goblinmonster)
     displayboard(player, goblinmonster)
 
     playedcard = player.hand[index]
@@ -425,7 +427,8 @@ def playerturn(goblinmonster, player):
 
     if playedcard.attrange != 0:
         if not possibleattack(player, goblinmonster, playedcard.attrange):
-            currentmessage = "There is no possible attack target for that card"
+            message_display("There is no possible attack target for that card")
+            time.sleep(2)
             displayboard(player, goblinmonster)
             player.cleanup = True
 
@@ -434,11 +437,12 @@ def playerturn(goblinmonster, player):
             if not goblinmonster.isalive:
                 randnum = random.randint(5, 10)
                 droppedgold = randnum
-                currentmessage = "You attack and kill the monster! You earn 100 points and %d gold!" % droppedgold
+                message_display("You attack and kill the monster! You earn 100 points and %d gold!" % droppedgold)
                 player.gold = player.gold + droppedgold
                 player.score = player.score + 100
                 spawngoblin(goblinmonster, player)
                 randnum = random.randint(1, 3)
+                time.sleep(2)
                 if randnum == 3:
                     player.loot = cardlib.randomcard()
                 player.cleanup = True
@@ -447,12 +451,14 @@ def playerturn(goblinmonster, player):
 
             else:
                 message_display("You attack the monster. It is weakened, but yet lives.")
+                time.sleep(2)
                 displayboard(player, goblinmonster)
                 player.cleanup = True
 
     if playedcard.armor != 0:
-        currentmessage = "You gain %d armor" % playedcard.armor
+        message_display("You gain %d armor" % playedcard.armor)
         player.armor = player.armor + playedcard.armor
+        time.sleep(2)
         displayboard(player, goblinmonster)
         player.cleanup = True
 
@@ -460,27 +466,36 @@ def playerturn(goblinmonster, player):
     if player.cleanup:
         player.cleanup = False
         player.discard(index)
-        currentmessage = "%s has been moved to your discard deck." % playedcard.name
+        message_display("%s has been moved to your discard deck." % playedcard.name)
         displayboard(player, goblinmonster)
+        displaycards(player)
+        time.sleep(2)
 
-        if (len(player.hand)) < 3:
+        if (len(player.hand)) < 2:
             drawcount = 0
             while (len(player.hand)) < 5:
                 drawcount = drawcount + 1
                 player.draw()
-            currentmessage = "You draw %d cards." % drawcount
+            displayboard(player,goblinmonster)
+            message_display("You draw %d cards." % drawcount)
             displayboard(player, goblinmonster)
+            displaycards(player)
+            time.sleep(2)
+
 
         player.turn = player.turn + 1
         return
     pass
 
+
 def playerloot(player):
     while True:
-            currentmessage = "The monster has dropped a part! Would you like to add %s to your deck?" % player.loot.name
-            img_lootcard = pygame.transform.scale(player.loot.image, (
+            screen.fill((0,0,0))
+            message_display("The monster has dropped a part! Would you like to add %s to your deck?" % player.loot.name)
+            img_lootcard = pygame.image.load(player.loot.image)
+            img_lootcard = pygame.transform.scale(img_lootcard, (
                 int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-            screen.blit(img_lootcard, 325, 200)
+            screen.blit(img_lootcard, 420, 400)
 
             button_yes = pygame.Rect(200, 200, 200, 50)
             pygame.draw.rect(screen, (255, 0, 0), button_yes)
@@ -552,6 +567,7 @@ def message_display(text):
     textRect = text.get_rect()
     textRect.center = (300, 350)
     screen.blit(text, textRect)
+    pygame.display.flip()
 
 def shopphase():
     #todo literally everything for this
@@ -593,6 +609,10 @@ def game():
         if turncount % 10 == 0:
             shopphase()
         mainClock.tick(60)
+    while True:
+        #game over screen in progress
+        screen.fill((255,0,0))
+        pygame.display.flip()
 
 
 #todo add game over screen and display player1.score

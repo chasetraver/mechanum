@@ -8,16 +8,15 @@ seed(randint(0, 10))
 def coordtogrid(i):
 
     if 0 < i < 63:
-        x = 0
+        return 0
     elif 64 < i < 127:
-        x = 64
+        return 64
     elif 128 < i < 190:
-        x = 128
+        return 128
     elif 191 < i < 255:
-        x = 191
+        return 191
     elif 255 < i < 316:
-        x = 255
-    return x
+        return 255
 
 
 def get_location(x: object, y: object) -> object:
