@@ -13,8 +13,8 @@ import high_scores
 # initialize game engine and open a window
 mainClock = pygame.time.Clock()
 pygame.init()
-window_width = 600
-window_height = 600
+window_width = 1200
+window_height = 750
 # window settings
 display_size = (window_width, window_height)
 screen = pygame.display.set_mode(display_size)
@@ -23,6 +23,11 @@ pygame.display.set_caption('Mechanum')
 # main font (currently system default)
 font = pygame.font.SysFont(None, 20)
 small_button_font = pygame.font.SysFont(None, 12)
+play_font = pygame.font.Font("pixel_font.TTF", 60)
+highscore_font = pygame.font.Font("pixel_font.TTF", 50)
+quit_font = pygame.font.Font("pixel_font.TTF", 60)
+player_select_font = pygame.font.Font("pixel_font.TTF", 40)
+play_as_font = pygame.font.Font("pixel_font.TTF", 60)
 
 #sounds
 #pygame.mixer.pre_init(44100, 16, 2, 4096)  # frequency, size, channels, buffersize
@@ -43,7 +48,7 @@ height = 0
 # constant globals for universal card size
 card_width = 1771
 card_length = 2633
-card_scale_factor = 0.05
+card_scale_factor = 0.08
 #global message usage
 currentmessage = ""
 
@@ -64,23 +69,23 @@ def main_menu():
         #screen.blit(text_play, (200, 100))
     #todo yell at chase to photoshop a background for the menu and the main game. Should feature a stylised 'mechanum' title
         # Rect(left pos, top pos, width, height)
-        button_play = pygame.Rect(200, 200, 200, 50)
-        button_highscores = pygame.Rect(200, 300, 200, 50)
-        button_exit = pygame.Rect(200, 400, 200, 50)
+        button_play = pygame.Rect(450, 150, 300, 100)
+        button_highscores = pygame.Rect(450, 350, 300, 100)
+        button_exit = pygame.Rect(450, 550, 300, 100)
         pygame.draw.rect(screen, (255, 0, 0), button_play)
         pygame.draw.rect(screen, (255, 0, 0), button_highscores)
         pygame.draw.rect(screen, (255, 0, 0), button_exit)
         pygame.draw.rect(screen, (255, 0, 0), button_play)
         # text for buttons
-        button_play_msg = "Play"
-        button_opt_msg = "High Scores"
+        button_play_msg = "PLAY"
+        button_opt_msg = "Highscores"
         button_quit_msg = "Quit"
-        button_play_txt = font.render(button_play_msg, True, (255, 255, 255))
-        button_opt_txt = font.render(button_opt_msg, True, (255, 255, 255))
-        button_quit_txt = font.render(button_quit_msg, True, (255, 255, 255))
-        screen.blit(button_play_txt, (285, 220))
-        screen.blit(button_opt_txt, (265, 320))
-        screen.blit(button_quit_txt, (285, 420))
+        button_play_txt = play_font.render(button_play_msg, True, (255, 255, 255))
+        button_opt_txt = highscore_font.render(button_opt_msg, True, (255, 255, 255))
+        button_quit_txt = quit_font.render(button_quit_msg, True, (255, 255, 255))
+        screen.blit(button_play_txt, (537, 170))
+        screen.blit(button_opt_txt, (465, 372))
+        screen.blit(button_quit_txt, (537, 570))
 
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
@@ -110,21 +115,34 @@ def main_menu():
 def characterscreen():
     while True:
         screen.fill((0, 0, 0))
-        button_char1 = pygame.Rect(200, 200, 200, 50)
-        button_char2 = pygame.Rect(200, 300, 200, 50)
+        button_char1 = pygame.Rect(400, 200, 400, 100)
+        button_char2 = pygame.Rect(400, 400, 400, 100)
         pygame.draw.rect(screen, (255, 0, 0), button_char1)
         pygame.draw.rect(screen, (255, 0, 0), button_char2)
+
+        robby_disp = pygame.image.load("Images/Robby.png")
+        robby_disp = pygame.transform.scale(robby_disp, (210, 270))
+        screen.blit(robby_disp, (150, 40))
+
+        doom_disp = pygame.image.load("Images/doomcopter.png")
+        doom_disp = pygame.transform.scale(doom_disp, (210, 270))
+        screen.blit(doom_disp, (840, 387))
         # text for buttons
-        button_char1_msg = "Select 'Robby the Robot'"
-        button_char2_msg = "Select 'The Doomcopter'"
-        button_char1_txt = font.render(button_char1_msg, True, (255, 255, 255))
-        button_char2_txt = font.render(button_char2_msg, True, (255, 255, 255))
-        screen.blit(button_char1_txt, (285, 220))
-        screen.blit(button_char2_txt, (265, 320))
+        play_as_msg = "PLAY AS:"
+        button_char1_msg = "Robby the Robot"
+        button_char2_msg = "The Doomcopter"
+        button_char1_txt = player_select_font.render(button_char1_msg, True, (255, 255, 255))
+        button_char2_txt = player_select_font.render(button_char2_msg, True, (255, 255, 255))
+        play_as_msg_txt = play_as_font.render(play_as_msg, True, (255, 255, 255))
+        screen.blit(play_as_msg_txt, (490, 100))
+        screen.blit(button_char1_txt, (430, 230))
+        screen.blit(button_char2_txt, (434, 430))
 
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
             click = False
+            if event.type == pygame.QUIT:
+                exit()
             # event - left mousebutton clicked (button actions)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 click = True
@@ -624,7 +642,7 @@ def text_objects(text, font):
 
 def highscore_display(text, i):
     height = window_height/10
-    largeText = pygame.font.Font('freesansbold.ttf',30)
+    largeText = pygame.font.Font('pixel_font.TTF',30)
     TextSurf, TextRect = text_objects(text, largeText)
     TextRect.center = ((window_width/2),(height+(i*50)))
     screen.blit(TextSurf, TextRect)
