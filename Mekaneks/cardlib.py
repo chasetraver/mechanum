@@ -31,4 +31,4 @@ def startingcards(characterselection):
 def randomcard():
     i = (len(allcards))
     r = random.randint(0, i)
-    return allcards[r]
+    return allcards[r - 1]

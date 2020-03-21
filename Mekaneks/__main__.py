@@ -232,7 +232,7 @@ def displaycards(player):
 
 def choosecards(player, goblin):
     handsize = len(player.hand)
-    currentmessage = "Choose a card to play"
+    currentmessage = "Choose a card to play this turn."
     while True:
         if handsize >= 1:
             button_card_0 = pygame.Rect(0, 700, 141, 40)
@@ -330,8 +330,10 @@ def displayboard(player, goblin, currentmessage):
     displaycards(player)
     displaygoblin(goblin)
 
+    displaymessage = currentmessage #+ "player:" + str(player.xcoord) + "," + str(player.ycoord) + "goblin:" + \
+                     #str(goblin.xcoord) + "," + str(goblin.ycoord)
     #todo display player.armor and display player.score
-    message_display(currentmessage) #todo update message_display to have a log of previous messages as well
+    message_display(displaymessage) #todo update message_display to have a log of previous messages as well
     pygame.display.flip()
 
 
@@ -348,8 +350,8 @@ def playersetup(xplayer, yplayer, playercharacterchoice):
 
 
 def possibleattack(player, _monster, attrange):
-    #todo fix bug where attack misses if target is to the right of player
-    for possibletarget in range(0, attrange):
+    #todo fix bug where attack misses if target is to the right of player, or above (might be fixed now)
+    for possibletarget in range(0, attrange + 1):
         if player.xcoord + possibletarget == _monster.xcoord and player.ycoord == _monster.ycoord:
             return True
         elif player.ycoord + possibletarget == _monster.ycoord and player.xcoord == _monster.xcoord:
@@ -362,18 +364,17 @@ def possibleattack(player, _monster, attrange):
     return False
 
 
-def isadjacent(object1, object2):
-   #loops through all orthagonally adjacent squares of an object2 to determine if object 1 is adjacent
-    xmod = 1
-    while xmod > -2:
-        ymod = 1
-        while ymod > -2:
-            if (object1.xcoord == (object2.xcoord + xmod)) & (object2.ycoord == object2.ycoord):
-                return True
-            elif (object1.xcoord == object2.xcoord) & (object1.ycoord == (object2.ycoord + ymod)):
-                return True
-            ymod = ymod - 2
-        xmod = xmod - 2
+def isadjacent(player, _monster):
+
+    if player.xcoord + 1 == _monster.xcoord and player.ycoord == _monster.ycoord:
+        return True
+    elif player.ycoord + 1 == _monster.ycoord and player.xcoord == _monster.xcoord:
+        return True
+    elif player.xcoord - 1 == _monster.xcoord and player.ycoord == _monster.ycoord:
+        return True
+    elif player.ycoord - 1 == _monster.ycoord and player.xcoord == _monster.xcoord:
+        return True
+
     return False
 
 def playermove(player, goblin, amount, direction):
@@ -422,7 +423,7 @@ def playermove(player, goblin, amount, direction):
 
 def playerturn(goblinmonster, player):
 
-    currentmessage = "Choose a card to play this turn."
+    currentmessage = ""
     index = choosecards(player, goblinmonster)
     displayboard(player, goblinmonster, currentmessage)
 
@@ -460,7 +461,6 @@ def playerturn(goblinmonster, player):
         player.cleanup = True
         displayboard(player, goblinmonster, currentmessage)
 
-
     if playedcard.attrange != 0:
         if not possibleattack(player, goblinmonster, playedcard.attrange):
             currentmessage = "There is no possible attack target for that card"
@@ -477,13 +477,12 @@ def playerturn(goblinmonster, player):
                 player.gold = player.gold + droppedgold
                 player.score = player.score + 100
                 spawngoblin(goblinmonster, player)
-                randnum = random.randint(1, 3)
+                randnum = 3 #random.randint(1, 3)
                 time.sleep(2)
                 if randnum == 3:
                     player.loot = cardlib.randomcard()
                 player.cleanup = True
                 displayboard(player, goblinmonster, currentmessage)
-
 
             else:
                 currentmessage = "You attack the monster. It is weakened, but yet lives."
@@ -497,7 +496,6 @@ def playerturn(goblinmonster, player):
         displayboard(player, goblinmonster, currentmessage)
         time.sleep(2)
         player.cleanup = True
-
 
     if player.cleanup:
         player.cleanup = False
@@ -524,34 +522,52 @@ def playerturn(goblinmonster, player):
 
 
 def playerloot(player):
+    screen.fill((0,0,0))
     while True:
-            screen.fill((0,0,0))
-            message_display("The monster has dropped a part! Would you like to add %s to your deck?" % player.loot.name)
-            img_lootcard = pygame.image.load(player.loot.image)
-            img_lootcard = pygame.transform.scale(img_lootcard, (
-                int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-            screen.blit(img_lootcard, 420, 400)
 
-            button_yes = pygame.Rect(200, 200, 200, 50)
-            pygame.draw.rect(screen, (255, 0, 0), button_yes)
-            button_yes_msg = "YES"
-            button_yes_txt = font.render(button_yes_msg, True, (255, 255, 255))
-            screen.blit(button_yes_txt, (285, 220))
-            button_no = pygame.Rect(200, 300, 200, 50)
-            pygame.draw.rect(screen, (255, 0, 0), button_no)
-            button_no_msg = "NO"
-            button_no_txt = font.render(button_no_msg, True, (255, 255, 255))
-            screen.blit(button_no_txt, (285, 320))
+            addprompt = "The monster has dropped a part! Would you like to add %s to your deck?" % player.loot.name
+            screen.fill((0, 0, 0))
+            button_option1 = pygame.Rect(400, 200, 400, 100)
+            button_option2 = pygame.Rect(400, 400, 400, 100)
+            pygame.draw.rect(screen, (255, 0, 0), button_option1)
+            pygame.draw.rect(screen, (255, 0, 0), button_option2)
+            addprompt = font.render(addprompt, True, (255, 255, 255))
+            lootcard = pygame.image.load(player.loot.image)
+            lootcard = pygame.transform.scale(lootcard, (210, 270))
+            screen.blit(lootcard, (150, 40))
+
+            # text for buttons
+            button_option1_msg = "Yes"
+            button_option2_msg = "No"
+            button_option1_txt = player_select_font.render(button_option1_msg, True, (255, 255, 255))
+            button_option2_txt = player_select_font.render(button_option2_msg, True, (255, 255, 255))
+            screen.blit(addprompt, (490, 100))
+            screen.blit(button_option1_txt, (430, 230))
+            screen.blit(button_option2_txt, (434, 430))
+
             pygame.display.flip()
-            xmouse, ymouse = pygame.mouse.get_pos()
-            if button_yes.collidepoint(xmouse, ymouse):
-                player.loot = None
-                player.addcard(player.loot)
-                return
-            if button_no.collidepoint(xmouse, ymouse):
-                player.loot = None
-                return
 
+            for event in pygame.event.get():
+                mx, my = pygame.mouse.get_pos()
+                click = False
+                if event.type == pygame.QUIT:
+                    exit()
+                # event - left mousebutton clicked (button actions)
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    click = True
+                    if button_option1.collidepoint(mx, my):
+                        if click:
+                            player.loot = None
+                            player.addcard(player.loot)
+                            return
+                    if button_option2.collidepoint(mx, my):
+                        if click:
+                            player.loot = None
+                            return
+                # call exit function on Esc key
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        exit()
 
 def monsterturn(_monster, player):
     #checks each space adjacent to monster. If player is there, player is damaged, otherwise the monster moves closer.
