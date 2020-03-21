@@ -3,13 +3,14 @@ import pygame
 
 
 class Card:
-    def __init__(self, name, move, attrange, damage, armor, sprite):
+    def __init__(self, name, move, attrange, damage, armor, cost, sprite):
         self.name = name
         self.move = move
         self.attrange = attrange
         self.damage = damage
         self.armor = armor
         self.image = sprite
+        self.cost = cost
 
 
 class Deck:

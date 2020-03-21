@@ -626,8 +626,68 @@ def message_display(text):
     screen.blit(text, textRect)
     pygame.display.flip()
 
-def shopphase():
-    #todo literally everything for this
+
+def shopphase(player):
+    screen.fill((0, 0, 0))
+    shopcard1 = cardlib.randomcard()
+    shopcard2 = cardlib.randomcard()
+    shopcard3 = cardlib.randomcard()
+    shopcard4 = cardlib.randomcard()
+    shopcard5 = cardlib.randomcard()
+    shopcard6 = cardlib.randomcard()
+    shopcard7 = cardlib.randomcard()
+    shopcard8 = cardlib.randomcard()
+    shopcard9 = cardlib.randomcard()
+    shopcard10 = cardlib.randomcard()
+    while True:
+        #todo display 10 cards using their respective images
+        displayimage1 = shopcard1.image
+        displayimage2 = shopcard2.image
+        displayimage3 = shopcard3.image
+        displayimage4 = shopcard4.image
+        displayimage5 = shopcard5.image
+        displayimage6 = shopcard6.image
+        displayimage7 = shopcard7.image
+        displayimage8 = shopcard8.image
+        displayimage9 = shopcard9.image
+        displayimage10 = shopcard10.image
+        #todo display buttons below the cards that say "purchase x" where x is the card's cost
+        card1cost = shopcard1.cost
+        card2cost = shopcard2.cost
+        card3cost = shopcard3.cost
+        card4cost = shopcard4.cost
+        card5cost = shopcard5.cost
+        card6cost = shopcard6.cost
+        card7cost = shopcard7.cost
+        card8cost = shopcard8.cost
+        card9cost = shopcard9.cost
+        card10cost = shopcard10.cost
+        #todo when the button is clicked, if the player has enough money, lose that much money and gain the card, and
+        #todo replace the card in the shop with a different, random card.
+        #todo Also send a message the player adds that card to their discard deck
+        if player.gold < shopcard.cost:
+            player.gold = player.gold - shopcard.cost
+            player.discarddeck.addcard(shopcard)
+            shopcard = cardlib.randomcard()
+            message_display("You have purchased %s and added it to your discard deck.") % shopcard.name
+
+        else:
+            message_display("you do not have enough gold to purchase that card.")
+
+        #todo there should also be a button that, when clicked, calls the "remove card" method
+        removecard(player)
+
+        #todo there should be another button that, when clicked, allows for the player to exit the shop
+        if False:
+            #change to button click, this should bring the player right back to the game function.
+            return
+        #todo the player's current gold amount should also be displayed at the top of the screen, preferably in yellow.
+        playergoldfordisplay = player.gold
+        pygame.display.flip()
+    pass
+
+def removecard(player):
+    #todo everything for this, starting Sunday.
     pass
 
 def game():
@@ -664,7 +724,7 @@ def game():
         turncount = turncount + 1
 
         if turncount % 10 == 0:
-            shopphase()
+            shopphase(player1)
         mainClock.tick(60)
     while True:
         #game over screen in progress
@@ -696,6 +756,7 @@ def read_scores(filename):
 
 
 def highscores():
+    #todo add a button that when clicked, returns back to main menu.
     black = (0, 0, 0)
     white = (255, 255, 255)
     red = (255, 0, 0)
