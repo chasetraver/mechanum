@@ -28,6 +28,7 @@ highscore_font = pygame.font.Font("pixel_font.TTF", 50)
 quit_font = pygame.font.Font("pixel_font.TTF", 60)
 player_select_font = pygame.font.Font("pixel_font.TTF", 40)
 play_as_font = pygame.font.Font("pixel_font.TTF", 60)
+back_font = pygame.font.Font("pixel_font.TTF", 40)
 
 #sounds
 pygame.mixer.pre_init(44100, 16, 2, 4096)  # frequency, size, channels, buffersize
@@ -761,17 +762,31 @@ def highscores():
     white = (255, 255, 255)
     red = (255, 0, 0)
     arr = read_scores('highscores.txt')
+
+
     running = True
     scoresdisplayed = False
     while running:
         screen.fill(black)
+        button_back = pygame.Rect(50, 50, 150, 50)
+        pygame.draw.rect(screen, (255, 0, 0), button_back)
+        button_back_msg = "BACK"
+        button_back_txt = back_font.render(button_back_msg, True, (255, 255, 255))
+        screen.blit(button_back_txt, (80, 55))
         for event in pygame.event.get():
+            mx, my = pygame.mouse.get_pos()
+            click = False
             if event.type == pygame.QUIT:
                 running = False
                 exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+                if button_back.collidepoint(mx, my):
+                    if click:
+                        main_menu()
 
         highscore_display("Top 10 High Scores:", 0)
         for i in range(10):
