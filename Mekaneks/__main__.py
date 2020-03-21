@@ -477,7 +477,7 @@ def playerturn(goblinmonster, player):
                 player.gold = player.gold + droppedgold
                 player.score = player.score + 100
                 spawngoblin(goblinmonster, player)
-                randnum = 3 #random.randint(1, 3)
+                randnum = random.randint(1, 3)
                 time.sleep(2)
                 if randnum == 3:
                     player.loot = cardlib.randomcard()
