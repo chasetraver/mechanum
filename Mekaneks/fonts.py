@@ -45,11 +45,11 @@ def score_font():
     return score
 
 def armor_font():
-    armor = pygame.font.Font("Video Game Font.ttf", 40)
+    armor = pygame.font.Font("Video Game Font.ttf", 30)
     return armor
 
 def armor_small_font():
-    armor_small = pygame.font.Font("Video Game Font.ttf", 25)
+    armor_small = pygame.font.Font("Video Game Font.ttf", 38)
     return armor_small
 
 def coin_font():
@@ -59,3 +59,7 @@ def coin_font():
 def message_display_font():
     message = pygame.font.Font("Video Game Font.ttf", 11)
     return message
+
+def display_deck_font():
+    display_deck = pygame.font.Font("Video Game Font.ttf", 35)
+    return display_deck

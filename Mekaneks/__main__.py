@@ -64,35 +64,40 @@ def display_armor(armor):
     armor_image: object = pygame.image.load(
         'Images/armor.png')
     armor_image = pygame.transform.scale(armor_image, (400, 400))
-    screen.blit(armor_image, [808, -27])
-    black_background = pygame.Rect(950, 140, 100, 40)
+    screen.blit(armor_image, [425, 140])
+    black_background = pygame.Rect(570, 310, 100, 40)
     pygame.draw.rect(screen, (0, 0, 0), black_background)
 
     armor_msg = str(armor)
     armor_txt = fonts.armor_small_font().render(armor_msg, True, (255, 255, 255))
     arm_txt2 = fonts.armor_font().render("Armor", True, (255, 255, 255))
-    screen.blit(armor_txt, (986, 148))
-    screen.blit(arm_txt2, (900, 10))
+    screen.blit(armor_txt, (603, 312))
+    screen.blit(arm_txt2, (552, 185))
 
 
 def display_gold(gold):
     gold_image: object = pygame.image.load('Images/coins.png')
-    gold_image = pygame.transform.scale(gold_image, (90, 90))
+    gold_image = pygame.transform.scale(gold_image, (60, 60))
     screen.blit(gold_image, [480, 10])
     gold_msg = str(gold)
     gold_txt = fonts.coin_font().render(gold_msg, True, (255, 255, 255))
-    screen.blit(gold_txt, (505, 110))
+    screen.blit(gold_txt, (544, 24))
 
 
 def display_draw_deck(deck_length):
     # deck_banner = pygame.Rect(450, 150, 300, 100)
     # pygame.draw.rect(screen, (255, 0, 0), deck_banner)
+    cardback_image: object = pygame.image.load('Images/cardback.png')
+    cardback_image = pygame.transform.scale(cardback_image, (270, 405))
+    screen.blit(cardback_image, [850, 70])
+    black_background = pygame.Rect(926, 250, 121, 40)
+    pygame.draw.rect(screen, (0, 0, 0), black_background)
+
     deck_msg = str(deck_length)
-    deck_txt = fonts.play_font().render(deck_msg, True, (255, 255, 255))
-    screen.blit(deck_txt, (537, 170))
-
-
-# def display_text_box():
+    deck_txt = fonts.display_deck_font().render(deck_msg, True, (255, 255, 255))
+    screen.blit(deck_txt, (972, 255))
+    draw_deck_txt = fonts.armor_font().render("Draw Deck", True, (255, 255, 255))
+    screen.blit(draw_deck_txt, (850, 20))
 
 
 def main_menu():
