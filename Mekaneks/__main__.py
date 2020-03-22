@@ -58,28 +58,42 @@ def get_location(x, y):
     height = y + 62
 
 
-def display_score():
-    button_play_msg = "Score: "
+def display_score(score):
+    button_play_msg = "Score: " + str(score)
     button_play_txt = score_font.render(button_play_msg, True, (255, 255, 255))
     screen.blit(button_play_txt, (150, 6))
 
 
-def display_armor():
+def display_armor(armor):
     armor_image: object = pygame.image.load(
         'Images/armor.png')
     armor_image = pygame.transform.scale(armor_image, (400, 400))
     screen.blit(armor_image, [840, -40])
+    #button_play = pygame.Rect(450, 150, 300, 100)
+    #pygame.draw.rect(screen, (255, 0, 0), button_play)
 
-random = True
-def display_gold():
+    armor_msg = str(armor)
+    armor_txt = play_font.render(armor_msg, True, (255, 255, 255))
+    screen.blit(armor_txt, (1015, 100))
+
+
+def display_gold(gold):
     gold_image: object = pygame.image.load('Images/coins.png')
     gold_image = pygame.transform.scale(gold_image, (150, 150))
     screen.blit(gold_image, [470, 10])
+    button_play = pygame.Rect(450, 150, 300, 100)
+    #pygame.draw.rect(screen, (255, 0, 0), button_play)
+    gold_msg = str(gold)
+    gold_txt = play_font.render(gold_msg, True, (255, 255, 255))
+    screen.blit(gold_txt, (537, 170))
 
 
-def display_draw_deck():
-    random = True
-
+def display_draw_deck(deck_length):
+    #deck_banner = pygame.Rect(450, 150, 300, 100)
+    #pygame.draw.rect(screen, (255, 0, 0), deck_banner)
+    deck_msg = str(deck_length)
+    deck_txt = play_font.render(deck_msg, True, (255, 255, 255))
+    screen.blit(deck_txt, (537, 170))
 
 
 def main_menu():
@@ -353,10 +367,10 @@ def displayboard(player, goblin, currentmessage):
     # displays grid
     screen.blit(grid.grid(), [0, 47])
     displayplayer(player)
-    display_score()
-    display_armor()
-    display_gold()
-    display_draw_deck()
+    display_score(player.score)
+    display_armor(player.armor)
+    display_gold(player.gold)
+    display_draw_deck(len(player.drawdeck.cards))
     displaycards(player)
     displaygoblin(goblin)
 
