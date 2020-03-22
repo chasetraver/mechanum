@@ -64,15 +64,15 @@ def display_armor(armor):
     armor_image: object = pygame.image.load(
         'Images/armor.png')
     armor_image = pygame.transform.scale(armor_image, (400, 400))
-    screen.blit(armor_image, [425, 140])
-    black_background = pygame.Rect(570, 310, 100, 40)
+    screen.blit(armor_image, [405, 100])
+    black_background = pygame.Rect(553, 251, 100, 40)
     pygame.draw.rect(screen, (0, 0, 0), black_background)
 
     armor_msg = str(armor)
     armor_txt = fonts.armor_small_font().render(armor_msg, True, (255, 255, 255))
     arm_txt2 = fonts.armor_font().render("Armor", True, (255, 255, 255))
-    screen.blit(armor_txt, (603, 312))
-    screen.blit(arm_txt2, (552, 185))
+    screen.blit(armor_txt, (583, 255))
+    screen.blit(arm_txt2, (533, 145))
 
 
 def display_gold(gold):
@@ -85,19 +85,30 @@ def display_gold(gold):
 
 
 def display_draw_deck(deck_length):
-    # deck_banner = pygame.Rect(450, 150, 300, 100)
-    # pygame.draw.rect(screen, (255, 0, 0), deck_banner)
     cardback_image: object = pygame.image.load('Images/cardback.png')
-    cardback_image = pygame.transform.scale(cardback_image, (270, 405))
-    screen.blit(cardback_image, [850, 70])
-    black_background = pygame.Rect(926, 250, 121, 40)
+    cardback_image = pygame.transform.scale(cardback_image, (230, 345))
+    screen.blit(cardback_image, [720, 70])
+    black_background = pygame.Rect(782, 220, 110, 40)
     pygame.draw.rect(screen, (0, 0, 0), black_background)
 
     deck_msg = str(deck_length)
     deck_txt = fonts.display_deck_font().render(deck_msg, True, (255, 255, 255))
-    screen.blit(deck_txt, (972, 255))
-    draw_deck_txt = fonts.armor_font().render("Draw Deck", True, (255, 255, 255))
-    screen.blit(draw_deck_txt, (850, 20))
+    screen.blit(deck_txt, (825, 226))
+    draw_deck_txt = fonts.display_title_font().render("Draw Deck", True, (255, 255, 255))
+    screen.blit(draw_deck_txt, (730, 40))
+
+def display_discard_deck(deck_length):
+    cardback_image: object = pygame.image.load('Images/cardback_red.png')
+    cardback_image = pygame.transform.scale(cardback_image, (230, 345))
+    screen.blit(cardback_image, [965, 70])
+    black_background = pygame.Rect(1026, 220, 110, 40)
+    pygame.draw.rect(screen, (0, 0, 0), black_background)
+
+    deck_msg = str(deck_length)
+    deck_txt = fonts.display_deck_font().render(deck_msg, True, (255, 255, 255))
+    screen.blit(deck_txt, (1068, 226))
+    draw_deck_txt = fonts.discard_deck_font().render("Discard Deck", True, (255, 255, 255))
+    screen.blit(draw_deck_txt, (970, 40))
 
 
 def main_menu():
@@ -377,6 +388,7 @@ def displayboard(player, goblin, currentmessage):
     display_armor(player.armor)
     display_gold(player.gold)
     display_draw_deck(len(player.drawdeck.cards))
+    display_discard_deck(len(player.discarddeck.cards))
     displaycards(player)
     displaygoblin(goblin)
 
