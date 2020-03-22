@@ -5,23 +5,34 @@ from random import randint
 seed(randint(0, 10))
 
 
-def coordtogrid(i):
+def coordtogridx(i):
+    if 2 < i < 92:
+        return 12
+    elif 93 < i < 183:
+        return 105
+    elif 184 < i < 275:
+        return 198
+    elif 277 < i < 368:
+        return 291
+    elif 369 < i < 459:
+        return 384
 
-    if 0 < i < 63:
-        return 0
-    elif 64 < i < 127:
-        return 64
-    elif 128 < i < 190:
-        return 128
-    elif 191 < i < 255:
-        return 191
-    elif 255 < i < 316:
-        return 255
+def coordtogridy(i):
+    if 49 < i < 138:
+        return 52
+    elif 140 < i < 229:
+        return 145
+    elif 232 < i < 322:
+        return 238
+    elif 325 < i < 415:
+        return 331
+    elif 417 < i < 507:
+        return 424
 
 
 def get_location(x: object, y: object) -> object:
-    x_coor = coordtogrid(x)
-    y_coor = coordtogrid(y)
+    x_coor = coordtogridx(x)
+    y_coor = coordtogridy(y)
     return x_coor, y_coor
 
 
@@ -40,17 +51,29 @@ def rand_location():
     return value
 
 
-def gridtocoord(i):
+def gridtocoordx(i):
     if i == 0:
-        return 0
+        return 12
     elif i == 1:
-        return 64
+        return 105
     elif i == 2:
-        return 128
+        return 198
     elif i == 3:
-        return 191
+        return 291
     else:
-        return 255
+        return 384
+
+def gridtocoordy(i):
+    if i == 0:
+        return 52
+    elif i == 1:
+        return 145
+    elif i == 2:
+        return 238
+    elif i == 3:
+        return 331
+    else:
+        return 424
 
 
 def valid_move(clickx, clicky, playerx, playery, goblinx, gobliny, move):
