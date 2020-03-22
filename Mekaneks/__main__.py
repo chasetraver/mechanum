@@ -22,13 +22,14 @@ pygame.display.set_caption('Mechanum')
 
 # main font (currently system default)
 font = pygame.font.SysFont(None, 20)
-small_button_font = pygame.font.Font("pixel_font.TTF", 12)
+small_button_font = pygame.font.Font("Video Game Font.ttf", 8)
 play_font = pygame.font.Font("pixel_font.TTF", 60)
 highscore_font = pygame.font.Font("pixel_font.TTF", 50)
 quit_font = pygame.font.Font("pixel_font.TTF", 60)
 player_select_font = pygame.font.Font("pixel_font.TTF", 40)
 play_as_font = pygame.font.Font("pixel_font.TTF", 60)
-back_font = pygame.font.Font("pixel_font.TTF", 40)
+back_font = pygame.font.Font("Video Game Font.ttf", 30)
+score_font = pygame.font.Font("pixel_font.TTF", 35)
 
 #sounds
 pygame.mixer.pre_init(44100, 16, 2, 4096)  # frequency, size, channels, buffersize
@@ -55,6 +56,30 @@ def get_location(x, y):
     top = y
     width = x + 62
     height = y + 62
+
+
+def display_score():
+    button_play_msg = "Score: "
+    button_play_txt = score_font.render(button_play_msg, True, (255, 255, 255))
+    screen.blit(button_play_txt, (150, 6))
+
+
+def display_armor():
+    armor_image: object = pygame.image.load(
+        'Images/armor.png')
+    armor_image = pygame.transform.scale(armor_image, (400, 400))
+    screen.blit(armor_image, [840, -40])
+
+random = True
+def display_gold():
+    gold_image: object = pygame.image.load('Images/coins.png')
+    gold_image = pygame.transform.scale(gold_image, (150, 150))
+    screen.blit(gold_image, [470, 10])
+
+
+def display_draw_deck():
+    random = True
+
 
 
 def main_menu():
@@ -176,59 +201,59 @@ def displaygoblin(goblinmonster):
 def displaycards(player):
     handsize = len(player.hand)
     if handsize >= 1:
-        button_card_0 = pygame.Rect(0, 700, 141, 40)
+        button_card_0 = pygame.Rect(0, 721, 141, 25)
         pygame.draw.rect(screen, (128, 128, 128), button_card_0)
         button_0_msg = "Play %s" % player.hand[0].name
         button_0_txt = small_button_font.render(button_0_msg, True, (255, 255, 255))
         img_0 = pygame.image.load(player.hand[0].image)
         img_0 = pygame.transform.scale(img_0, (
             int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_0, (0, 485))
-        screen.blit(button_0_txt, (8, 715))
+        screen.blit(img_0, (0, 508))
+        screen.blit(button_0_txt, (2, 730))
 
     if handsize >= 2:
-        button_card_1 = pygame.Rect(150, 700, 141, 40)
+        button_card_1 = pygame.Rect(150, 721, 141, 25)
         pygame.draw.rect(screen, (128, 128, 128), button_card_1)
         button_1_msg = "Play %s" % player.hand[1].name
         button_1_txt = small_button_font.render(button_1_msg, True, (255, 255, 255))
-        screen.blit(button_1_txt, (156, 715))
+        screen.blit(button_1_txt, (152, 730))
         img_1 = pygame.image.load(player.hand[1].image)
         img_1 = pygame.transform.scale(img_1, (
             int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_1, (150, 485))
+        screen.blit(img_1, (150, 508))
 
     if handsize >= 3:
-        button_card_2 = pygame.Rect(300, 700, 141, 40)
+        button_card_2 = pygame.Rect(300, 721, 141, 25)
         pygame.draw.rect(screen, (128, 128, 128), button_card_2)
         button_2_msg = "Play %s" % player.hand[2].name
         button_2_txt = small_button_font.render(button_2_msg, True, (255, 255, 255))
-        screen.blit(button_2_txt, (304, 715))
+        screen.blit(button_2_txt, (302, 730))
         img_2 = pygame.image.load(player.hand[2].image)
         img_2 = pygame.transform.scale(img_2, (
             int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_2, (300, 485))
+        screen.blit(img_2, (300, 508))
 
     if handsize >= 4:
-        button_card_3 = pygame.Rect(450, 700, 141, 40)
+        button_card_3 = pygame.Rect(450, 721, 141, 25)
         pygame.draw.rect(screen, (128, 128, 128), button_card_3)
         button_3_msg = "Play %s" % player.hand[3].name
         button_3_txt = small_button_font.render(button_3_msg, True, (255, 255, 255))
-        screen.blit(button_3_txt, (455, 715))
+        screen.blit(button_3_txt, (452, 730))
         img_3 = pygame.image.load(player.hand[3].image)
         img_3 = pygame.transform.scale(img_3, (
             int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_3, (450, 485))
+        screen.blit(img_3, (450, 508))
 
     if handsize >= 5:
-        button_card_4 = pygame.Rect(600, 700, 141, 40)
+        button_card_4 = pygame.Rect(600, 721, 141, 25)
         pygame.draw.rect(screen, (128, 128, 128), button_card_4)
         button_4_msg = "Play %s" % player.hand[4].name
         button_4_txt = small_button_font.render(button_4_msg, True, (255, 255, 255))
-        screen.blit(button_4_txt, (603, 715))
+        screen.blit(button_4_txt, (602, 730))
         img_4 = pygame.image.load(player.hand[4].image)
         img_4 = pygame.transform.scale(img_4, (
             int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_4, (600, 485))
+        screen.blit(img_4, (600, 508))
 
 
 def choosecards(player, goblin):
@@ -326,8 +351,12 @@ def choosecards(player, goblin):
 def displayboard(player, goblin, currentmessage):
     screen.fill((0, 0, 0))
     # displays grid
-    screen.blit(grid.grid(), [0, 0])
+    screen.blit(grid.grid(), [0, 47])
     displayplayer(player)
+    display_score()
+    display_armor()
+    display_gold()
+    display_draw_deck()
     displaycards(player)
     displaygoblin(goblin)
 
@@ -620,7 +649,7 @@ def spawngoblin(goblinmonster, player):
 def message_display(text):
     white = (255, 255, 255)
     black = (0, 0, 0)
-    font = pygame.font.Font('freesansbold.ttf', 15)
+    font = pygame.font.Font('Video Game Font.ttf', 15)
     text = font.render(text, True, white, black)
     textRect = text.get_rect()
     textRect.center = (300, 350)
@@ -772,7 +801,7 @@ def highscores():
         pygame.draw.rect(screen, (255, 0, 0), button_back)
         button_back_msg = "BACK"
         button_back_txt = back_font.render(button_back_msg, True, (255, 255, 255))
-        screen.blit(button_back_txt, (80, 55))
+        screen.blit(button_back_txt, (68, 61))
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
             click = False

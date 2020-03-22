@@ -31,6 +31,7 @@ def get_location(x: object, y: object) -> object:
 def grid():
     grid_image: object = pygame.image.load(
         'Images/gridBackground.png').convert()
+    grid_image = pygame.transform.scale(grid_image, (460, 460))
     return grid_image
 
 
