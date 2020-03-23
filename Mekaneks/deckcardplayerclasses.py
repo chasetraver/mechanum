@@ -68,7 +68,7 @@ class Player:
                 self.gameover()
 
     def addcard(self, card):
-        self.discarddeck.addcard(card)
+        self.drawdeck.addcard(card)
 
     def discard(self, cardindex):
         self.discarddeck.addcard(self.hand.pop(cardindex))
@@ -81,12 +81,12 @@ class Player:
                 break
             count = count + 1
             if self.armor < 1:
-                if len(self.drawdeck.cards) < 1:
+                if len(self.drawdeck.cards) > 0:
                     trashedcard = self.drawdeck.drawcard()
                     self.trashdeck.addcard(trashedcard)
                     return trashedcard
                 else:
-                    if len(self.discarddeck.cards) < 1:
+                    if len(self.discarddeck.cards) > 0:
                         self.drawdeck.swapdeck(self.discarddeck)
                         trashedcard = self.drawdeck.drawcard()
                         self.trashdeck.addcard(trashedcard)
