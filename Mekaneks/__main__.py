@@ -9,6 +9,7 @@ import monster
 import random
 import time
 import fonts
+from Mekaneks.fonts import player_select_font
 import messages
 import high_scores
 
@@ -21,6 +22,7 @@ window_height = 750
 display_size = (window_width, window_height)
 screen = pygame.display.set_mode(display_size)
 pygame.display.set_caption('Mechanum')
+FPS = 60
 
 # main font (currently system default)
 
@@ -109,6 +111,29 @@ def display_discard_deck(deck_length):
     screen.blit(deck_txt, (1068, 226))
     draw_deck_txt = fonts.discard_deck_font().render("Discard Deck", True, (255, 255, 255))
     screen.blit(draw_deck_txt, (970, 40))
+
+def create_game_over(score):
+    #Display score on screen
+    #Update high scores if needed; need to call other function that saves score to file
+    #Make button/key press that will tke the player back to the main menu
+
+    pygame.display.set_caption('GAME OVER')
+    screen.fill((255, 0, 0))
+    pygame.draw_text(screen, "Score: " + score, 64, window_width / 2, window_height / 4)
+    pygame.draw_text(screen, "Press any key to go back to the main menu.", 20, window_width / 2, window_height / 2)
+    #TODO: call function to check and update high score if needed, then print out if top 10 was updated
+    pygame.display.flip()
+
+    game_over = True
+    while game_over:
+        time.clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYUP:
+                #Goes back to main menu
+                game_over = False
+                main_menu()
 
 
 def main_menu():
@@ -869,8 +894,7 @@ def game():
         mainClock.tick(60)
     while True:
         # game over screen in progress
-        screen.fill((255, 0, 0))
-        pygame.display.flip()
+        create_game_over(player1.score)
 
 
 # todo add game over screen and display player1.score
