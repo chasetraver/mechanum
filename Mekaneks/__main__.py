@@ -1013,10 +1013,9 @@ def game():
 
         turncount = turncount + 1
 
-        shopphase(player1) #Force shop phase to go after a turn for testing (original below)
-        #if turncount % 10 == 0
-        #if turncount == 1:
-        #    shopphase(player1)
+        #shopphase(player1) #Force shop phase to go after a turn for testing (original below)
+        if turncount % 10 == 0:
+            shopphase(player1)
         mainClock.tick(60)
     while True:
         # game over screen in progress
