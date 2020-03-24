@@ -69,7 +69,7 @@ class Player:
                 self.gameover()
 
     def addcard(self, card):
-        self.drawdeck.addcard(card)
+        self.discarddeck.addcard(card)
 
     def discard(self, cardindex):
         self.discarddeck.addcard(self.hand.pop(cardindex))
@@ -106,5 +106,3 @@ class Player:
     def gameover(self):
         self.isalive = False
         pass
-
-

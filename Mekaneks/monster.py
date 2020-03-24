@@ -9,6 +9,7 @@ class Monster:
         self.hp = self.maxhp
         self.isalive = 1
         self.xcoord = xcoord
+        self.attackpower = 1
         self.ycoord = ycoord
         self.sprite = 'Images/goblinmonster.png'
 
@@ -16,4 +17,3 @@ class Monster:
         self.hp = self.hp - amount
         if self.hp <= 0:
             self.isalive = 0
-

@@ -4,6 +4,9 @@
     <list default="true" id="1c30dd6e-7258-4d53-990b-6cfb58b800a1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Mekaneks/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Mekaneks/__main__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mekaneks/deckcardplayerclasses.py" beforeDir="false" afterPath="$PROJECT_DIR$/Mekaneks/deckcardplayerclasses.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mekaneks/messages.py" beforeDir="false" afterPath="$PROJECT_DIR$/Mekaneks/messages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mekaneks/monster.py" beforeDir="false" afterPath="$PROJECT_DIR$/Mekaneks/monster.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
