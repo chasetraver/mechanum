@@ -407,7 +407,6 @@ def playersetup(xplayer, yplayer, playercharacterchoice):
         player.draw()
     return player
 
-
 def possibleattack(player, _monster, attrange):
     # todo fix bug where attack misses if target is to the right of player, or above (might be fixed now)
     for possibletarget in range(0, attrange + 1):
@@ -468,7 +467,6 @@ def playermove(player, goblin, amount, direction):
                 break
         player.xcoord = destination
 
-
     elif direction == "left":
         destination = player.xcoord - amount
         if destination < 0:
@@ -483,7 +481,6 @@ def playermove(player, goblin, amount, direction):
 def playerturn(goblinmonster, player):
     currentmessage = ""
     index = choosecards(player, goblinmonster)
-    displayboard(player, goblinmonster, currentmessage)
 
     playedcard = player.hand[index]
     if playedcard.move == 99:
@@ -492,10 +489,8 @@ def playerturn(goblinmonster, player):
         move = playedcard.move
         direction = ""
         validinput = False
-        currentmessage = "Select the direction to move in"
-        displayboard(player, goblinmonster, currentmessage)
+        message_display("Select the direction to move in")
         currentmessage = "using the arrow keys"
-        displayboard(player, goblinmonster, currentmessage)
         while True:
             displayboard(player, goblinmonster, currentmessage)
             for event in pygame.event.get():
@@ -533,10 +528,8 @@ def playerturn(goblinmonster, player):
             if not goblinmonster.isalive:
                 randnum = random.randint(5, 10)
                 droppedgold = randnum
-                currentmessage = "You attack and kill the monster!"
-                displayboard(player, goblinmonster, currentmessage)
+                message_display("You attack and kill the monster!")
                 currentmessage = "You earn 100 points and %d gold!" % droppedgold
-                displayboard(player, goblinmonster, currentmessage)
                 player.gold = player.gold + droppedgold
                 player.score = player.score + 100
                 spawngoblin(goblinmonster, player)
@@ -547,9 +540,9 @@ def playerturn(goblinmonster, player):
                 displayboard(player, goblinmonster, currentmessage)
 
             else:
-                currentmessage = "The monster survives your attack."
-                displayboard(player, goblinmonster, currentmessage)
+                message_display("The monster survives your attack.")
                 currentmessage = "The monster has %d health left" % goblinmonster.hp
+                displayboard(player, goblinmonster, currentmessage)
                 player.cleanup = True
 
     if playedcard.armor != 0:
@@ -563,17 +556,14 @@ def playerturn(goblinmonster, player):
         player.discard(index)
         currentmessage = "%s has been discarded." % playedcard.name
         displayboard(player, goblinmonster, currentmessage)
-        displaycards(player)
 
         if (len(player.hand)) < 2:
             drawcount = 0
             while (len(player.hand)) < 5:
                 drawcount = drawcount + 1
                 player.draw()
-            displayboard(player, goblinmonster, currentmessage)
             currentmessage = "You draw %d cards." % drawcount
             displayboard(player, goblinmonster, currentmessage)
-            displaycards(player)
 
         player.turn = player.turn + 1
         return
@@ -581,7 +571,6 @@ def playerturn(goblinmonster, player):
 
 
 def playerloot(player):
-    screen.fill((0, 0, 0))
     while True:
 
         addprompt = "The monster has dropped a part! Would you like to add %s to your deck?" % player.loot.name
@@ -590,7 +579,7 @@ def playerloot(player):
         button_option2 = pygame.Rect(400, 400, 400, 100)
         pygame.draw.rect(screen, (255, 0, 0), button_option1)
         pygame.draw.rect(screen, (255, 0, 0), button_option2)
-        addprompt = fonts.play_font().render(addprompt, True, (255, 255, 255))
+        addprompt = fonts.message_display_font().render(addprompt, True, (255, 255, 255))
         lootcard = pygame.image.load(player.loot.image)
         lootcard = pygame.transform.scale(lootcard, (210, 270))
         screen.blit(lootcard, (150, 40))
@@ -598,8 +587,8 @@ def playerloot(player):
         # text for buttons
         button_option1_msg = "Yes"
         button_option2_msg = "No"
-        button_option1_txt = player_select_font.render(button_option1_msg, True, (255, 255, 255))
-        button_option2_txt = player_select_font.render(button_option2_msg, True, (255, 255, 255))
+        button_option1_txt = fonts.play_font().render(button_option1_msg, True, (255, 255, 255))
+        button_option2_txt = fonts.play_font().render(button_option2_msg, True, (255, 255, 255))
         screen.blit(addprompt, (490, 100))
         screen.blit(button_option1_txt, (430, 230))
         screen.blit(button_option2_txt, (434, 430))
@@ -616,8 +605,8 @@ def playerloot(player):
                 click = True
                 if button_option1.collidepoint(mx, my):
                     if click:
-                        player.loot = None
                         player.addcard(player.loot)
+                        player.loot = None
                         return
                 if button_option2.collidepoint(mx, my):
                     if click:
@@ -632,22 +621,21 @@ def playerloot(player):
 def monsterturn(_monster, player):
     # checks each space adjacent to monster. If player is there, player is damaged, otherwise the monster moves closer.
     if isadjacent(_monster, player):
-        if player.armor > 0:
-            currentmessage = "The monster attacked you, but your armor protected you!"
-            player.damage(1)
-            displayboard(player, _monster, currentmessage)
-        else:
-            lostcard = player.damage(1)
-            if player.isalive:
-                currentmessage = "The monster attacked you and broke your %s!" % lostcard.name
-                displayboard(player, _monster, currentmessage)
+        for i in range(0, _monster.attackpower):
+            if player.armor > 0:
+                message_display("Your armor protected you from 1 damage!")
+                player.damage(1)
             else:
-                currentmessage = "The monster attacked you and broke your robot! \nGAME OVER! \n Your score was: %d" % \
-                                 player.score
-                displayboard(player, _monster, currentmessage)
-                time.sleep(4)
+                lostcard = player.damage(1)
+                if player.isalive:
+                    message_display("The monster broke your %s!" % lostcard.name)
+                else:
+                    currentmessage = "The monster broke your robot!"
+                    displayboard(player, _monster, currentmessage)
+                    time.sleep(4)
 
     else:
+        message_display("The monster moves closer.")
         if _monster.ycoord < player.ycoord:
             _monster.ycoord = _monster.ycoord + 1
         elif _monster.ycoord > player.ycoord:
@@ -661,6 +649,8 @@ def monsterturn(_monster, player):
                 # assert True, "monster/player coord move error. Monsterx: %a, Monstery: %b, Playerx: %c, Playery: %d" % \
                 # (_monster.xcoord, _monster.ycoord, player.xcoord, player.ycoord)
                 pass
+    currentmessage = ""
+    displayboard(player, _monster, currentmessage)
 
 
 def spawngoblin(goblinmonster, player):
@@ -675,6 +665,11 @@ def spawngoblin(goblinmonster, player):
     goblinmonster.ycoord = ygoblin
     goblinmonster.isalive = True
     goblinmonster.maxhp = goblinmonster.maxhp + 1
+    goblinmonster.hp = goblinmonster.maxhp
+    displayboard(player, goblinmonster, "The monsters have %d hp" % goblinmonster.hp)
+    if goblinmonster.maxhp % 3 == 0:
+        goblinmonster.attackpower = goblinmonster.attackpower + 1
+        displayboard(player, goblinmonster, "The monsters have %d atk" % goblinmonster.attackpower)
 
 
 def message_display(text: object) -> object:
@@ -716,10 +711,9 @@ def message_display(text: object) -> object:
     screen.blit(text4, textRect4)
     screen.blit(text5, textRect5)
 
-    pygame.display.flip()
-
 
 def shopphase(player):
+    #todo remove this
     shopnotdoneyet = True
     if shopnotdoneyet:
         return
@@ -763,7 +757,7 @@ def shopphase(player):
         # todo Also send a message the player adds that card to their discard deck
         if player.gold < shopcard.cost:
             player.gold = player.gold - shopcard.cost
-            player.discarddeck.addcard(shopcard)
+            player.addcard(shopcard)
             shopcard = cardlib.randomcard()
             message_display("You have purchased %s and added it to your discard deck.") % shopcard.name
 
@@ -848,12 +842,16 @@ def game():
     turncount = 0
     while player1.isalive:
 
-        screen.fill((0, 0, 0))
+        turncount = turncount + 1
+        shopcountdown = 10 - turncount % 10
+        if shopcountdown == 0:
+            currentmessage = "The shop will open this round!"
+        else:
+            currentmessage = ("%d rounds until the shop opens!" % shopcountdown)
         displayboard(player1, goblinmonster, currentmessage)
         currentmessage = ""
         if player1.turn < 2:
             playerturn(goblinmonster, player1)
-            displayboard(player1, goblinmonster, currentmessage)
             if player1.loot != None:
                 playerloot(player1)
 
@@ -861,8 +859,6 @@ def game():
             monsterturn(goblinmonster, player1)
             player1.turn = 0
             displayboard(player1, goblinmonster, currentmessage)
-
-        turncount = turncount + 1
 
         if turncount % 10 == 0:
             shopphase(player1)
