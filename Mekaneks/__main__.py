@@ -735,10 +735,8 @@ def message_display(text: object) -> object:
     screen.blit(text4, textRect4)
     screen.blit(text5, textRect5)
 
-
 def shopphase(player):
-    #todo remove this
-    shopnotdoneyet = True
+    shopnotdoneyet = False
     if shopnotdoneyet:
         return
 
@@ -754,67 +752,217 @@ def shopphase(player):
     shopcard9 = cardlib.randomcard()
     shopcard10 = cardlib.randomcard()
     while True:
-        # todo display 10 cards using their respective images
+        #Display card images
         displayimage1 = shopcard1.image
+        img_shop_card1 = pygame.image.load(displayimage1)
+        img_shop_card1 = pygame.transform.scale(img_shop_card1, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card1, (125,100))
         displayimage2 = shopcard2.image
+        img_shop_card2 = pygame.image.load(displayimage2)
+        img_shop_card2 = pygame.transform.scale(img_shop_card2, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card2, (325,100))
         displayimage3 = shopcard3.image
+        img_shop_card3 = pygame.image.load(displayimage3)
+        img_shop_card3 = pygame.transform.scale(img_shop_card3, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card3, (525,100))
         displayimage4 = shopcard4.image
+        img_shop_card4 = pygame.image.load(displayimage4)
+        img_shop_card4 = pygame.transform.scale(img_shop_card4, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card4, (725,100))
         displayimage5 = shopcard5.image
+        img_shop_card5 = pygame.image.load(displayimage5)
+        img_shop_card5 = pygame.transform.scale(img_shop_card5, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card5, (925,100))
         displayimage6 = shopcard6.image
+        img_shop_card6 = pygame.image.load(displayimage6)
+        img_shop_card6 = pygame.transform.scale(img_shop_card6, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card6, (125,400))
         displayimage7 = shopcard7.image
+        img_shop_card7 = pygame.image.load(displayimage7)
+        img_shop_card7 = pygame.transform.scale(img_shop_card7, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card7, (325,400))
         displayimage8 = shopcard8.image
+        img_shop_card8 = pygame.image.load(displayimage8)
+        img_shop_card8 = pygame.transform.scale(img_shop_card8, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card8, (525,400))
         displayimage9 = shopcard9.image
+        img_shop_card9 = pygame.image.load(displayimage9)
+        img_shop_card9 = pygame.transform.scale(img_shop_card9, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card9, (725,400))
         displayimage10 = shopcard10.image
-        # todo display buttons below the cards that say "purchase x" where x is the card's cost
+        img_shop_card10 = pygame.image.load(displayimage10)
+        img_shop_card10 = pygame.transform.scale(img_shop_card10, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card10, (925,400))
+
+        #Display costs
         card1cost = shopcard1.cost
+        button_purchase_card1 = pygame.Rect(125, 335, 145, 30)
+        pygame.draw.rect(screen, (128, 128, 128), button_purchase_card1)
+        msg_card1_price = "Purchase for %s" % card1cost
+        card1_price_txt = fonts.small_button_font().render(msg_card1_price, True, (255, 255, 255))
+        screen.blit(card1_price_txt, (125, 345))
         card2cost = shopcard2.cost
+        button_purchase_card2 = pygame.Rect(325, 335, 145, 30)
+        pygame.draw.rect(screen, (128, 128, 128), button_purchase_card2)
+        msg_card2_price = "Purchase for %s" % card2cost
+        card2_price_txt = fonts.small_button_font().render(msg_card2_price, True, (255, 255, 255))
+        screen.blit(card2_price_txt, (325, 345))
         card3cost = shopcard3.cost
+        button_purchase_card3 = pygame.Rect(525, 335, 145, 30)
+        pygame.draw.rect(screen, (128, 128, 128), button_purchase_card3)
+        msg_card3_price = "Purchase for %s" % card3cost
+        card3_price_txt = fonts.small_button_font().render(msg_card3_price, True, (255, 255, 255))
+        screen.blit(card3_price_txt, (525, 345))
         card4cost = shopcard4.cost
+        button_purchase_card4 = pygame.Rect(725, 335, 145, 30)
+        pygame.draw.rect(screen, (128, 128, 128), button_purchase_card4)
+        msg_card4_price = "Purchase for %s" % card4cost
+        card4_price_txt = fonts.small_button_font().render(msg_card4_price, True, (255, 255, 255))
+        screen.blit(card4_price_txt, (725, 345))
         card5cost = shopcard5.cost
+        button_purchase_card5 = pygame.Rect(925, 335, 145, 30)
+        pygame.draw.rect(screen, (128, 128, 128), button_purchase_card5)
+        msg_card5_price = "Purchase for %s" % card5cost
+        card5_price_txt = fonts.small_button_font().render(msg_card5_price, True, (255, 255, 255))
+        screen.blit(card5_price_txt, (925, 345))
+
+        #2nd row of cards
         card6cost = shopcard6.cost
+        button_purchase_card6 = pygame.Rect(125, 635, 145, 30)
+        pygame.draw.rect(screen, (128, 128, 128), button_purchase_card6)
+        msg_card6_price = "Purchase for %s" % card6cost
+        card6_price_txt = fonts.small_button_font().render(msg_card6_price, True, (255, 255, 255))
+        screen.blit(card6_price_txt, (125, 645))
         card7cost = shopcard7.cost
+        button_purchase_card7 = pygame.Rect(325, 635, 145, 30)
+        pygame.draw.rect(screen, (128, 128, 128), button_purchase_card7)
+        msg_card7_price = "Purchase for %s" % card7cost
+        card7_price_txt = fonts.small_button_font().render(msg_card7_price, True, (255, 255, 255))
+        screen.blit(card7_price_txt, (325, 645))
         card8cost = shopcard8.cost
+        button_purchase_card8 = pygame.Rect(525, 635, 145, 30)
+        pygame.draw.rect(screen, (128, 128, 128), button_purchase_card8)
+        msg_card8_price = "Purchase for %s" % card8cost
+        card8_price_txt = fonts.small_button_font().render(msg_card8_price, True, (255, 255, 255))
+        screen.blit(card8_price_txt, (525, 645))
         card9cost = shopcard9.cost
+        button_purchase_card9 = pygame.Rect(725, 635, 145, 30)
+        pygame.draw.rect(screen, (128, 128, 128), button_purchase_card9)
+        msg_card9_price = "Purchase for %s" % card9cost
+        card9_price_txt = fonts.small_button_font().render(msg_card9_price, True, (255, 255, 255))
+        screen.blit(card9_price_txt, (725, 645))
         card10cost = shopcard10.cost
+        button_purchase_card10 = pygame.Rect(925, 635, 145, 30)
+        pygame.draw.rect(screen, (128, 128, 128), button_purchase_card10)
+        msg_card10_price = "Purchase for %s" % card10cost
+        card10_price_txt = fonts.small_button_font().render(msg_card10_price, True, (255, 255, 255))
+        screen.blit(card10_price_txt, (925, 645))
+
+        
+        button_discard = pygame.Rect(800, 20, 275, 50)
+        pygame.draw.rect(screen, (0, 0, 255), button_discard)
+        msg_discard = "Remove a card here for 5 gold"
+        discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
+        screen.blit(discard_txt, (820, 45))
         # todo when the button is clicked, if the player has enough money, lose that much money and gain the card, and
         # todo replace the card in the shop with a different, random card.
         # todo Also send a message the player adds that card to their discard deck
-        if player.gold < shopcard.cost:
-            player.gold = player.gold - shopcard.cost
-            player.addcard(shopcard)
-            shopcard = cardlib.randomcard()
-            message_display("You have purchased %s and added it to your discard deck.") % shopcard.name
-
-        else:
-            message_display("you do not have enough gold to purchase that card.")
-
-        # todo there should also be a button that, when clicked, runs the following code
-        removedcard = removecard(player)
-        removed = False
-        for card in player.drawdeck:
-            if removedcard == card.name:
-                player.drawdeck.remove(card)
-                removed = True
-                break
-        if not removed:
-            for card in player.discarddeck:
-                if removedcard == card.name:
-                    player.discarddeck.remove(card)
-                    removed = True
-                    break
-        if not removed:
-            for card in player.hand:
-                if removedcard == card.name:
-                    player.hand.remove(card)
-                    removed = True
-                    break
 
 
-        # todo there should be another button that, when clicked, allows for the player to exit the shop
-        if False:
-            # change to button click, this should bring the player right back to the game function.
-            return
-        # todo the player's current gold amount should also be displayed at the top of the screen, preferably in yellow.
+        # if player.gold < shopcard.cost:
+        #     player.gold = player.gold - shopcard.cost
+        #     player.discarddeck.addcard(shopcard)
+        #     shopcard = cardlib.randomcard()
+        #     message_display("You have purchased %s and added it to your discard deck.") % shopcard.name
+
+        # else:
+        #     message_display("you do not have enough gold to purchase that card.")
+        #Exit the shop display
+
+        #Go back message
+        button_0_msg = "Press Esc to go back"
+        button_back_txt = fonts.small_button_font().render(button_0_msg, True, (255, 255, 255))
+        screen.blit(button_back_txt, (800, 730))
+
+        #Purchase display log
+        log_msg = "Purchase a card!"
+        log_txt = fonts.small_button_font().render(log_msg, True, (255, 255, 255))
+        screen.blit(log_txt, (300, 730))
+
+        for event in pygame.event.get():
+            mx, my = pygame.mouse.get_pos()
+            click = False
+            #card purchase event
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if button_purchase_card1.collidepoint(mx, my):
+                    #discard card 1(not done)
+                    if player.gold < shopcard1.cost:
+                        player.discard.deck.add(shopcard)
+                        shopcard1 = cardlib.randomcard()
+                        log_msg = ("You have purchased %s and added it to your discard deck.") % shopcard1.name
+                    else:
+                        log_msg = "You do not have enough gold to purchase that card."
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if button_purchase_card2.collidepoint(mx, my):
+                    exit() #discard card 2
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if button_purchase_card3.collidepoint(mx, my):
+                    exit() #discard card 3
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if button_purchase_card4.collidepoint(mx, my):
+                    exit() #discard card 4
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if button_purchase_card5.collidepoint(mx, my):
+                    exit() #discard card 5
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if button_purchase_card6.collidepoint(mx, my):
+                    exit() #discard card 6
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if button_purchase_card7.collidepoint(mx, my):
+                    exit() #discard card 7
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if button_purchase_card8.collidepoint(mx, my):
+                    exit() #discard card 8
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if button_purchase_card9.collidepoint(mx, my):
+                    exit() #discard card 9
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if button_purchase_card10.collidepoint(mx, my):
+                    exit() #discard card 10
+            #discard button event
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+                if button_discard.collidepoint(mx, my):
+                    if click:
+                        removedcard = removecard(player)
+                        removed = False
+                        for card in player.drawdeck:
+                            if removedcard == card.name:
+                                player.drawdeck.remove(card)
+                                removed = True
+                                break
+                        if not removed:
+                            for card in player.discarddeck:
+                                if removedcard == card.name:
+                                    player.discarddeck.remove(card)
+                                    removed = True
+                                    break
+                        if not removed:
+                            for card in player.hand:
+                                if removedcard == card.name:
+                                    player.hand.remove(card)
+                                    removed = True
+                                    break
+            if event.type == pygame.QUIT:
+                running = False
+                exit()
+            if event.type == pygame.KEYDOWN: 
+                if event.key == pygame.K_ESCAPE: #Exit Shop here
+                    game()
+
+        #Showing gold amount
+        display_score(player.score)
+        display_gold(player.gold)
         playergoldfordisplay = player.gold
         pygame.display.flip()
 
@@ -884,6 +1032,7 @@ def game():
             player1.turn = 0
             displayboard(player1, goblinmonster, currentmessage)
 
+        #shopphase(player1)
         if turncount % 10 == 0:
             shopphase(player1)
         mainClock.tick(60)
