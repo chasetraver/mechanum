@@ -10,7 +10,7 @@ class Messages:
         self.message5 = " "
     
     def new_message(self, new):
-        if not self.message5 == new:
+        if not self.message5 == new and new != "":
             self.message1 = self.message2
             self.message2 = self.message3
             self.message3 = self.message4

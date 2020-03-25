@@ -4,8 +4,9 @@ import pygame
 
 
 class Monster:
-    def __init__(self, hp, xcoord, ycoord):
-        self.hp = hp
+    def __init__(self, maxhp, xcoord, ycoord):
+        self.maxhp = maxhp
+        self.hp = self.maxhp
         self.isalive = 1
         self.xcoord = xcoord
         self.ycoord = ycoord

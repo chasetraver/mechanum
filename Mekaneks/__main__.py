@@ -392,10 +392,7 @@ def displayboard(player, goblin, currentmessage):
     displaycards(player)
     displaygoblin(goblin)
 
-    displaymessage = currentmessage  # + "player:" + str(player.xcoord) + "," + str(player.ycoord) + "goblin:" + \
-    # str(goblin.xcoord) + "," + str(goblin.ycoord)
-    # todo display player.armor and display player.score
-    message_display(displaymessage)  # todo update message_display to have a log of previous messages as well
+    message_display(currentmessage)  # todo update message_display to have a log of previous messages as well
     pygame.display.flip()
 
 
@@ -495,7 +492,10 @@ def playerturn(goblinmonster, player):
         move = playedcard.move
         direction = ""
         validinput = False
-        currentmessage = "Select the direction to move in using the arrow keys"
+        currentmessage = "Select the direction to move in"
+        displayboard(player, goblinmonster, currentmessage)
+        currentmessage = "using the arrow keys"
+        displayboard(player, goblinmonster, currentmessage)
         while True:
             displayboard(player, goblinmonster, currentmessage)
             for event in pygame.event.get():
@@ -524,8 +524,7 @@ def playerturn(goblinmonster, player):
 
     if playedcard.attrange != 0:
         if not possibleattack(player, goblinmonster, playedcard.attrange):
-            currentmessage = "There is no possible attack target for that card"
-            time.sleep(2)
+            currentmessage = "There is no possible attack target"
             displayboard(player, goblinmonster, currentmessage)
             player.cleanup = True
 
@@ -534,28 +533,29 @@ def playerturn(goblinmonster, player):
             if not goblinmonster.isalive:
                 randnum = random.randint(5, 10)
                 droppedgold = randnum
-                currentmessage = "You attack and kill the monster! You earn 100 points and %d gold!" % droppedgold
+                currentmessage = "You attack and kill the monster!"
+                displayboard(player, goblinmonster, currentmessage)
+                currentmessage = "You earn 100 points and %d gold!" % droppedgold
+                displayboard(player, goblinmonster, currentmessage)
                 player.gold = player.gold + droppedgold
                 player.score = player.score + 100
                 spawngoblin(goblinmonster, player)
                 randnum = random.randint(1, 3)
-                time.sleep(2)
                 if randnum == 3:
                     player.loot = cardlib.randomcard()
                 player.cleanup = True
                 displayboard(player, goblinmonster, currentmessage)
 
             else:
-                currentmessage = "You attack the monster. It is weakened, but yet lives."
+                currentmessage = "The monster survives your attack."
                 displayboard(player, goblinmonster, currentmessage)
-                time.sleep(2)
+                currentmessage = "The monster has %d health left" % goblinmonster.hp
                 player.cleanup = True
 
     if playedcard.armor != 0:
         currentmessage = "You gain %d armor" % playedcard.armor
         player.armor = player.armor + playedcard.armor
         displayboard(player, goblinmonster, currentmessage)
-        time.sleep(2)
         player.cleanup = True
 
     if player.cleanup:
@@ -564,7 +564,6 @@ def playerturn(goblinmonster, player):
         currentmessage = "%s has been discarded." % playedcard.name
         displayboard(player, goblinmonster, currentmessage)
         displaycards(player)
-        time.sleep(2)
 
         if (len(player.hand)) < 2:
             drawcount = 0
@@ -575,7 +574,6 @@ def playerturn(goblinmonster, player):
             currentmessage = "You draw %d cards." % drawcount
             displayboard(player, goblinmonster, currentmessage)
             displaycards(player)
-            time.sleep(2)
 
         player.turn = player.turn + 1
         return
@@ -592,7 +590,7 @@ def playerloot(player):
         button_option2 = pygame.Rect(400, 400, 400, 100)
         pygame.draw.rect(screen, (255, 0, 0), button_option1)
         pygame.draw.rect(screen, (255, 0, 0), button_option2)
-        addprompt = font.render(addprompt, True, (255, 255, 255))
+        addprompt = fonts.play_font().render(addprompt, True, (255, 255, 255))
         lootcard = pygame.image.load(player.loot.image)
         lootcard = pygame.transform.scale(lootcard, (210, 270))
         screen.blit(lootcard, (150, 40))
@@ -676,7 +674,7 @@ def spawngoblin(goblinmonster, player):
     goblinmonster.xcoord = xgoblin
     goblinmonster.ycoord = ygoblin
     goblinmonster.isalive = True
-    goblinmonster.hp = goblinmonster.hp + 1
+    goblinmonster.maxhp = goblinmonster.maxhp + 1
 
 
 def message_display(text: object) -> object:
@@ -722,6 +720,10 @@ def message_display(text: object) -> object:
 
 
 def shopphase(player):
+    shopnotdoneyet = True
+    if shopnotdoneyet:
+        return
+
     screen.fill((0, 0, 0))
     shopcard1 = cardlib.randomcard()
     shopcard2 = cardlib.randomcard()
@@ -768,8 +770,27 @@ def shopphase(player):
         else:
             message_display("you do not have enough gold to purchase that card.")
 
-        # todo there should also be a button that, when clicked, calls the "remove card" method
-        removecard(player)
+        # todo there should also be a button that, when clicked, runs the following code
+        removedcard = removecard(player)
+        removed = False
+        for card in player.drawdeck:
+            if removedcard == card.name:
+                player.drawdeck.remove(card)
+                removed = True
+                break
+        if not removed:
+            for card in player.discarddeck:
+                if removedcard == card.name:
+                    player.discarddeck.remove(card)
+                    removed = True
+                    break
+        if not removed:
+            for card in player.hand:
+                if removedcard == card.name:
+                    player.hand.remove(card)
+                    removed = True
+                    break
+
 
         # todo there should be another button that, when clicked, allows for the player to exit the shop
         if False:
@@ -778,11 +799,37 @@ def shopphase(player):
         # todo the player's current gold amount should also be displayed at the top of the screen, preferably in yellow.
         playergoldfordisplay = player.gold
         pygame.display.flip()
+
     pass
 
 
 def removecard(player):
-    # todo everything for this, starting Sunday.
+    uniquecards = deckcardplayerclasses.Deck()
+
+    for card in player.drawdeck:
+        for uniquecard in uniquecards:
+            if card == uniquecard:
+                break
+            else:
+                uniquecards.addcard(card)
+
+    for card in player.discarddeck:
+        for uniquecard in uniquecards:
+            if card == uniquecard:
+                break
+            else:
+                uniquecards.addcard(card)
+
+    for card in player.hand:
+        for uniquecard in uniquecards:
+            if card == uniquecard:
+                break
+            else:
+                uniquecards.addcard(card)
+
+    totalcards = len(uniquecards)
+    #todo for each card in uniquecards, display it on the screen.
+    #todo each card should also have a button underneath it that, when clicked, returns card.name
     pass
 
 
@@ -797,13 +844,13 @@ def game():
     spawngoblin(goblinmonster, player1)
     displayplayer(player1)
     displaygoblin(goblinmonster)
-    currentmessage = ""
+    currentmessage = "Use the cards to kill the goblins!"
     turncount = 0
     while player1.isalive:
 
         screen.fill((0, 0, 0))
         displayboard(player1, goblinmonster, currentmessage)
-
+        currentmessage = ""
         if player1.turn < 2:
             playerturn(goblinmonster, player1)
             displayboard(player1, goblinmonster, currentmessage)

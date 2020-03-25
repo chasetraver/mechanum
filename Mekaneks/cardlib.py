@@ -27,8 +27,8 @@ def startingcards(characterselection):
         startcards = [durdle, durdle, durdle, broadside, broadside, rocketboost, rocketboost, mobilerepairs,
                       arccannon, arccannon]
     else:
-        return emptycard
-    return bugteststartcards
+        return bugteststartcards
+    return startcards
 
 
 def randomcard():
