@@ -64,15 +64,15 @@ def display_armor(armor):
     armor_image: object = pygame.image.load(
         'Images/armor.png')
     armor_image = pygame.transform.scale(armor_image, (400, 400))
-    screen.blit(armor_image, [405, 100])
-    black_background = pygame.Rect(553, 251, 100, 40)
+    screen.blit(armor_image, [395, 100])
+    black_background = pygame.Rect(543, 251, 100, 40)
     pygame.draw.rect(screen, (0, 0, 0), black_background)
 
     armor_msg = str(armor)
     armor_txt = fonts.armor_small_font().render(armor_msg, True, (255, 255, 255))
     arm_txt2 = fonts.armor_font().render("Armor", True, (255, 255, 255))
-    screen.blit(armor_txt, (583, 255))
-    screen.blit(arm_txt2, (533, 145))
+    screen.blit(armor_txt, (573, 255))
+    screen.blit(arm_txt2, (523, 145))
 
 
 def display_gold(gold):
@@ -828,7 +828,7 @@ def removecard(player):
                 uniquecards.addcard(card)
 
     totalcards = len(uniquecards)
-    #todo for each card in uniquecards, display it on the screen.
+    #todo for each card in uniquecards, display it on the screen, to a max of 15. If you don't think 15 will fit, 10 is fine
     #todo each card should also have a button underneath it that, when clicked, returns card.name
     pass
 
