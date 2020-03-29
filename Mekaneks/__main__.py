@@ -23,6 +23,7 @@ display_size = (window_width, window_height)
 screen = pygame.display.set_mode(display_size)
 pygame.display.set_caption('Mechanum')
 FPS = 60
+white = (255, 255, 255)
 
 # main font (currently system default)
 
@@ -119,14 +120,22 @@ def create_game_over(score):
 
     pygame.display.set_caption('GAME OVER')
     screen.fill((255, 0, 0))
-    pygame.draw_text(screen, "Score: " + score, 64, window_width / 2, window_height / 4)
-    pygame.draw_text(screen, "Press any key to go back to the main menu.", 20, window_width / 2, window_height / 2)
+    pygame.init()
+
+    go_score = "Final Score: " + str(score)
+    largeText = pygame.font.Font('Video Game Font.ttf', 50)
+    textSurf, textRect = text_objects(go_score, largeText)
+    textRect.center = ((window_width / 2), (window_height / 2))
+    screen.blit(textSurf, textRect)
+
+    pygame.display.update()
+
     #TODO: call function to check and update high score if needed, then print out if top 10 was updated
-    pygame.display.flip()
+    #pygame.display.flip()
 
     game_over = True
     while game_over:
-        time.clock.tick(FPS)
+        #time.clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -642,15 +651,15 @@ def playerloot(player):
                     exit()
 
 
-def monsterturn(_monster, player):
+def monsterturn(_monster, player, p_score):
     # checks each space adjacent to monster. If player is there, player is damaged, otherwise the monster moves closer.
     if isadjacent(_monster, player):
         for i in range(0, _monster.attackpower):
             if player.armor > 0:
                 message_display("Your armor protected you from 1 damage!")
-                player.damage(1)
+                player.damage(1, p_score)
             else:
-                lostcard = player.damage(1)
+                lostcard = player.damage(1, p_score)
                 if player.isalive:
                     message_display("The monster broke your %s!" % lostcard.name)
                 else:
@@ -953,20 +962,22 @@ def shopphase(player):
                                     player.hand.remove(card)
                                     removed = True
                                     break
+            #create_game_over(player.score)
+            '''
             if event.type == pygame.QUIT:
                 running = False
                 exit()
-            if event.type == pygame.KEYDOWN: 
-                if event.key == pygame.K_ESCAPE: #Exit Shop here
-                    game()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP: #Exit Shop here
+                    create_game_over(player.score)
+            '''
 
         #Showing gold amount
         display_score(player.score)
         display_gold(player.gold)
         playergoldfordisplay = player.gold
+        create_game_over(player.score)
         pygame.display.flip()
-
-    pass
 
 
 def removecard(player):
@@ -1028,7 +1039,7 @@ def game():
                 playerloot(player1)
 
         if player1.turn >= 2:
-            monsterturn(goblinmonster, player1)
+            monsterturn(goblinmonster, player1, player1.score)
             player1.turn = 0
             displayboard(player1, goblinmonster, currentmessage)
 
@@ -1038,11 +1049,8 @@ def game():
         mainClock.tick(60)
     while True:
         # game over screen in progress
-        create_game_over(player1.score)
-
-# todo add game over screen and display player1.score
-
-white = (255, 255, 255)
+        #create_game_over(player1.score)
+        pass
 
 
 def text_objects(text, font):

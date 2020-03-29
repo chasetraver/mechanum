@@ -1,6 +1,13 @@
 import random
 import pygame
 
+pygame.init()
+window_width = 1200
+window_height = 750
+# window settings
+display_size = (window_width, window_height)
+screen = pygame.display.set_mode(display_size)
+
 
 class Card:
     def __init__(self, name, move, attrange, damage, armor, cost, sprite):
@@ -74,7 +81,7 @@ class Player:
     def discard(self, cardindex):
         self.discarddeck.addcard(self.hand.pop(cardindex))
 
-    def damage(self, amount):
+    def damage(self, amount, score):
         # when player takes damage, reduces armor first if possible before putting top card of drawdeck into trashdeck
         count = 0
         while True:
@@ -93,7 +100,16 @@ class Player:
                         self.trashdeck.addcard(trashedcard)
                         return trashedcard
                     else:
-                        self.gameover()
+                        #Put gameover function here instead
+                        #self.gameover()
+
+                        pygame.display.set_caption('GAME OVER')
+                        screen.fill((255, 0, 0))
+                        pygame.draw_text(screen, "Score: " + score, 64, window_width / 2, window_height / 4)
+                        pygame.draw_text(screen, "Press any key to go back to the main menu.", 20, window_width / 2,
+                                         window_height / 2)
+                        # TODO: call function to check and update high score if needed, then print out if top 10 was updated
+                        pygame.display.flip()
 
             else:
                 self.armor = self.armor - 1

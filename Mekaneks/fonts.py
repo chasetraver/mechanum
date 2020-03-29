@@ -78,3 +78,7 @@ def display_title_font():
 def discard_deck_font():
     display_deck = pygame.font.Font("Video Game Font.ttf", 17)
     return display_deck
+
+def game_over_font():
+    display_go = pygame.font.Font("Video Game Dont.ttf", 30)
+    return display_go
