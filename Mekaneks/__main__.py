@@ -128,6 +128,12 @@ def create_game_over(score):
     textRect.center = ((window_width / 2), (window_height / 2))
     screen.blit(textSurf, textRect)
 
+    go_msg = "Press any key to return to the main menu."
+    medText = pygame.font.Font('Video Game Font.ttf', 20)
+    textSurf2, textRect2 = text_objects(go_msg, medText)
+    textRect2.center = ((window_width / 2), (window_height - (window_height/ 4)))
+    screen.blit(textSurf2, textRect2)
+
     pygame.display.update()
 
     #TODO: call function to check and update high score if needed, then print out if top 10 was updated
@@ -913,31 +919,40 @@ def shopphase(player):
                         log_msg = "You do not have enough gold to purchase that card."
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card2.collidepoint(mx, my):
-                    exit() #discard card 2
+                    #exit() #discard card 2
+                    create_game_over(player.score)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card3.collidepoint(mx, my):
-                    exit() #discard card 3
+                    #exit() #discard card 3
+                    create_game_over(player.score)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card4.collidepoint(mx, my):
-                    exit() #discard card 4
+                    #exit() #discard card 4
+                    create_game_over(player.score)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card5.collidepoint(mx, my):
-                    exit() #discard card 5
+                    #exit() #discard card 5
+                    create_game_over(player.score)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card6.collidepoint(mx, my):
-                    exit() #discard card 6
+                    #exit() #discard card 6
+                    create_game_over(player.score)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card7.collidepoint(mx, my):
-                    exit() #discard card 7
+                    #exit() #discard card 7
+                    create_game_over(player.score)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card8.collidepoint(mx, my):
-                    exit() #discard card 8
+                    #exit() #discard card 8
+                    create_game_over(player.score)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card9.collidepoint(mx, my):
-                    exit() #discard card 9
+                    #exit() #discard card 9
+                    create_game_over(player.score)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card10.collidepoint(mx, my):
-                    exit() #discard card 10
+                    #exit() #discard card 10
+                    create_game_over(player.score)
             #discard button event
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 click = True
@@ -949,20 +964,19 @@ def shopphase(player):
                             if removedcard == card.name:
                                 player.drawdeck.remove(card)
                                 removed = True
-                                break
+                                create_game_over(player.score)
                         if not removed:
                             for card in player.discarddeck:
                                 if removedcard == card.name:
                                     player.discarddeck.remove(card)
                                     removed = True
-                                    break
+                                    create_game_over(player.score)
                         if not removed:
                             for card in player.hand:
                                 if removedcard == card.name:
                                     player.hand.remove(card)
                                     removed = True
-                                    break
-            #create_game_over(player.score)
+                                    create_game_over(player.score)
             '''
             if event.type == pygame.QUIT:
                 running = False
@@ -976,7 +990,6 @@ def shopphase(player):
         display_score(player.score)
         display_gold(player.gold)
         playergoldfordisplay = player.gold
-        create_game_over(player.score)
         pygame.display.flip()
 
 
@@ -1046,6 +1059,7 @@ def game():
         #shopphase(player1)
         if turncount % 10 == 0:
             shopphase(player1)
+            #create_game_over(player1.score)
         mainClock.tick(60)
     while True:
         # game over screen in progress
