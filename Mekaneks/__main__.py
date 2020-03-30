@@ -113,10 +113,40 @@ def display_discard_deck(deck_length):
     draw_deck_txt = fonts.discard_deck_font().render("Discard Deck", True, (255, 255, 255))
     screen.blit(draw_deck_txt, (970, 40))
 
+def save_high_score(new_high_score):
+    hs_file = "highscores.txt"
+    hs_arr = read_scores(hs_file)
+    hs_arr.sort()
+
+    #Displaying text whether or not you made it to the top 10
+    update_text = pygame.font.Font('Video Game Font.ttf', 20)
+    updatedSurf, updatedRect = text_objects("Congrats, you made the top 10 in high scores!", update_text)
+    updatedRect.center = ((window_width / 2), (window_height - (window_height / 6)))
+
+    notUpdatedSurf, notUpdatedRect = text_objects("Sorry, you didn't make top 10 :(", update_text)
+    notUpdatedRect.center = ((window_width / 2), (window_height - (window_height / 6)))
+
+    # Checks to see if the new score is greater than the first (smallest) element in the array
+    #If so, then lowest score is replaced with new high score 
+    if new_high_score > hs_arr[0]:
+        screen.blit(updatedSurf, updatedRect)
+        hs_arr.pop(0)
+        hs_arr.append(new_high_score)
+        hs_arr.sort()
+        try:
+            high_score_file = open(hs_file, "w")
+            for element in range(10):
+                temp_str = str(hs_arr[element])
+                high_score_file.write(temp_str + "\n")
+            high_score_file.close()
+        except IOError:
+            #Can't write to file
+            print("Unable to write to file...")
+    else:
+        screen.blit(notUpdatedSurf, notUpdatedRect)
+
 def create_game_over(score):
-    #Display score on screen
     #Update high scores if needed; need to call other function that saves score to file
-    #Make button/key press that will tke the player back to the main menu
 
     pygame.display.set_caption('GAME OVER')
     screen.fill((255, 0, 0))
@@ -131,13 +161,13 @@ def create_game_over(score):
     go_msg = "Press any key to return to the main menu."
     medText = pygame.font.Font('Video Game Font.ttf', 20)
     textSurf2, textRect2 = text_objects(go_msg, medText)
-    textRect2.center = ((window_width / 2), (window_height - (window_height/ 4)))
+    textRect2.center = ((window_width / 2), (window_height - (window_height / 4)))
     screen.blit(textSurf2, textRect2)
 
-    pygame.display.update()
+    #using the end score, check to see if the scores need to be updated; print if they were updated or not
+    save_high_score(score)
 
-    #TODO: call function to check and update high score if needed, then print out if top 10 was updated
-    #pygame.display.flip()
+    pygame.display.update()
 
     game_over = True
     while game_over:
@@ -1081,14 +1111,12 @@ def highscore_display(text, i):
 
     # pygame.display.update()
 
-
+#This reads the high scores text file and saves the integers into an array
 def read_scores(filename):
     with open(filename) as f:
-        return [int(x) for x in f]
-
+        return [int(x) for x in f]  #Converts them to integers before storing in array
 
 def highscores():
-    # todo add a button that when clicked, returns back to main menu.
     black = (0, 0, 0)
     white = (255, 255, 255)
     red = (255, 0, 0)
@@ -1119,6 +1147,7 @@ def highscores():
                         main_menu()
 
         highscore_display("Top 10 High Scores:", 0)
+        arr.sort(reverse=True)
         for i in range(10):
             temp_string = str(arr[i])
             temp_string = str(i + 1) + ". " + temp_string
