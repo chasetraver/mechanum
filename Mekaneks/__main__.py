@@ -127,7 +127,7 @@ def save_high_score(new_high_score):
     notUpdatedRect.center = ((window_width / 2), (window_height - (window_height / 6)))
 
     # Checks to see if the new score is greater than the first (smallest) element in the array
-    #If so, then lowest score is replaced with new high score 
+    #If so, then lowest score is replaced with new high score
     if new_high_score > hs_arr[0]:
         screen.blit(updatedSurf, updatedRect)
         hs_arr.pop(0)
