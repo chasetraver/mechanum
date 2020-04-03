@@ -719,7 +719,6 @@ def monsterturn(_monster, player, p_score):
                 # (_monster.xcoord, _monster.ycoord, player.xcoord, player.ycoord)
                 pass
     currentmessage = ""
-    displayboard(player, _monster, currentmessage)
 
 
 def spawngoblin(goblinmonster, player):
@@ -735,10 +734,10 @@ def spawngoblin(goblinmonster, player):
     goblinmonster.isalive = True
     goblinmonster.maxhp = goblinmonster.maxhp + 1
     goblinmonster.hp = goblinmonster.maxhp
-    displayboard(player, goblinmonster, "The monsters have %d hp" % goblinmonster.hp)
+    message_display("The monsters have %d hp" % goblinmonster.hp)
     if goblinmonster.maxhp % 3 == 0:
         goblinmonster.attackpower = goblinmonster.attackpower + 1
-        displayboard(player, goblinmonster, "The monsters have %d atk" % goblinmonster.attackpower)
+        message_display("The monsters have %d atk" % goblinmonster.attackpower)
 
 
 def message_display(text: object) -> object:
@@ -781,10 +780,6 @@ def message_display(text: object) -> object:
     screen.blit(text5, textRect5)
 
 def shopphase(player):
-    shopnotdoneyet = False
-    if shopnotdoneyet:
-        return
-
     screen.fill((0, 0, 0))
     shopcard1 = cardlib.randomcard()
     shopcard2 = cardlib.randomcard()
@@ -796,7 +791,12 @@ def shopphase(player):
     shopcard8 = cardlib.randomcard()
     shopcard9 = cardlib.randomcard()
     shopcard10 = cardlib.randomcard()
+
+    #first message to be displayed, overwritten when other cards are purchased.
+    log_msg = "Purchase a card!"
+
     while True:
+        screen.fill((0,0,0))
         #Display card images
         displayimage1 = shopcard1.image
         img_shop_card1 = pygame.image.load(displayimage1)
@@ -903,34 +903,24 @@ def shopphase(player):
         card10_price_txt = fonts.small_button_font().render(msg_card10_price, True, (255, 255, 255))
         screen.blit(card10_price_txt, (925, 645))
 
-        
-        button_discard = pygame.Rect(800, 20, 275, 50)
-        pygame.draw.rect(screen, (0, 0, 255), button_discard)
-        msg_discard = "Remove a card here for 5 gold"
-        discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
-        screen.blit(discard_txt, (820, 45))
+
+        #todo add remove card button for sprint 3
+         #button_discard = pygame.Rect(800, 20, 275, 50)
+         #pygame.draw.rect(screen, (0, 0, 255), button_discard)
+         #msg_discard = "Remove a card here for 5 gold"
+         #discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
+         #screen.blit(discard_txt, (820, 45))
         # todo when the button is clicked, if the player has enough money, lose that much money and gain the card, and
         # todo replace the card in the shop with a different, random card.
         # todo Also send a message the player adds that card to their discard deck
 
 
-        # if player.gold < shopcard.cost:
-        #     player.gold = player.gold - shopcard.cost
-        #     player.discarddeck.addcard(shopcard)
-        #     shopcard = cardlib.randomcard()
-        #     message_display("You have purchased %s and added it to your discard deck.") % shopcard.name
-
-        # else:
-        #     message_display("you do not have enough gold to purchase that card.")
-        #Exit the shop display
-
         #Go back message
-        button_0_msg = "Press Esc to go back"
+        button_0_msg = "Press Esc to exit the shop"
         button_back_txt = fonts.small_button_font().render(button_0_msg, True, (255, 255, 255))
         screen.blit(button_back_txt, (800, 730))
 
         #Purchase display log
-        log_msg = "Purchase a card!"
         log_txt = fonts.small_button_font().render(log_msg, True, (255, 255, 255))
         screen.blit(log_txt, (300, 730))
 
@@ -940,51 +930,121 @@ def shopphase(player):
             #card purchase event
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card1.collidepoint(mx, my):
-                    #discard card 1(not done)
-                    if player.gold < shopcard1.cost:
-                        player.discard.deck.add(shopcard)
+                    #buy card 1(not done)
+                    if player.gold >= shopcard1.cost:
+                        player.gold = player.gold - shopcard1.cost
+                        player.addcard(shopcard1)
+                        log_msg = ("%s has been added to your discard deck.") % shopcard1.name
                         shopcard1 = cardlib.randomcard()
-                        log_msg = ("You have purchased %s and added it to your discard deck.") % shopcard1.name
                     else:
                         log_msg = "You do not have enough gold to purchase that card."
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card2.collidepoint(mx, my):
-                    #exit() #discard card 2
-                    create_game_over(player.score)
+                    if player.gold >= shopcard2.cost:
+                        player.gold = player.gold - shopcard2.cost
+                        player.addcard(shopcard2)
+                        log_msg = ("%s has been added to your discard deck.") % shopcard1.name
+                        shopcard2 = cardlib.randomcard()
+                    else:
+                        log_msg = "You do not have enough gold to purchase that card."
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card3.collidepoint(mx, my):
-                    #exit() #discard card 3
-                    create_game_over(player.score)
+                    if player.gold >= shopcard3.cost:
+                        player.gold = player.gold - shopcard1.cost
+                        player.addcard(shopcard3)
+                        log_msg = ("%s has been added to your discard deck.") % shopcard3.name
+                        shopcard3 = cardlib.randomcard()
+                    else:
+                        log_msg = "You do not have enough gold to purchase that card."
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card4.collidepoint(mx, my):
-                    #exit() #discard card 4
-                    create_game_over(player.score)
+                    if player.gold >= shopcard4.cost:
+                        player.gold = player.gold - shopcard4.cost
+                        player.addcard(shopcard4)
+                        log_msg = ("%s has been added to your discard deck.") % shopcard1.name
+                        shopcard4 = cardlib.randomcard()
+                    else:
+                        log_msg = "You do not have enough gold to purchase that card."
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card5.collidepoint(mx, my):
-                    #exit() #discard card 5
-                    create_game_over(player.score)
+                    if player.gold >= shopcard5.cost:
+                        player.gold = player.gold - shopcard5.cost
+                        player.addcard(shopcard5)
+                        log_msg = ("%s has been added to your discard deck.") % shopcard5.name
+                        shopcard5 = cardlib.randomcard()
+                    else:
+                        log_msg = "You do not have enough gold to purchase that card."
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card6.collidepoint(mx, my):
-                    #exit() #discard card 6
-                    create_game_over(player.score)
+                    if player.gold >= shopcard6.cost:
+                        player.gold = player.gold - shopcard6.cost
+                        player.addcard(shopcard6)
+                        log_msg = ("%s has been added to your discard deck.") % shopcard6.name
+                        shopcard6 = cardlib.randomcard()
+                    else:
+                        log_msg = "You do not have enough gold to purchase that card."
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card7.collidepoint(mx, my):
-                    #exit() #discard card 7
-                    create_game_over(player.score)
+                    if player.gold >= shopcard7.cost:
+                        player.gold = player.gold - shopcard7.cost
+                        player.addcard(shopcard7)
+                        log_msg = ("%s has been added to your discard deck.") % shopcard7.name
+                        shopcard7 = cardlib.randomcard()
+                    else:
+                        log_msg = "You do not have enough gold to purchase that card."
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card8.collidepoint(mx, my):
-                    #exit() #discard card 8
-                    create_game_over(player.score)
+                    if player.gold >= shopcard8.cost:
+                        player.gold = player.gold - shopcard8.cost
+                        player.addcard(shopcard8)
+                        log_msg = ("%s has been added to your discard deck.") % shopcard8.name
+                        shopcard8 = cardlib.randomcard()
+                    else:
+                        log_msg = "You do not have enough gold to purchase that card."
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card9.collidepoint(mx, my):
-                    #exit() #discard card 9
-                    create_game_over(player.score)
+                    if player.gold >= shopcard9.cost:
+                        player.gold = player.gold - shopcard9.cost
+                        player.addcard(shopcard9)
+                        log_msg = ("%s has been added to your discard deck.") % shopcard9.name
+                        shopcard9 = cardlib.randomcard()
+                    else:
+                        log_msg = "You do not have enough gold to purchase that card."
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card10.collidepoint(mx, my):
-                    #exit() #discard card 10
-                    create_game_over(player.score)
-            #discard button event
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    if player.gold >= shopcard10.cost:
+                        player.gold = player.gold - shopcard10.cost
+                        player.addcard(shopcard10)
+                        log_msg = ("%s has been added to your discard deck.") % shopcard10.name
+                        shopcard10 = cardlib.randomcard()
+                    else:
+                        log_msg = "You do not have enough gold to purchase that card."
+
+            if event.type == pygame.QUIT:
+                running = False
+                exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE: #Exit Shop here
+                    return
+
+
+        #Showing gold amount
+        display_score(player.score)
+        display_gold(player.gold)
+        pygame.display.flip()
+
+'''
+             #todo move this up
+            discard button event
+             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 click = True
                 if button_discard.collidepoint(mx, my):
                     if click:
@@ -994,33 +1054,17 @@ def shopphase(player):
                             if removedcard == card.name:
                                 player.drawdeck.remove(card)
                                 removed = True
-                                create_game_over(player.score)
                         if not removed:
                             for card in player.discarddeck:
                                 if removedcard == card.name:
                                     player.discarddeck.remove(card)
                                     removed = True
-                                    create_game_over(player.score)
                         if not removed:
                             for card in player.hand:
                                 if removedcard == card.name:
                                     player.hand.remove(card)
                                     removed = True
-                                    create_game_over(player.score)
-            '''
-            if event.type == pygame.QUIT:
-                running = False
-                exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP: #Exit Shop here
-                    create_game_over(player.score)
-            '''
-
-        #Showing gold amount
-        display_score(player.score)
-        display_gold(player.gold)
-        playergoldfordisplay = player.gold
-        pygame.display.flip()
+   '''
 
 
 def removecard(player):
@@ -1070,7 +1114,7 @@ def game():
 
         turncount = turncount + 1
         shopcountdown = 10 - turncount % 10
-        if shopcountdown == 0:
+        if shopcountdown == 10:
             currentmessage = "The shop will open this round!"
         else:
             currentmessage = ("%d rounds until the shop opens!" % shopcountdown)
@@ -1086,14 +1130,12 @@ def game():
             player1.turn = 0
             displayboard(player1, goblinmonster, currentmessage)
 
-        #shopphase(player1)
-        if turncount % 10 == 0:
+        if shopcountdown == 10:
             shopphase(player1)
-            #create_game_over(player1.score)
         mainClock.tick(60)
     while True:
         # game over screen in progress
-        #create_game_over(player1.score)
+        create_game_over(player1.score)
         pass
 
 
