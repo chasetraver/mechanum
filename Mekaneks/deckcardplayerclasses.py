@@ -100,16 +100,8 @@ class Player:
                         self.trashdeck.addcard(trashedcard)
                         return trashedcard
                     else:
-                        #Put gameover function here instead
-                        #self.gameover()
 
-                        pygame.display.set_caption('GAME OVER')
-                        screen.fill((255, 0, 0))
-                        pygame.draw_text(screen, "Score: " + score, 64, window_width / 2, window_height / 4)
-                        pygame.draw_text(screen, "Press any key to go back to the main menu.", 20, window_width / 2,
-                                         window_height / 2)
-                        # TODO: call function to check and update high score if needed, then print out if top 10 was updated
-                        pygame.display.flip()
+                        self.gameover()
 
             else:
                 self.armor = self.armor - 1
