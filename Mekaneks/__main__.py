@@ -1,17 +1,16 @@
+import random
+import sys
+import time
 from os import path
 
 import pygame
-import grid
-import sys
-import deckcardplayerclasses
+
 import cardlib
-import monster
-import random
-import time
+import deckcardplayerclasses
 import fonts
-from Mekaneks.fonts import player_select_font
+import grid
 import messages
-import high_scores
+import monster
 
 # initialize game engine and open a window
 mainClock = pygame.time.Clock()
