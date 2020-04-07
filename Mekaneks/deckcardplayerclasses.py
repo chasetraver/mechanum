@@ -106,11 +106,6 @@ class Player:
             else:
                 self.armor = self.armor - 1
 
-    def showhand(self):
-        for card in self.hand:
-            card.show()
-        pass
-
     def gameover(self):
         self.isalive = False
         pass
