@@ -82,3 +82,7 @@ def discard_deck_font():
 def game_over_font():
     display_go = pygame.font.Font("Video Game Dont.ttf", 30)
     return display_go
+
+def go_font():
+    go = pygame.font.Font("pixel_font.TTF", 80)
+    return go

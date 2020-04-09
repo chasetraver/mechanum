@@ -233,32 +233,60 @@ def main_menu():
         mainClock.tick(60)
 
 
-def characterscreen():
+def characterscreen() -> object:
+    character = 0
+    difficulty = 0
+    screen.fill((0, 0, 0))
+    color1 = (0, 0, 0)
+    color2 = (0, 0, 0)
+    color3 = (0, 0, 0)
+    color4 = (0, 0, 0)
+    button_char1 = pygame.Rect(90, 255, 400, 100)
+    button_char2 = pygame.Rect(90, 450, 400, 100)
+    button_diff1 = pygame.Rect(720, 255, 400, 100)
+    button_diff2 = pygame.Rect(720, 450, 400, 100)
+    button_fill1 = pygame.Rect(92, 257, 396, 96)
+    button_fill2 = pygame.Rect(92, 452, 396, 96)
+    button_fill3 = pygame.Rect(722, 257, 396, 96)
+    button_fill4 = pygame.Rect(722, 452, 396, 96)
+    button_go = pygame.Rect(520, 360, 170, 100)
+    pygame.draw.rect(screen, (255, 0, 0), button_char1)
+    pygame.draw.rect(screen, (255, 0, 0), button_char2)
+    pygame.draw.rect(screen, (255, 0, 0), button_diff1)
+    pygame.draw.rect(screen, (255, 0, 0), button_diff2)
+
+
+
+    robby_disp = pygame.image.load("Images/Robby.png")
+    robby_disp = pygame.transform.scale(robby_disp, (134, 172))
+    screen.blit(robby_disp, (40, 85))
+
+
+    doom_disp = pygame.image.load("Images/doomcopter.png")
+    doom_disp = pygame.transform.scale(doom_disp, (134, 172))
+    screen.blit(doom_disp, (440, 550))
+    # text for buttons
+    play_as_msg = "SELECT YOUR CHARACTER:"
+    difficulty_msg = "SELECT YOUR DIFFICULTY:"
+    button_char1_msg = "Robby the Robot"
+    button_char2_msg = "The Doomcopter"
+    button_diff1_msg = "EASY"
+    button_diff2_msg = "HARD"
+    go_msg = "Play"
+
+    button_char1_txt = fonts.player_select_font().render(button_char1_msg, True, (255, 255, 255))
+    button_char2_txt = fonts.player_select_font().render(button_char2_msg, True, (255, 255, 255))
+    play_as_msg_txt = fonts.player_select_font().render(play_as_msg, True, (255, 255, 255))
+    difficulty_msg_txt = fonts.player_select_font().render(difficulty_msg, True, (255, 255, 255))
+    button_diff1_txt = fonts.player_select_font().render(button_diff1_msg, True, (255, 255, 255))
+    button_diff2_txt = fonts.player_select_font().render(button_diff2_msg, True, (255, 255, 255))
+    go_txt = fonts.go_font().render(go_msg, True, (255, 255, 255))
+    screen.blit(play_as_msg_txt, (60, 50))
+    screen.blit(difficulty_msg_txt, (664, 50))
+    pygame.draw.line(screen, (255, 255, 255), (window_width/2, 0), (window_width/2, 1000), 3)
+    pygame.draw.rect(screen, (255, 0, 0), button_go)
+    screen.blit(go_txt, (window_width/2 - 73, window_height/2 - 8))
     while True:
-        screen.fill((0, 0, 0))
-        button_char1 = pygame.Rect(400, 200, 400, 100)
-        button_char2 = pygame.Rect(400, 400, 400, 100)
-        pygame.draw.rect(screen, (255, 0, 0), button_char1)
-        pygame.draw.rect(screen, (255, 0, 0), button_char2)
-
-        robby_disp = pygame.image.load("Images/Robby.png")
-        robby_disp = pygame.transform.scale(robby_disp, (210, 270))
-        screen.blit(robby_disp, (150, 40))
-
-        doom_disp = pygame.image.load("Images/doomcopter.png")
-        doom_disp = pygame.transform.scale(doom_disp, (210, 270))
-        screen.blit(doom_disp, (840, 387))
-        # text for buttons
-        play_as_msg = "PLAY AS:"
-        button_char1_msg = "Robby the Robot"
-        button_char2_msg = "The Doomcopter"
-        button_char1_txt = fonts.player_select_font().render(button_char1_msg, True, (255, 255, 255))
-        button_char2_txt = fonts.player_select_font().render(button_char2_msg, True, (255, 255, 255))
-        play_as_msg_txt = fonts.player_select_font().render(play_as_msg, True, (255, 255, 255))
-        screen.blit(play_as_msg_txt, (490, 100))
-        screen.blit(button_char1_txt, (430, 230))
-        screen.blit(button_char2_txt, (434, 430))
-
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
             click = False
@@ -269,16 +297,45 @@ def characterscreen():
                 click = True
                 if button_char1.collidepoint(mx, my):
                     if click:
-                        return 1
+                        character = 1
+                        color1 = (255, 0, 0)
+                        color2 = (0, 0, 0)
                 if button_char2.collidepoint(mx, my):
                     if click:
-                        return 2
+                        character = 2
+                        color1 = (0, 0, 0)
+                        color2 = (255, 0, 0)
+                if button_diff1.collidepoint(mx, my):
+                    if click:
+                        difficulty = 1
+                        color3 = (255, 0, 0)
+                        color4 = (0, 0, 0)
+                if button_diff2.collidepoint(mx, my):
+                    if click:
+                        difficulty = 2
+                        color3 = (0, 0, 0)
+                        color4 = (255, 0, 0)
+                if button_go.collidepoint(mx, my):
+                    if click:
+                        if not character == 0:
+                            if not difficulty == 0:
+                                return character, difficulty
             # call exit function on Esc key
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     exit()
+
+
+        pygame.draw.rect(screen, color1, button_fill1)
+        pygame.draw.rect(screen, color2, button_fill2)
+        pygame.draw.rect(screen, color3, button_fill3)
+        pygame.draw.rect(screen, color4, button_fill4)
+        screen.blit(button_char1_txt, (120, 285))
+        screen.blit(button_char2_txt, (124, 480))
+        screen.blit(button_diff1_txt, (875, 285))
+        screen.blit(button_diff2_txt, (875, 480))
         pygame.display.update()
-        mainClock.tick(60)
+
 
 
 def displayplayer(player):
@@ -1097,7 +1154,7 @@ def removecard(player):
 
 
 def game():
-    characterselect = characterscreen()
+    characterselect, difficulty = characterscreen()
     xplayer = grid.rand_location()
     yplayer = grid.rand_location()
 
