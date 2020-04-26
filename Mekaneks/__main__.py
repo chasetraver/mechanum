@@ -707,8 +707,8 @@ def playerloot(player):
         button_option2 = pygame.Rect(400, 400, 400, 100)
         pygame.draw.rect(screen, (255, 0, 0), button_option1)
         pygame.draw.rect(screen, (255, 0, 0), button_option2)
-        addprompt = fonts.display_title_font().render(addprompt, True, (255, 255, 255))
-        addprompt2 = fonts.display_title_font().render(addprompt2, True, (255, 255, 255))
+        addprompt = fonts.message_display_font().render(addprompt, True, (255, 255, 255))
+        addprompt2 = fonts.message_display_font().render(addprompt2, True, (255, 255, 255))
         lootcard = pygame.image.load(player.loot.image)
         lootcard = pygame.transform.scale(lootcard, (210, 270))
         screen.blit(lootcard, (150, 40))
@@ -798,6 +798,8 @@ def spawngoblin(goblinmonster, player):
     message_display("The monsters have %d hp" % goblinmonster.hp)
     if goblinmonster.maxhp % 3 == 0:
         goblinmonster.attackpower = goblinmonster.attackpower + 1
+        if goblinmonster.attackpower < 5:
+            goblinmonster.sprite = cardlib.sprites[goblinmonster.attackpower - 1]
         message_display("The monsters have %d atk" % goblinmonster.attackpower)
 
 
@@ -1195,7 +1197,7 @@ def game():
             player1.turn = 0
             displayboard(player1, goblinmonster, currentmessage)
 
-        if shopcountdown == 10:
+        if shopcountdown == shopturns:
             shopphase(player1)
         mainClock.tick(60)
     while True:

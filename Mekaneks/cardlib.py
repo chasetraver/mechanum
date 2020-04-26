@@ -11,6 +11,8 @@ broadside = deckcardplayerclasses.Card("The Broadside", 0, 1, 4, 0, 17, 'Images/
 mobilerepairs = deckcardplayerclasses.Card("Mobile Repairs", 1, 0, 0, 1, 15, 'Images/mobilerepairs.png')
 rocketboost = deckcardplayerclasses.Card("Rocket Boost", 1, 1, 1, 0, 15,  'Images/rocket boost.png')
 
+sprites = ['Images/goblinmonster.png', 'Images/zombie.png', 'Images/orc.png', 'Images/lich.png']
+
 allcards = [pointedstick, conveyorwheels, scraparmor, sticklobber, arccannon, durdle, broadside, mobilerepairs,
             rocketboost]
 emptycard = deckcardplayerclasses.Card("", 0, 0, 0, 0, 0, "")

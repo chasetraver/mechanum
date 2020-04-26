@@ -2,7 +2,6 @@ import cardlib
 import random
 import pygame
 
-
 class Monster:
     def __init__(self, maxhp, xcoord, ycoord):
         self.maxhp = maxhp
