@@ -188,7 +188,6 @@ def main_menu():
         # button creations
         # text_play = font.render('Mechanum', True, (255, 255, 255))
         # screen.blit(text_play, (200, 100))
-        # todo yell at chase to photoshop a background for the menu and the main game. Should feature a stylised 'mechanum' title
         # Rect(left pos, top pos, width, height)
         button_play = pygame.Rect(450, 150, 300, 100)
         button_highscores = pygame.Rect(450, 350, 300, 100)
@@ -603,7 +602,7 @@ def playermove(player, goblin, amount, direction):
         player.xcoord = destination
 
 
-def playerturn(goblinmonster, player):
+def playerturn(goblinmonster, player, difficulty):
     currentmessage = ""
     index = choosecards(player, goblinmonster)
 
@@ -658,9 +657,12 @@ def playerturn(goblinmonster, player):
                 player.gold = player.gold + droppedgold
                 player.score = player.score + 100
                 spawngoblin(goblinmonster, player)
-                randnum = random.randint(1, 3)
-                if randnum == 3:
+                if difficulty == 1:
                     player.loot = cardlib.randomcard()
+                else:
+                    randnum = random.randint(1, 3)
+                    if randnum == 3:
+                        player.loot = cardlib.randomcard()
                 player.cleanup = True
                 displayboard(player, goblinmonster, currentmessage)
 
@@ -698,13 +700,15 @@ def playerturn(goblinmonster, player):
 def playerloot(player):
     while True:
 
-        addprompt = "The monster has dropped a part! Would you like to add %s to your deck?" % player.loot.name
+        addprompt = "The monster has dropped a part!"
+        addprompt2 = "Would you like to add %s to your deck?" % player.loot.name
         screen.fill((0, 0, 0))
         button_option1 = pygame.Rect(400, 200, 400, 100)
         button_option2 = pygame.Rect(400, 400, 400, 100)
         pygame.draw.rect(screen, (255, 0, 0), button_option1)
         pygame.draw.rect(screen, (255, 0, 0), button_option2)
-        addprompt = fonts.message_display_font().render(addprompt, True, (255, 255, 255))
+        addprompt = fonts.display_title_font().render(addprompt, True, (255, 255, 255))
+        addprompt2 = fonts.display_title_font().render(addprompt2, True, (255, 255, 255))
         lootcard = pygame.image.load(player.loot.image)
         lootcard = pygame.transform.scale(lootcard, (210, 270))
         screen.blit(lootcard, (150, 40))
@@ -715,6 +719,7 @@ def playerloot(player):
         button_option1_txt = fonts.play_font().render(button_option1_msg, True, (255, 255, 255))
         button_option2_txt = fonts.play_font().render(button_option2_msg, True, (255, 255, 255))
         screen.blit(addprompt, (490, 100))
+        screen.blit(addprompt2, (490, 140))
         screen.blit(button_option1_txt, (430, 230))
         screen.blit(button_option2_txt, (434, 430))
 
@@ -1166,18 +1171,22 @@ def game():
     displaygoblin(goblinmonster)
     currentmessage = "Use the cards to kill the goblins!"
     turncount = 0
+    if difficulty == 1:
+        shopturns = 5
+    else:
+        shopturn = 10
     while player1.isalive:
 
         turncount = turncount + 1
-        shopcountdown = 10 - turncount % 10
-        if shopcountdown == 10:
+        shopcountdown = shopturns - turncount % shopturns
+        if shopcountdown == shopturns:
             currentmessage = "The shop will open this round!"
         else:
             currentmessage = ("%d rounds until the shop opens!" % shopcountdown)
         displayboard(player1, goblinmonster, currentmessage)
         currentmessage = ""
         if player1.turn < 2:
-            playerturn(goblinmonster, player1)
+            playerturn(goblinmonster, player1, difficulty)
             if player1.loot != None:
                 playerloot(player1)
 
