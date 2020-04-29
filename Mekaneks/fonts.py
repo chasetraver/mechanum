@@ -86,3 +86,7 @@ def game_over_font():
 def go_font():
     go = pygame.font.Font("pixel_font.TTF", 80)
     return go
+
+def tut_font():
+    tut = pygame.font.Font("Video Game Font.ttf", 15)
+    return tut

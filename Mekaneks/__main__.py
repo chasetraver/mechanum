@@ -56,6 +56,7 @@ def get_location(x, y):
 
 mess_ = messages.Messages()
 
+
 def display_score(score):
     button_play_msg = "Score: " + str(score)
     button_play_txt = fonts.score_font().render(button_play_msg, True, (255, 255, 255))
@@ -99,6 +100,7 @@ def display_draw_deck(deck_length):
     draw_deck_txt = fonts.display_title_font().render("Draw Deck", True, (255, 255, 255))
     screen.blit(draw_deck_txt, (730, 40))
 
+
 def display_discard_deck(deck_length):
     cardback_image: object = pygame.image.load('Images/cardback_red.png')
     cardback_image = pygame.transform.scale(cardback_image, (230, 345))
@@ -112,12 +114,13 @@ def display_discard_deck(deck_length):
     draw_deck_txt = fonts.discard_deck_font().render("Discard Deck", True, (255, 255, 255))
     screen.blit(draw_deck_txt, (970, 40))
 
+
 def save_high_score(new_high_score):
     hs_file = "highscores.txt"
     hs_arr = read_scores(hs_file)
     hs_arr.sort()
 
-    #Displaying text whether or not you made it to the top 10
+    # Displaying text whether or not you made it to the top 10
     update_text = pygame.font.Font('Video Game Font.ttf', 20)
     updatedSurf, updatedRect = text_objects("Congrats, you made the top 10 in high scores!", update_text)
     updatedRect.center = ((window_width / 2), (window_height - (window_height / 6)))
@@ -126,7 +129,7 @@ def save_high_score(new_high_score):
     notUpdatedRect.center = ((window_width / 2), (window_height - (window_height / 6)))
 
     # Checks to see if the new score is greater than the first (smallest) element in the array
-    #If so, then lowest score is replaced with new high score
+    # If so, then lowest score is replaced with new high score
     if new_high_score > hs_arr[0]:
         screen.blit(updatedSurf, updatedRect)
         hs_arr.pop(0)
@@ -139,13 +142,14 @@ def save_high_score(new_high_score):
                 high_score_file.write(temp_str + "\n")
             high_score_file.close()
         except IOError:
-            #Can't write to file
+            # Can't write to file
             print("Unable to write to file...")
     else:
         screen.blit(notUpdatedSurf, notUpdatedRect)
 
+
 def create_game_over(score):
-    #Update high scores if needed; need to call other function that saves score to file
+    # Update high scores if needed; need to call other function that saves score to file
 
     pygame.display.set_caption('GAME OVER')
     screen.fill((255, 0, 0))
@@ -163,21 +167,22 @@ def create_game_over(score):
     textRect2.center = ((window_width / 2), (window_height - (window_height / 4)))
     screen.blit(textSurf2, textRect2)
 
-    #using the end score, check to see if the scores need to be updated; print if they were updated or not
+    # using the end score, check to see if the scores need to be updated; print if they were updated or not
     save_high_score(score)
 
     pygame.display.update()
 
     game_over = True
     while game_over:
-        #time.clock.tick(FPS)
+        # time.clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.KEYUP:
-                #Goes back to main menu
+                # Goes back to main menu
                 game_over = False
                 main_menu()
+
 
 def main_menu():
     pygame.mixer.music.play(-1)
@@ -192,20 +197,25 @@ def main_menu():
         button_play = pygame.Rect(450, 150, 300, 100)
         button_highscores = pygame.Rect(450, 350, 300, 100)
         button_exit = pygame.Rect(450, 550, 300, 100)
+        button_tutorial = pygame.Rect(535, 275, 130, 25)
         pygame.draw.rect(screen, (255, 0, 0), button_play)
         pygame.draw.rect(screen, (255, 0, 0), button_highscores)
         pygame.draw.rect(screen, (255, 0, 0), button_exit)
         pygame.draw.rect(screen, (255, 0, 0), button_play)
+        pygame.draw.rect(screen, (255, 255, 255), button_tutorial)
         # text for buttons
         button_play_msg = "PLAY"
         button_opt_msg = "Highscores"
         button_quit_msg = "Quit"
+        button_tut_msg = "Tutorial"
         button_play_txt = fonts.play_font().render(button_play_msg, True, (255, 255, 255))
         button_opt_txt = fonts.highscore_font().render(button_opt_msg, True, (255, 255, 255))
         button_quit_txt = fonts.quit_font().render(button_quit_msg, True, (255, 255, 255))
+        button_tut_txt = fonts.tut_font().render(button_tut_msg, True, (0, 0, 0))
         screen.blit(button_play_txt, (537, 170))
         screen.blit(button_opt_txt, (465, 372))
         screen.blit(button_quit_txt, (537, 570))
+        screen.blit(button_tut_txt, (537, 280))
 
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
@@ -224,6 +234,13 @@ def main_menu():
                 if button_exit.collidepoint(mx, my):
                     if click:
                         exit()
+                if button_tutorial.collidepoint(mx, my):
+                    if click:
+                        xplayer = grid.rand_location()
+                        yplayer = grid.rand_location()
+                        player1 = playersetup(xplayer, yplayer, 1)
+                        goblin = monster.Monster(0, 0, 0)
+                        game_tutorial(player1, goblin)
             # call exit function on Esc key
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -254,12 +271,9 @@ def characterscreen() -> object:
     pygame.draw.rect(screen, (255, 0, 0), button_diff1)
     pygame.draw.rect(screen, (255, 0, 0), button_diff2)
 
-
-
     robby_disp = pygame.image.load("Images/Robby.png")
     robby_disp = pygame.transform.scale(robby_disp, (134, 172))
     screen.blit(robby_disp, (40, 85))
-
 
     doom_disp = pygame.image.load("Images/doomcopter.png")
     doom_disp = pygame.transform.scale(doom_disp, (134, 172))
@@ -282,9 +296,9 @@ def characterscreen() -> object:
     go_txt = fonts.go_font().render(go_msg, True, (255, 255, 255))
     screen.blit(play_as_msg_txt, (60, 50))
     screen.blit(difficulty_msg_txt, (664, 50))
-    pygame.draw.line(screen, (255, 255, 255), (window_width/2, 0), (window_width/2, 1000), 3)
+    pygame.draw.line(screen, (255, 255, 255), (window_width / 2, 0), (window_width / 2, 1000), 3)
     pygame.draw.rect(screen, (255, 0, 0), button_go)
-    screen.blit(go_txt, (window_width/2 - 73, window_height/2 - 8))
+    screen.blit(go_txt, (window_width / 2 - 73, window_height / 2 - 8))
     while True:
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
@@ -324,7 +338,6 @@ def characterscreen() -> object:
                 if event.key == pygame.K_ESCAPE:
                     exit()
 
-
         pygame.draw.rect(screen, color1, button_fill1)
         pygame.draw.rect(screen, color2, button_fill2)
         pygame.draw.rect(screen, color3, button_fill3)
@@ -334,7 +347,6 @@ def characterscreen() -> object:
         screen.blit(button_diff1_txt, (875, 285))
         screen.blit(button_diff2_txt, (875, 480))
         pygame.display.update()
-
 
 
 def displayplayer(player):
@@ -530,6 +542,7 @@ def playersetup(xplayer, yplayer, playercharacterchoice):
     while len(player.hand) < 5:
         player.draw()
     return player
+
 
 def possibleattack(player, _monster, attrange):
     # todo fix bug where attack misses if target is to the right of player, or above (might be fixed now)
@@ -812,9 +825,6 @@ def message_display(text: object) -> object:
     pygame.draw.rect(screen, white, border1)
     pygame.draw.rect(screen, white, border2)
 
-
-
-
     mess_.new_message(text)
     message1, message2, message3, message4, message5 = mess_.get_messages()
     text1 = fonts.message_display_font().render(message1, True, white, black)
@@ -842,6 +852,43 @@ def message_display(text: object) -> object:
     screen.blit(text4, textRect4)
     screen.blit(text5, textRect5)
 
+def tut_message(text):
+    white = (255, 255, 255)
+    black = (0, 0, 0)
+
+    border1 = pygame.Rect(746, 485, 2, 265)
+    border2 = pygame.Rect(746, 485, 480, 2)
+    pygame.draw.rect(screen, white, border1)
+    pygame.draw.rect(screen, white, border2)
+
+    mess_.new_tutorial_message(text)
+    message1, message2, message3, message4, message5 = mess_.get_messages()
+    text1 = fonts.message_display_font().render(message1, True, white, black)
+    text2 = fonts.message_display_font().render(message2, True, white, black)
+    text3 = fonts.message_display_font().render(message3, True, white, black)
+    text4 = fonts.message_display_font().render(message4, True, white, black)
+    text5 = fonts.message_display_font().render(message5, True, white, black)
+
+    textRect1 = text1.get_rect()
+    textRect2 = text2.get_rect()
+    textRect3 = text3.get_rect()
+    textRect4 = text4.get_rect()
+    textRect5 = text5.get_rect()
+
+    textRect1.center = (960, 518)
+    textRect2.center = (960, 571)
+    textRect3.center = (960, 624)
+    textRect4.center = (960, 677)
+    textRect5.center = (960, 730)
+
+    assert isinstance(screen, object)
+    screen.blit(text1, textRect1)
+    screen.blit(text2, textRect2)
+    screen.blit(text3, textRect3)
+    screen.blit(text4, textRect4)
+    screen.blit(text5, textRect5)
+
+
 def shopphase(player):
     screen.fill((0, 0, 0))
     shopcard1 = cardlib.randomcard()
@@ -855,54 +902,64 @@ def shopphase(player):
     shopcard9 = cardlib.randomcard()
     shopcard10 = cardlib.randomcard()
 
-    #first message to be displayed, overwritten when other cards are purchased.
+    # first message to be displayed, overwritten when other cards are purchased.
     log_msg = "Purchase a card!"
 
     while True:
-        screen.fill((0,0,0))
-        #Display card images
+        screen.fill((0, 0, 0))
+        # Display card images
         displayimage1 = shopcard1.image
         img_shop_card1 = pygame.image.load(displayimage1)
-        img_shop_card1 = pygame.transform.scale(img_shop_card1, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_shop_card1, (125,100))
+        img_shop_card1 = pygame.transform.scale(img_shop_card1, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card1, (125, 100))
         displayimage2 = shopcard2.image
         img_shop_card2 = pygame.image.load(displayimage2)
-        img_shop_card2 = pygame.transform.scale(img_shop_card2, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_shop_card2, (325,100))
+        img_shop_card2 = pygame.transform.scale(img_shop_card2, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card2, (325, 100))
         displayimage3 = shopcard3.image
         img_shop_card3 = pygame.image.load(displayimage3)
-        img_shop_card3 = pygame.transform.scale(img_shop_card3, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_shop_card3, (525,100))
+        img_shop_card3 = pygame.transform.scale(img_shop_card3, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card3, (525, 100))
         displayimage4 = shopcard4.image
         img_shop_card4 = pygame.image.load(displayimage4)
-        img_shop_card4 = pygame.transform.scale(img_shop_card4, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_shop_card4, (725,100))
+        img_shop_card4 = pygame.transform.scale(img_shop_card4, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card4, (725, 100))
         displayimage5 = shopcard5.image
         img_shop_card5 = pygame.image.load(displayimage5)
-        img_shop_card5 = pygame.transform.scale(img_shop_card5, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_shop_card5, (925,100))
+        img_shop_card5 = pygame.transform.scale(img_shop_card5, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card5, (925, 100))
         displayimage6 = shopcard6.image
         img_shop_card6 = pygame.image.load(displayimage6)
-        img_shop_card6 = pygame.transform.scale(img_shop_card6, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_shop_card6, (125,400))
+        img_shop_card6 = pygame.transform.scale(img_shop_card6, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card6, (125, 400))
         displayimage7 = shopcard7.image
         img_shop_card7 = pygame.image.load(displayimage7)
-        img_shop_card7 = pygame.transform.scale(img_shop_card7, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_shop_card7, (325,400))
+        img_shop_card7 = pygame.transform.scale(img_shop_card7, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card7, (325, 400))
         displayimage8 = shopcard8.image
         img_shop_card8 = pygame.image.load(displayimage8)
-        img_shop_card8 = pygame.transform.scale(img_shop_card8, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_shop_card8, (525,400))
+        img_shop_card8 = pygame.transform.scale(img_shop_card8, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card8, (525, 400))
         displayimage9 = shopcard9.image
         img_shop_card9 = pygame.image.load(displayimage9)
-        img_shop_card9 = pygame.transform.scale(img_shop_card9, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_shop_card9, (725,400))
+        img_shop_card9 = pygame.transform.scale(img_shop_card9, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card9, (725, 400))
         displayimage10 = shopcard10.image
         img_shop_card10 = pygame.image.load(displayimage10)
-        img_shop_card10 = pygame.transform.scale(img_shop_card10, (int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-        screen.blit(img_shop_card10, (925,400))
+        img_shop_card10 = pygame.transform.scale(img_shop_card10, (
+            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+        screen.blit(img_shop_card10, (925, 400))
 
-        #Display costs
+        # Display costs
         card1cost = shopcard1.cost
         button_purchase_card1 = pygame.Rect(125, 335, 145, 30)
         pygame.draw.rect(screen, (128, 128, 128), button_purchase_card1)
@@ -934,7 +991,7 @@ def shopphase(player):
         card5_price_txt = fonts.small_button_font().render(msg_card5_price, True, (255, 255, 255))
         screen.blit(card5_price_txt, (925, 345))
 
-        #2nd row of cards
+        # 2nd row of cards
         card6cost = shopcard6.cost
         button_purchase_card6 = pygame.Rect(125, 635, 145, 30)
         pygame.draw.rect(screen, (128, 128, 128), button_purchase_card6)
@@ -966,34 +1023,32 @@ def shopphase(player):
         card10_price_txt = fonts.small_button_font().render(msg_card10_price, True, (255, 255, 255))
         screen.blit(card10_price_txt, (925, 645))
 
-
-        #todo add remove card button for sprint 3
-         #button_discard = pygame.Rect(800, 20, 275, 50)
-         #pygame.draw.rect(screen, (0, 0, 255), button_discard)
-         #msg_discard = "Remove a card here for 5 gold"
-         #discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
-         #screen.blit(discard_txt, (820, 45))
+        # todo add remove card button for sprint 3
+        # button_discard = pygame.Rect(800, 20, 275, 50)
+        # pygame.draw.rect(screen, (0, 0, 255), button_discard)
+        # msg_discard = "Remove a card here for 5 gold"
+        # discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
+        # screen.blit(discard_txt, (820, 45))
         # todo when the button is clicked, if the player has enough money, lose that much money and gain the card, and
         # todo replace the card in the shop with a different, random card.
         # todo Also send a message the player adds that card to their discard deck
 
-
-        #Go back message
+        # Go back message
         button_0_msg = "Press Esc to exit the shop"
         button_back_txt = fonts.small_button_font().render(button_0_msg, True, (255, 255, 255))
         screen.blit(button_back_txt, (800, 730))
 
-        #Purchase display log
+        # Purchase display log
         log_txt = fonts.small_button_font().render(log_msg, True, (255, 255, 255))
         screen.blit(log_txt, (300, 730))
 
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
             click = False
-            #card purchase event
+            # card purchase event
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_purchase_card1.collidepoint(mx, my):
-                    #buy card 1(not done)
+                    # buy card 1(not done)
                     if player.gold >= shopcard1.cost:
                         player.gold = player.gold - shopcard1.cost
                         player.addcard(shopcard1)
@@ -1095,14 +1150,14 @@ def shopphase(player):
                 running = False
                 exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE: #Exit Shop here
+                if event.key == pygame.K_ESCAPE:  # Exit Shop here
                     return
 
-
-        #Showing gold amount
+        # Showing gold amount
         display_score(player.score)
         display_gold(player.gold)
         pygame.display.flip()
+
 
 '''
              #todo move this up
@@ -1155,12 +1210,126 @@ def removecard(player):
                 uniquecards.addcard(card)
 
     totalcards = len(uniquecards)
-    #todo for each card in uniquecards, display it on the screen, to a max of 15. If you don't think 15 will fit, 10 is fine
-    #todo each card should also have a button underneath it that, when clicked, returns card.name
+    # todo for each card in uniquecards, display it on the screen, to a max of 15. If you don't think 15 will fit, 10 is fine
+    # todo each card should also have a button underneath it that, when clicked, returns card.name
     pass
 
 
+def game_tutorial(player: object, goblin: object) -> object:
+    stage = 1
+    running = True
+
+    while not stage == 10:
+        screen.fill((0, 0, 0))
+    # explain message box
+        if stage == 1:
+            tut_message("Welcome to MEKANEKS")
+    # explain grid and character
+        if stage == 2:
+            screen.blit(grid.grid(), [0, 47])
+            displayplayer(player)
+            tut_message("This is your grid with your character")
+            tut_message("Your job is to move around and attack.")
+            tut_message("Goal: survive as long as you can.")
+    # explain monsters
+        if stage == 3:
+            screen.blit(grid.grid(), [0, 47])
+            displayplayer(player)
+            displaygoblin(goblin)
+            tut_message("The monster will chase you.")
+            tut_message("Stay alive for as you can.")
+            tut_message("Kill the monster or be killed.")
+            tut_message("Kill one and a stronger one appears.")
+    # explain coins
+        if stage == 4:
+            screen.blit(grid.grid(), [0, 47])
+            displayplayer(player)
+            displaygoblin(goblin)
+            display_gold(player.gold)
+            tut_message("Kill a monster to get coins.")
+            tut_message("Collect all the coins you can.")
+            tut_message("Spend coins in the shop phase.")
+    # explain scores
+        if stage == 5:
+            screen.blit(grid.grid(), [0, 47])
+            displayplayer(player)
+            displaygoblin(goblin)
+            display_gold(player.gold)
+            display_score(player.score)
+            tut_message("Your score is above the grid.")
+            tut_message("Beat your previous highscores!")
+    # explain armor
+        if stage == 6:
+            screen.blit(grid.grid(), [0, 47])
+            displayplayer(player)
+            displaygoblin(goblin)
+            display_gold(player.gold)
+            display_score(player.score)
+            display_armor(player.armor)
+            tut_message("Protect yourself by using armor.")
+            tut_message("Get armor from armor cards.")
+    # explain hand
+        if stage == 7:
+            screen.blit(grid.grid(), [0, 47])
+            displayplayer(player)
+            displaygoblin(goblin)
+            display_gold(player.gold)
+            display_score(player.score)
+            display_armor(player.armor)
+            displaycards(player)
+            tut_message("Play your cards during your turn.")
+            tut_message("Attack, move, and more.")
+            tut_message("Range is on each card.")
+            tut_message("Select cards to play them.")
+    # explain drawdeck & discard
+        if stage == 8:
+            screen.blit(grid.grid(), [0, 47])
+            displayplayer(player)
+            displaygoblin(goblin)
+            display_gold(player.gold)
+            display_score(player.score)
+            display_armor(player.armor)
+            displaycards(player)
+            display_draw_deck(len(player.drawdeck.cards))
+            display_discard_deck(len(player.discarddeck.cards))
+            tut_message("Draw deck has extra cards.")
+            tut_message("It refills your hand when low.")
+            tut_message("Discard pile holds used cards.")
+        if stage == 9:
+            screen.blit(grid.grid(), [0, 47])
+            displayplayer(player)
+            displaygoblin(goblin)
+            display_gold(player.gold)
+            display_score(player.score)
+            display_armor(player.armor)
+            displaycards(player)
+            display_draw_deck(len(player.drawdeck.cards))
+            display_discard_deck(len(player.discarddeck.cards))
+            tut_message("You're ready to play!")
+            tut_message(" ")
+            tut_message("  ")
+            tut_message("   ")
+
+
+
+        for event in pygame.event.get():
+            click = False
+            if event.type == pygame.QUIT:
+                running = False
+                exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                click = True
+                if click:
+                    stage = stage + 1
+    # todo explain shop
+        pygame.display.flip()
+
+
 def game():
+
     characterselect, difficulty = characterscreen()
     xplayer = grid.rand_location()
     yplayer = grid.rand_location()
@@ -1220,10 +1389,12 @@ def highscore_display(text, i):
 
     # pygame.display.update()
 
-#This reads the high scores text file and saves the integers into an array
+
+# This reads the high scores text file and saves the integers into an array
 def read_scores(filename):
     with open(filename) as f:
-        return [int(x) for x in f]  #Converts them to integers before storing in array
+        return [int(x) for x in f]  # Converts them to integers before storing in array
+
 
 def highscores():
     black = (0, 0, 0)
