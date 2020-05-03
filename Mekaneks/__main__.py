@@ -31,7 +31,8 @@ white = (255, 255, 255)
 pygame.mixer.pre_init(44100, 16, 2, 4096)  # frequency, size, channels, buffersize
 pygame.mixer.init()
 sound_dir = path.join(path.dirname(__file__), 'sounds')
-MenuMusic = pygame.mixer.music.load(path.join(sound_dir, 'menu_music.wav'))
+MenuMusic = pygame.mixer.music.load(path.join(sound_dir, 'acid_music.wav'))     #A.C.I.D. - Intro the Breach OST
+#music_playing = True        #Variable to toggle music on/off
 
 click = False
 
@@ -45,7 +46,6 @@ height = 0
 card_width = 1771
 card_length = 2633
 card_scale_factor = 0.08
-
 
 def get_location(x, y):
     left = x
@@ -186,6 +186,9 @@ def create_game_over(score):
 
 def main_menu():
     pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.2)
+    music_playing = True  # Variable to toggle music on/off
+
     while True:
         # button texts
         # Fill black
@@ -198,24 +201,33 @@ def main_menu():
         button_highscores = pygame.Rect(450, 350, 300, 100)
         button_exit = pygame.Rect(450, 550, 300, 100)
         button_tutorial = pygame.Rect(535, 275, 130, 25)
+        button_mute = pygame.Rect(980, 10, 200, 25)
+
         pygame.draw.rect(screen, (255, 0, 0), button_play)
         pygame.draw.rect(screen, (255, 0, 0), button_highscores)
         pygame.draw.rect(screen, (255, 0, 0), button_exit)
         pygame.draw.rect(screen, (255, 0, 0), button_play)
         pygame.draw.rect(screen, (255, 255, 255), button_tutorial)
+        pygame.draw.rect(screen, (255, 255, 255), button_mute)
+
         # text for buttons
         button_play_msg = "PLAY"
         button_opt_msg = "Highscores"
         button_quit_msg = "Quit"
         button_tut_msg = "Tutorial"
+        button_mute_msg = "Toggle Music"
+
         button_play_txt = fonts.play_font().render(button_play_msg, True, (255, 255, 255))
         button_opt_txt = fonts.highscore_font().render(button_opt_msg, True, (255, 255, 255))
         button_quit_txt = fonts.quit_font().render(button_quit_msg, True, (255, 255, 255))
         button_tut_txt = fonts.tut_font().render(button_tut_msg, True, (0, 0, 0))
+        button_mute_txt = fonts.tut_font().render(button_mute_msg, True, (0, 0, 0))
+
         screen.blit(button_play_txt, (537, 170))
         screen.blit(button_opt_txt, (465, 372))
         screen.blit(button_quit_txt, (537, 570))
         screen.blit(button_tut_txt, (537, 280))
+        screen.blit(button_mute_txt, (990, 15))
 
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
@@ -241,6 +253,16 @@ def main_menu():
                         player1 = playersetup(xplayer, yplayer, 1)
                         goblin = monster.Monster(0, 0, 0)
                         game_tutorial(player1, goblin)
+                if button_mute.collidepoint(mx, my):
+                    while(click):
+                        if music_playing == True:
+                            pygame.mixer.music.pause()
+                            music_playing = False
+                        else:
+                            pygame.mixer.music.unpause()
+                            music_playing = True
+                        break
+
             # call exit function on Esc key
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -250,6 +272,7 @@ def main_menu():
 
 
 def characterscreen() -> object:
+
     character = 0
     difficulty = 0
     screen.fill((0, 0, 0))
@@ -266,6 +289,7 @@ def characterscreen() -> object:
     button_fill3 = pygame.Rect(722, 257, 396, 96)
     button_fill4 = pygame.Rect(722, 452, 396, 96)
     button_go = pygame.Rect(520, 360, 170, 100)
+
     pygame.draw.rect(screen, (255, 0, 0), button_char1)
     pygame.draw.rect(screen, (255, 0, 0), button_char2)
     pygame.draw.rect(screen, (255, 0, 0), button_diff1)
@@ -278,6 +302,7 @@ def characterscreen() -> object:
     doom_disp = pygame.image.load("Images/doomcopter.png")
     doom_disp = pygame.transform.scale(doom_disp, (134, 172))
     screen.blit(doom_disp, (440, 550))
+
     # text for buttons
     play_as_msg = "SELECT YOUR CHARACTER:"
     difficulty_msg = "SELECT YOUR DIFFICULTY:"
@@ -294,11 +319,14 @@ def characterscreen() -> object:
     button_diff1_txt = fonts.player_select_font().render(button_diff1_msg, True, (255, 255, 255))
     button_diff2_txt = fonts.player_select_font().render(button_diff2_msg, True, (255, 255, 255))
     go_txt = fonts.go_font().render(go_msg, True, (255, 255, 255))
+
     screen.blit(play_as_msg_txt, (60, 50))
     screen.blit(difficulty_msg_txt, (664, 50))
+
     pygame.draw.line(screen, (255, 255, 255), (window_width / 2, 0), (window_width / 2, 1000), 3)
     pygame.draw.rect(screen, (255, 0, 0), button_go)
     screen.blit(go_txt, (window_width / 2 - 73, window_height / 2 - 8))
+
     while True:
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
@@ -333,6 +361,7 @@ def characterscreen() -> object:
                         if not character == 0:
                             if not difficulty == 0:
                                 return character, difficulty
+
             # call exit function on Esc key
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -516,6 +545,7 @@ def choosecards(player, goblin):
 
 
 def displayboard(player, goblin, currentmessage):
+
     screen.fill((0, 0, 0))
     # displays grid
     screen.blit(grid.grid(), [0, 47])
@@ -530,7 +560,6 @@ def displayboard(player, goblin, currentmessage):
 
     message_display(currentmessage)  # todo update message_display to have a log of previous messages as well
     pygame.display.flip()
-
 
 def playersetup(xplayer, yplayer, playercharacterchoice):
     playerdrawdeck = deckcardplayerclasses.Deck(cardlib.startingcards(playercharacterchoice))
@@ -1328,7 +1357,7 @@ def game_tutorial(player: object, goblin: object) -> object:
         pygame.display.flip()
 
 
-def game():
+def game(music_play):
 
     characterselect, difficulty = characterscreen()
     xplayer = grid.rand_location()
@@ -1347,6 +1376,12 @@ def game():
     else:
         shopturn = 10
     while player1.isalive:
+
+        button_mute = pygame.Rect(980, 10, 200, 25)
+        pygame.draw.rect(screen, (255, 255, 255), button_mute)
+        button_mute_msg = "Toggle Music"
+        button_mute_txt = fonts.tut_font().render(button_mute_msg, True, (0, 0, 0))
+        screen.blit(button_mute_txt, (990, 15))
 
         turncount = turncount + 1
         shopcountdown = shopturns - turncount % shopturns
@@ -1369,6 +1404,21 @@ def game():
         if shopcountdown == shopturns:
             shopphase(player1)
         mainClock.tick(60)
+
+        for event in pygame.event.get():
+            mx, my = pygame.mouse.get_pos()
+            click = False
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+                if button_mute.collidepoint(mx, my):
+                    while (click):
+                        if mp == True:
+                            pygame.mixer.music.pause()
+                            mp = False
+                        else:
+                            pygame.mixer.music.unpause()
+                            mp = True
+                        break
     while True:
         # game over screen in progress
         create_game_over(player1.score)
