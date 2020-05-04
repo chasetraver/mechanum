@@ -40,6 +40,10 @@ def back_font():
     return back
 
 
+def title_font():
+    title = pygame.font.Font("pixel_font.TTF", 75)
+    return title
+
 def score_font():
     score = pygame.font.Font("pixel_font.TTF", 35)
     return score

@@ -30,7 +30,7 @@ white = (255, 255, 255)
 # sounds
 pygame.mixer.pre_init(44100, 16, 2, 4096)  # frequency, size, channels, buffersize
 pygame.mixer.init()
-sound_dir = path.join(path.dirname(__file__), 'sounds')
+sound_dir = path.join(path.dirname(__file__), 'Sounds')
 MenuMusic = pygame.mixer.music.load(path.join(sound_dir, 'acid_music.wav'))     #A.C.I.D. - Intro the Breach OST
 #music_playing = True        #Variable to toggle music on/off
 
@@ -211,18 +211,21 @@ def main_menu():
         pygame.draw.rect(screen, (255, 255, 255), button_mute)
 
         # text for buttons
+        button_title_msg = "MECHANUM"
         button_play_msg = "PLAY"
         button_opt_msg = "Highscores"
         button_quit_msg = "Quit"
         button_tut_msg = "Tutorial"
         button_mute_msg = "Toggle Music"
 
+        button_title_text = fonts.title_font().render(button_title_msg, True, (255, 255, 255))
         button_play_txt = fonts.play_font().render(button_play_msg, True, (255, 255, 255))
         button_opt_txt = fonts.highscore_font().render(button_opt_msg, True, (255, 255, 255))
         button_quit_txt = fonts.quit_font().render(button_quit_msg, True, (255, 255, 255))
         button_tut_txt = fonts.tut_font().render(button_tut_msg, True, (0, 0, 0))
         button_mute_txt = fonts.tut_font().render(button_mute_msg, True, (0, 0, 0))
 
+        screen.blit(button_title_text, (410, 50))
         screen.blit(button_play_txt, (537, 170))
         screen.blit(button_opt_txt, (465, 372))
         screen.blit(button_quit_txt, (537, 570))
@@ -1253,6 +1256,7 @@ def game_tutorial(player: object, goblin: object) -> object:
     # explain message box
         if stage == 1:
             tut_message("Welcome to MEKANEKS")
+            pygame.display.flip()
     # explain grid and character
         if stage == 2:
             screen.blit(grid.grid(), [0, 47])
@@ -1260,6 +1264,7 @@ def game_tutorial(player: object, goblin: object) -> object:
             tut_message("This is your grid with your character")
             tut_message("Your job is to move around and attack.")
             tut_message("Goal: survive as long as you can.")
+            pygame.display.flip()
     # explain monsters
         if stage == 3:
             screen.blit(grid.grid(), [0, 47])
@@ -1269,15 +1274,17 @@ def game_tutorial(player: object, goblin: object) -> object:
             tut_message("Stay alive for as you can.")
             tut_message("Kill the monster or be killed.")
             tut_message("Kill one and a stronger one appears.")
+            pygame.display.flip()
     # explain coins
         if stage == 4:
             screen.blit(grid.grid(), [0, 47])
             displayplayer(player)
             displaygoblin(goblin)
             display_gold(player.gold)
-            tut_message("Kill a monster to get coins.")
-            tut_message("Collect all the coins you can.")
-            tut_message("Spend coins in the shop phase.")
+            tut_message("Kill monsters to get coins and cards.")
+            tut_message("You can buy cards in the shop.")
+            tut_message("Build the best deck you can!")
+            pygame.display.flip()
     # explain scores
         if stage == 5:
             screen.blit(grid.grid(), [0, 47])
@@ -1286,7 +1293,8 @@ def game_tutorial(player: object, goblin: object) -> object:
             display_gold(player.gold)
             display_score(player.score)
             tut_message("Your score is above the grid.")
-            tut_message("Beat your previous highscores!")
+            tut_message("Each monster is worth 100 points")
+            pygame.display.flip()
     # explain armor
         if stage == 6:
             screen.blit(grid.grid(), [0, 47])
@@ -1295,8 +1303,11 @@ def game_tutorial(player: object, goblin: object) -> object:
             display_gold(player.gold)
             display_score(player.score)
             display_armor(player.armor)
-            tut_message("Protect yourself by using armor.")
+            tut_message("Monster attacks break your cards.")
+            tut_message("Armor prevents damage.")
             tut_message("Get armor from armor cards.")
+            tut_message("If you don't have 5 cards left, you lose!")
+            pygame.display.flip()
     # explain hand
         if stage == 7:
             screen.blit(grid.grid(), [0, 47])
@@ -1306,10 +1317,11 @@ def game_tutorial(player: object, goblin: object) -> object:
             display_score(player.score)
             display_armor(player.armor)
             displaycards(player)
-            tut_message("Play your cards during your turn.")
-            tut_message("Attack, move, and more.")
-            tut_message("Range is on each card.")
-            tut_message("Select cards to play them.")
+            tut_message("Each turn you can play a card.")
+            tut_message("Using them, you can move, attack,")
+            tut_message("or gain armor.")
+            tut_message("The button below the card will play it.")
+            pygame.display.flip()
     # explain drawdeck & discard
         if stage == 8:
             screen.blit(grid.grid(), [0, 47])
@@ -1321,9 +1333,11 @@ def game_tutorial(player: object, goblin: object) -> object:
             displaycards(player)
             display_draw_deck(len(player.drawdeck.cards))
             display_discard_deck(len(player.discarddeck.cards))
-            tut_message("Draw deck has extra cards.")
-            tut_message("It refills your hand when low.")
-            tut_message("Discard pile holds used cards.")
+            tut_message("Used cards go to the discard.")
+            tut_message("New cards from the draw deck.")
+            tut_message("If the draw deck is empty,")
+            tut_message("the discard deck is shuffled in.")
+            pygame.display.flip()
         if stage == 9:
             screen.blit(grid.grid(), [0, 47])
             displayplayer(player)
@@ -1338,6 +1352,7 @@ def game_tutorial(player: object, goblin: object) -> object:
             tut_message(" ")
             tut_message("  ")
             tut_message("   ")
+            pygame.display.flip()
 
 
 
@@ -1354,7 +1369,6 @@ def game_tutorial(player: object, goblin: object) -> object:
                 if click:
                     stage = stage + 1
     # todo explain shop
-        pygame.display.flip()
 
 
 def game(music_play):
