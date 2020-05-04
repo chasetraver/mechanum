@@ -1152,114 +1152,304 @@ def shopphase(player):
                 if button_discard.collidepoint(mx, my):
                     #if player.gold >= 5:
                         #begin discard phase
-                    screen.fill((0, 0, 0))
-                    display_score(player.score)
-                    display_gold(player.gold)
-                    msg_discard = "Discard"
+                    while True:
+                        screen.fill((0, 0, 0))
+                        display_score(player.score)
+                        display_gold(player.gold)
+                        msg_discard = "Discard"
 
-                    uniquecard1 = cardlib.allcards[0]
-                    uniquecard2 = cardlib.allcards[1]
-                    uniquecard3 = cardlib.allcards[2]
-                    uniquecard4 = cardlib.allcards[3]
-                    uniquecard5 = cardlib.allcards[4]
-                    uniquecard6 = cardlib.allcards[5]
-                    uniquecard7 = cardlib.allcards[6]
-                    uniquecard8 = cardlib.allcards[7]
-                    uniquecard9 = cardlib.allcards[8]
+                        uniquecard1 = cardlib.allcards[0]
+                        uniquecard2 = cardlib.allcards[1]
+                        uniquecard3 = cardlib.allcards[2]
+                        uniquecard4 = cardlib.allcards[3]
+                        uniquecard5 = cardlib.allcards[4]
+                        uniquecard6 = cardlib.allcards[5]
+                        uniquecard7 = cardlib.allcards[6]
+                        uniquecard8 = cardlib.allcards[7]
+                        uniquecard9 = cardlib.allcards[8]
 
-                    img_unique_card1 = pygame.image.load(uniquecard1.image)
-                    img_unique_card1 = pygame.transform.scale(img_unique_card1, (
-                        int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-                    screen.blit(img_unique_card1, (125, 100))  
+                        img_unique_card1 = pygame.image.load(uniquecard1.image)
+                        img_unique_card1 = pygame.transform.scale(img_unique_card1, (
+                            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+                        screen.blit(img_unique_card1, (125, 100))  
 
-                    button_discard_card1 = pygame.Rect(125, 335, 145, 30)
-                    pygame.draw.rect(screen, (128, 128, 128), button_discard_card1)
-                    card1_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
-                    screen.blit(card1_discard_txt, (125, 345))
+                        button_discard_card1 = pygame.Rect(125, 335, 145, 30)
+                        pygame.draw.rect(screen, (128, 128, 128), button_discard_card1)
+                        card1_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
+                        screen.blit(card1_discard_txt, (125, 345))
 
-                    img_unique_card2 = pygame.image.load(uniquecard2.image)
-                    img_unique_card2 = pygame.transform.scale(img_unique_card2, (
-                        int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-                    screen.blit(img_unique_card2, (325, 100))
+                        img_unique_card2 = pygame.image.load(uniquecard2.image)
+                        img_unique_card2 = pygame.transform.scale(img_unique_card2, (
+                            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+                        screen.blit(img_unique_card2, (325, 100))
 
-                    button_discard_card2 = pygame.Rect(325, 335, 145, 30)
-                    pygame.draw.rect(screen, (128, 128, 128), button_discard_card2)
-                    card2_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
-                    screen.blit(card2_discard_txt, (325, 345))
+                        button_discard_card2 = pygame.Rect(325, 335, 145, 30)
+                        pygame.draw.rect(screen, (128, 128, 128), button_discard_card2)
+                        card2_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
+                        screen.blit(card2_discard_txt, (325, 345))
 
-                    img_unique_card3 = pygame.image.load(uniquecard3.image)
-                    img_unique_card3 = pygame.transform.scale(img_unique_card3, (
-                        int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-                    screen.blit(img_unique_card3, (525, 100))
+                        img_unique_card3 = pygame.image.load(uniquecard3.image)
+                        img_unique_card3 = pygame.transform.scale(img_unique_card3, (
+                            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+                        screen.blit(img_unique_card3, (525, 100))
 
-                    button_discard_card3 = pygame.Rect(525, 335, 145, 30)
-                    pygame.draw.rect(screen, (128, 128, 128), button_discard_card3)
-                    card3_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
-                    screen.blit(card3_discard_txt, (525, 345))
+                        button_discard_card3 = pygame.Rect(525, 335, 145, 30)
+                        pygame.draw.rect(screen, (128, 128, 128), button_discard_card3)
+                        card3_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
+                        screen.blit(card3_discard_txt, (525, 345))
 
-                    img_unique_card4 = pygame.image.load(uniquecard4.image)
-                    img_unique_card4 = pygame.transform.scale(img_unique_card4, (
-                        int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-                    screen.blit(img_unique_card4, (725, 100))
+                        img_unique_card4 = pygame.image.load(uniquecard4.image)
+                        img_unique_card4 = pygame.transform.scale(img_unique_card4, (
+                            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+                        screen.blit(img_unique_card4, (725, 100))
 
-                    button_discard_card4 = pygame.Rect(725, 335, 145, 30)
-                    pygame.draw.rect(screen, (128, 128, 128), button_discard_card4)
-                    card4_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
-                    screen.blit(card4_discard_txt, (725, 345))
+                        button_discard_card4 = pygame.Rect(725, 335, 145, 30)
+                        pygame.draw.rect(screen, (128, 128, 128), button_discard_card4)
+                        card4_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
+                        screen.blit(card4_discard_txt, (725, 345))
 
-                    img_unique_card5 = pygame.image.load(uniquecard5.image)
-                    img_unique_card5 = pygame.transform.scale(img_unique_card5, (
-                        int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-                    screen.blit(img_unique_card5, (925, 100))
+                        img_unique_card5 = pygame.image.load(uniquecard5.image)
+                        img_unique_card5 = pygame.transform.scale(img_unique_card5, (
+                            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+                        screen.blit(img_unique_card5, (925, 100))
 
-                    button_discard_card5 = pygame.Rect(925, 335, 145, 30)
-                    pygame.draw.rect(screen, (128, 128, 128), button_discard_card5)
-                    card5_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
-                    screen.blit(card5_discard_txt, (925, 345))
+                        button_discard_card5 = pygame.Rect(925, 335, 145, 30)
+                        pygame.draw.rect(screen, (128, 128, 128), button_discard_card5)
+                        card5_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
+                        screen.blit(card5_discard_txt, (925, 345))
 
-                    img_unique_card6 = pygame.image.load(uniquecard6.image)
-                    img_unique_card6 = pygame.transform.scale(img_unique_card6, (
-                        int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-                    screen.blit(img_unique_card6, (125, 400))
+                        img_unique_card6 = pygame.image.load(uniquecard6.image)
+                        img_unique_card6 = pygame.transform.scale(img_unique_card6, (
+                            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+                        screen.blit(img_unique_card6, (125, 400))
 
-                    button_discard_card6 = pygame.Rect(125, 635, 145, 30)
-                    pygame.draw.rect(screen, (128, 128, 128), button_discard_card6)
-                    card6_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
-                    screen.blit(card6_discard_txt, (125, 645))
+                        button_discard_card6 = pygame.Rect(125, 635, 145, 30)
+                        pygame.draw.rect(screen, (128, 128, 128), button_discard_card6)
+                        card6_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
+                        screen.blit(card6_discard_txt, (125, 645))
 
-                    img_unique_card7 = pygame.image.load(uniquecard7.image)
-                    img_unique_card7 = pygame.transform.scale(img_unique_card7, (
-                        int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-                    screen.blit(img_unique_card7, (325, 400))
+                        img_unique_card7 = pygame.image.load(uniquecard7.image)
+                        img_unique_card7 = pygame.transform.scale(img_unique_card7, (
+                            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+                        screen.blit(img_unique_card7, (325, 400))
 
-                    button_discard_card7 = pygame.Rect(325, 635, 145, 30)
-                    pygame.draw.rect(screen, (128, 128, 128), button_discard_card7)
-                    card7_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
-                    screen.blit(card7_discard_txt, (325, 645))
+                        button_discard_card7 = pygame.Rect(325, 635, 145, 30)
+                        pygame.draw.rect(screen, (128, 128, 128), button_discard_card7)
+                        card7_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
+                        screen.blit(card7_discard_txt, (325, 645))
 
-                    img_unique_card8 = pygame.image.load(uniquecard8.image)
-                    img_unique_card8 = pygame.transform.scale(img_unique_card8, (
-                        int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-                    screen.blit(img_unique_card8, (525, 400))
+                        img_unique_card8 = pygame.image.load(uniquecard8.image)
+                        img_unique_card8 = pygame.transform.scale(img_unique_card8, (
+                            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+                        screen.blit(img_unique_card8, (525, 400))
 
-                    button_discard_card8 = pygame.Rect(525, 635, 145, 30)
-                    pygame.draw.rect(screen, (128, 128, 128), button_discard_card8)
-                    card8_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
-                    screen.blit(card8_discard_txt, (525, 645))
+                        button_discard_card8 = pygame.Rect(525, 635, 145, 30)
+                        pygame.draw.rect(screen, (128, 128, 128), button_discard_card8)
+                        card8_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
+                        screen.blit(card8_discard_txt, (525, 645))
 
-                    img_unique_card9 = pygame.image.load(uniquecard9.image)
-                    img_unique_card9 = pygame.transform.scale(img_unique_card9, (
-                        int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
-                    screen.blit(img_unique_card9, (725, 400))
+                        img_unique_card9 = pygame.image.load(uniquecard9.image)
+                        img_unique_card9 = pygame.transform.scale(img_unique_card9, (
+                            int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
+                        screen.blit(img_unique_card9, (725, 400))
 
-                    button_discard_card9 = pygame.Rect(725, 635, 145, 30)
-                    pygame.draw.rect(screen, (128, 128, 128), button_discard_card9)
-                    card9_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
-                    screen.blit(card9_discard_txt, (725, 645))
+                        button_discard_card9 = pygame.Rect(725, 635, 145, 30)
+                        pygame.draw.rect(screen, (128, 128, 128), button_discard_card9)
+                        card9_discard_txt = fonts.small_button_font().render(msg_discard, True, (255, 255, 255))
+                        screen.blit(card9_discard_txt, (725, 645))
 
-                    #after testing is done
-                    # if player.gold >= 5:
-                    #     #discard actions here
+                        # for event in pygame.event.get():
+                        #     mx, my = pygame.mouse.get_pos()
+                        #     click = False
+                        #     #discard card buttons
+                        #     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        #         click = True
+                        #         if button_discard_card1.collidepoint(mx, my):
+                        #             if click:
+                        #                 removedcard = removecard(player)
+                        #                 removed = False
+                        #                 for card in player.drawdeck:
+                        #                     if removedcard == card.name:
+                        #                         player.drawdeck.remove(card)
+                        #                         removed = True
+                        #                 if not removed:
+                        #                     for card in player.discarddeck:
+                        #                         if removedcard == card.name:
+                        #                             player.discarddeck.remove(card)
+                        #                             removed = True
+                        #                 if not removed:
+                        #                     for card in player.hand:
+                        #                         if removedcard == card.name:
+                        #                             player.hand.remove(card)
+                        #                             removed = True
+
+                        #     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        #         click = True
+                        #         if button_discard_card2.collidepoint(mx, my):
+                        #             if click:
+                        #                 removedcard = removecard(player)
+                        #                 removed = False
+                        #                 for card in player.drawdeck:
+                        #                     if removedcard == card.name:
+                        #                         player.drawdeck.remove(card)
+                        #                         removed = True
+                        #                 if not removed:
+                        #                     for card in player.discarddeck:
+                        #                         if removedcard == card.name:
+                        #                             player.discarddeck.remove(card)
+                        #                             removed = True
+                        #                 if not removed:
+                        #                     for card in player.hand:
+                        #                         if removedcard == card.name:
+                        #                             player.hand.remove(card)
+                        #                             removed = True
+
+                        #     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        #         click = True
+                        #         if button_discard_card3.collidepoint(mx, my):
+                        #             if click:
+                        #                 removedcard = removecard(player)
+                        #                 removed = False
+                        #                 for card in player.drawdeck:
+                        #                     if removedcard == card.name:
+                        #                         player.drawdeck.remove(card)
+                        #                         removed = True
+                        #                 if not removed:
+                        #                     for card in player.discarddeck:
+                        #                         if removedcard == card.name:
+                        #                             player.discarddeck.remove(card)
+                        #                             removed = True
+                        #                 if not removed:
+                        #                     for card in player.hand:
+                        #                         if removedcard == card.name:
+                        #                             player.hand.remove(card)
+                        #                             removed = True
+
+                        #     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        #         click = True
+                        #         if button_discard_card4.collidepoint(mx, my):
+                        #             if click:
+                        #                 removedcard = removecard(player)
+                        #                 removed = False
+                        #                 for card in player.drawdeck:
+                        #                     if removedcard == card.name:
+                        #                         player.drawdeck.remove(card)
+                        #                         removed = True
+                        #                 if not removed:
+                        #                     for card in player.discarddeck:
+                        #                         if removedcard == card.name:
+                        #                             player.discarddeck.remove(card)
+                        #                             removed = True
+                        #                 if not removed:
+                        #                     for card in player.hand:
+                        #                         if removedcard == card.name:
+                        #                             player.hand.remove(card)
+                        #                             removed = True
+
+                        #     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        #         click = True
+                        #         if button_discard_card5.collidepoint(mx, my):
+                        #             if click:
+                        #                 removedcard = removecard(player)
+                        #                 removed = False
+                        #                 for card in player.drawdeck:
+                        #                     if removedcard == card.name:
+                        #                         player.drawdeck.remove(card)
+                        #                         removed = True
+                        #                 if not removed:
+                        #                     for card in player.discarddeck:
+                        #                         if removedcard == card.name:
+                        #                             player.discarddeck.remove(card)
+                        #                             removed = True
+                        #                 if not removed:
+                        #                     for card in player.hand:
+                        #                         if removedcard == card.name:
+                        #                             player.hand.remove(card)
+                        #                             removed = True
+
+                        #     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        #         click = True
+                        #         if button_discard_card6.collidepoint(mx, my):
+                        #             if click:
+                        #                 removedcard = removecard(player)
+                        #                 removed = False
+                        #                 for card in player.drawdeck:
+                        #                     if removedcard == card.name:
+                        #                         player.drawdeck.remove(card)
+                        #                         removed = True
+                        #                 if not removed:
+                        #                     for card in player.discarddeck:
+                        #                         if removedcard == card.name:
+                        #                             player.discarddeck.remove(card)
+                        #                             removed = True
+                        #                 if not removed:
+                        #                     for card in player.hand:
+                        #                         if removedcard == card.name:
+                        #                             player.hand.remove(card)
+                        #                             removed = True
+
+                        #     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        #         click = True
+                        #         if button_discard_card7.collidepoint(mx, my):
+                        #             if click:
+                        #                 removedcard = removecard(player)
+                        #                 removed = False
+                        #                 for card in player.drawdeck:
+                        #                     if removedcard == card.name:
+                        #                         player.drawdeck.remove(card)
+                        #                         removed = True
+                        #                 if not removed:
+                        #                     for card in player.discarddeck:
+                        #                         if removedcard == card.name:
+                        #                             player.discarddeck.remove(card)
+                        #                             removed = True
+                        #                 if not removed:
+                        #                     for card in player.hand:
+                        #                         if removedcard == card.name:
+                        #                             player.hand.remove(card)
+                        #                             removed = True
+
+                        #     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        #         click = True
+                        #         if button_discard_card8.collidepoint(mx, my):
+                        #             if click:
+                        #                 removedcard = removecard(player)
+                        #                 removed = False
+                        #                 for card in player.drawdeck:
+                        #                     if removedcard == card.name:
+                        #                         player.drawdeck.remove(card)
+                        #                         removed = True
+                        #                 if not removed:
+                        #                     for card in player.discarddeck:
+                        #                         if removedcard == card.name:
+                        #                             player.discarddeck.remove(card)
+                        #                             removed = True
+                        #                 if not removed:
+                        #                     for card in player.hand:
+                        #                         if removedcard == card.name:
+                        #                             player.hand.remove(card)
+                        #                             removed = True
+
+                        #     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        #         click = True
+                        #         if button_discard_card9.collidepoint(mx, my):
+                        #             if click:
+                        #                 removedcard = removecard(player)
+                        #                 removed = False
+                        #                 for card in player.drawdeck:
+                        #                     if removedcard == card.name:
+                        #                         player.drawdeck.remove(card)
+                        #                         removed = True
+                        #                 if not removed:
+                        #                     for card in player.discarddeck:
+                        #                         if removedcard == card.name:
+                        #                             player.discarddeck.remove(card)
+                        #                             removed = True
+                        #                 if not removed:
+                        #                     for card in player.hand:
+                        #                         if removedcard == card.name:
+                        #                             player.hand.remove(card)
+                        #                             removed = True
                     # else:
                     #     log_msg = "You do not have enough gold for this action."
 
@@ -1274,32 +1464,6 @@ def shopphase(player):
         display_score(player.score)
         display_gold(player.gold)
         pygame.display.flip()
-
-
-'''
-             #todo move this up
-            discard button event
-             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                click = True
-                if button_discard.collidepoint(mx, my):
-                    if click:
-                        removedcard = removecard(player)
-                        removed = False
-                        for card in player.drawdeck:
-                            if removedcard == card.name:
-                                player.drawdeck.remove(card)
-                                removed = True
-                        if not removed:
-                            for card in player.discarddeck:
-                                if removedcard == card.name:
-                                    player.discarddeck.remove(card)
-                                    removed = True
-                        if not removed:
-                            for card in player.hand:
-                                if removedcard == card.name:
-                                    player.hand.remove(card)
-                                    removed = True
-   '''
 
 
 def removecard(player):
