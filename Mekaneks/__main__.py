@@ -1371,7 +1371,7 @@ def game_tutorial(player: object, goblin: object) -> object:
     # todo explain shop
 
 
-def game(music_play):
+def game():
 
     characterselect, difficulty = characterscreen()
     xplayer = grid.rand_location()
