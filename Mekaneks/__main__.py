@@ -1390,13 +1390,6 @@ def game():
     else:
         shopturns = 10
     while player1.isalive:
-
-        button_mute = pygame.Rect(980, 10, 200, 25)
-        pygame.draw.rect(screen, (255, 255, 255), button_mute)
-        button_mute_msg = "Toggle Music"
-        button_mute_txt = fonts.tut_font().render(button_mute_msg, True, (0, 0, 0))
-        screen.blit(button_mute_txt, (990, 15))
-
         turncount = turncount + 1
         shopcountdown = shopturns - turncount % shopturns
         if shopcountdown == shopturns:
@@ -1419,10 +1412,8 @@ def game():
             shopphase(player1)
         mainClock.tick(60)
 
-    while True:
         # game over screen in progress
-        create_game_over(player1.score)
-        pass
+    create_game_over(player1.score)
 
 
 def text_objects(text, font):
