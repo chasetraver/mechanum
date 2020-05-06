@@ -525,7 +525,7 @@ def choosecards(player, goblin):
             click = False
             if event.type == pygame.QUIT:
                 exit()
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:  # Exit Shop here
                     create_game_over(player.score)
             if True:
@@ -570,9 +570,9 @@ def displayboard(player, goblin, currentmessage):
     display_discard_deck(len(player.discarddeck.cards))
     displaycards(player)
     displaygoblin(goblin)
-    button_quit_msg = "Press Esc to quit"
-    button_quit_txt = fonts.small_button_font().render(button_quit_msg, True, (255, 255, 255))
-    screen.blit(button_quit_txt, (1050, 0))
+    button_quit_msg = "Press Esc to self-destruct"
+    button_quit_txt = fonts.message_display_font().render(button_quit_msg, True, (255, 255, 255))
+    screen.blit(button_quit_txt, (800, 10))
 
     message_display(currentmessage)  # todo update message_display to have a log of previous messages as well
     pygame.display.flip()
