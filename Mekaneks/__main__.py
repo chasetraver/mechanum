@@ -1388,7 +1388,7 @@ def game():
     if difficulty == 1:
         shopturns = 5
     else:
-        shopturn = 10
+        shopturns = 10
     while player1.isalive:
 
         button_mute = pygame.Rect(980, 10, 200, 25)
@@ -1419,20 +1419,6 @@ def game():
             shopphase(player1)
         mainClock.tick(60)
 
-        for event in pygame.event.get():
-            mx, my = pygame.mouse.get_pos()
-            click = False
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                click = True
-                if button_mute.collidepoint(mx, my):
-                    while (click):
-                        if mp == True:
-                            pygame.mixer.music.pause()
-                            mp = False
-                        else:
-                            pygame.mixer.music.unpause()
-                            mp = True
-                        break
     while True:
         # game over screen in progress
         create_game_over(player1.score)
