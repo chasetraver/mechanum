@@ -68,10 +68,12 @@ class Player:
     def draw(self):
         if len(self.drawdeck.cards) > 0:
             self.hand.append(self.drawdeck.drawcard())
+            return True
         else:
             if len(self.discarddeck.cards) > 0:
                 self.drawdeck.swapdeck(self.discarddeck)
                 self.hand.append(self.drawdeck.drawcard())
+                return True
             else:
                 self.gameover()
                 return False

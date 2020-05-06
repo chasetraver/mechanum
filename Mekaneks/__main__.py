@@ -514,6 +514,12 @@ def choosecards(player, goblin):
                 int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
             screen.blit(img_4, (600, 485))
 
+            #button_quit = pygame.Rect(1150, 0)
+            #pygame.draw.rect(screen, (128,128,128), button_quit)
+            #button_quit_msg = "Quit Game"
+            #button_quit_txt = fonts.small_button_font().render(button_quit_msg, True, (255, 255, 255))
+            #screen.blit(button_quit_txt, (x,y))
+
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
             click = False
@@ -577,7 +583,7 @@ def playersetup(xplayer, yplayer, playercharacterchoice):
 
 
 def possibleattack(player, _monster, attrange):
-    # todo fix bug where attack misses if target is to the right of player, or above (might be fixed now)
+
     for possibletarget in range(0, attrange + 1):
         if player.xcoord + possibletarget == _monster.xcoord and player.ycoord == _monster.ycoord:
             return True
@@ -615,7 +621,6 @@ def playermove(player, goblin, amount, direction):
                 break
         player.ycoord = destination
 
-    # todo fix bug where I couldnt move up when I was at coordinates (2,2), same issue from (3,2). (Might be fixed now)
     elif direction == "up":
         destination = player.ycoord - amount
         if destination < 0:
