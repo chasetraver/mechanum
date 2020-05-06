@@ -74,6 +74,7 @@ class Player:
                 self.hand.append(self.drawdeck.drawcard())
             else:
                 self.gameover()
+                return False
 
     def addcard(self, card):
         self.discarddeck.addcard(card)
@@ -108,4 +109,3 @@ class Player:
 
     def gameover(self):
         self.isalive = False
-        pass

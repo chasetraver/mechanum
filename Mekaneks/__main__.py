@@ -733,7 +733,8 @@ def playerturn(goblinmonster, player, difficulty):
             drawcount = 0
             while (len(player.hand)) < 5:
                 drawcount = drawcount + 1
-                player.draw()
+                if not player.draw():
+                    return
             currentmessage = "You draw %d cards." % drawcount
             displayboard(player, goblinmonster, currentmessage)
 
