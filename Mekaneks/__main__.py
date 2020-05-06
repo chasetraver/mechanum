@@ -514,21 +514,25 @@ def choosecards(player, goblin):
                 int(card_scale_factor * card_width), int(card_scale_factor * card_length)))
             screen.blit(img_4, (600, 485))
 
-            #button_quit = pygame.Rect(1150, 0)
-            #pygame.draw.rect(screen, (128,128,128), button_quit)
-            #button_quit_msg = "Quit Game"
-            #button_quit_txt = fonts.small_button_font().render(button_quit_msg, True, (255, 255, 255))
-            #screen.blit(button_quit_txt, (x,y))
+        #button_quit = pygame.Rect(1150, 0, 130, 25)
+        #pygame.draw.rect(screen, (128,128,128), button_quit)
+        #button_quit_msg = "Quit Game"
+        #button_quit_txt = fonts.small_button_font().render(button_quit_msg, True, (255, 255, 255))
+        #screen.blit(button_quit_txt, (1160,0))
 
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
             click = False
             if event.type == pygame.QUIT:
                 exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:  # Exit Shop here
+                    create_game_over(player.score)
             if True:
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     click = True
-
+                    #if button_quit.collidepoint(mx,my):
+                    #   create_game_over(player.score)
                     if handsize >= 1:
                         if button_card_0.collidepoint(mx, my):
                             if click:
@@ -566,6 +570,9 @@ def displayboard(player, goblin, currentmessage):
     display_discard_deck(len(player.discarddeck.cards))
     displaycards(player)
     displaygoblin(goblin)
+    button_quit_msg = "Press Esc to quit"
+    button_quit_txt = fonts.small_button_font().render(button_quit_msg, True, (255, 255, 255))
+    screen.blit(button_quit_txt, (1050, 0))
 
     message_display(currentmessage)  # todo update message_display to have a log of previous messages as well
     pygame.display.flip()
