@@ -10,3 +10,5 @@ In Mechanum you play as Robbie the Robot or the Doomcopter, and your goal is to 
 The main menu can be navigated by left clicking the various buttons. An in-game tutorial is available to explain the game mechanics.
 
 Cards can be selected by left clicking the button, and movement is determined via directional input using the arrow keys.
+
+Music is the track A.C.I.D. from the Into the Breach Soundtrack, as composed by Ben Prunty. Can be found here: https://youtu.be/AVaSEEdfmRI
